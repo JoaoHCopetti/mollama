@@ -1,0 +1,19 @@
+@import url(https://fonts.bunny.net/css?family=albert-sans:100,300,500,700,800);;
+
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "./base.css";
+@import "./daisyui-custom.css";
+@import "./colors.css";
+
+html {
+  font-family: 'Albert Sans';
+}
+
+:root,
+html,
+body,
+#app {
+  @apply m-0 p-0 h-full;
+}

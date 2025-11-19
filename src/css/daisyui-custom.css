@@ -1,0 +1,7 @@
+@plugin "daisyui" {
+  themes: dark --default, light --preferslight;
+}
+
+@utility btn {
+  @apply rounded-full shadow-none;
+}
