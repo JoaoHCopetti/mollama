@@ -6,32 +6,7 @@ import BaseSession from './BaseSession'
 const ollama = new Ollama()
 
 export default class OllamaSession extends BaseSession {
-  public async setResponse(response: Partial<OllamaChatResponse>) {
-    const { message } = response
-
-    if (message?.content) {
-      this.response.content += message.content
-    }
-
-    if (message?.thinking) {
-      this.response.thinking += message.thinking
-    }
-
-    Object.assign<ChatResponse, Partial<ChatResponse>>(this.response, {
-      done: response.done,
-      totalDuration: response.total_duration,
-      promptDuration: response.prompt_eval_duration,
-      promptTokens: response.prompt_eval_count,
-      responseDuration: response.eval_duration,
-      responseTokens: response.eval_count,
-    })
-
-    if (this.responseChangeCallback) {
-      await this.responseChangeCallback(this.response)
-    }
-  }
-
-  public async fetchResponse(options: FetchResponseOptions): Promise<void> {
+  public async handleResponse(options: FetchResponseOptions): Promise<void> {
     const context = await retrieveContext(options.sessionId)
 
     const formattedContext = context.map((message) => ({
@@ -45,10 +20,25 @@ export default class OllamaSession extends BaseSession {
     if (!options.stream) {
       await this.fetchStaticResponse(options, formattedContext)
     } else {
+      this.state.isStreaming = true
       await this.fetchStreamedResponse(options, formattedContext)
     }
 
     this.finish()
+  }
+
+  protected getFormattedResponse = (response: OllamaChatResponse): ChatResponse => {
+    return {
+      model: this.model,
+      content: response.message.content,
+      thinking: response.message.thinking,
+      done: response.done,
+      promptDuration: response.prompt_eval_duration,
+      promptTokens: response.prompt_eval_count,
+      responseDuration: response.eval_duration,
+      responseTokens: response.eval_count,
+      totalDuration: response.total_duration,
+    }
   }
 
   protected async fetchStaticResponse(options: FetchResponseOptions, context: Message[]) {
@@ -58,7 +48,7 @@ export default class OllamaSession extends BaseSession {
       stream: false,
     })
 
-    await this.setResponse(response)
+    this.setResponse(this.getFormattedResponse(response))
   }
 
   protected async fetchStreamedResponse(options: FetchResponseOptions, context: Message[]) {
@@ -70,17 +60,15 @@ export default class OllamaSession extends BaseSession {
 
     const iterator = response[Symbol.asyncIterator]()
 
-    this.state.isStreaming = true
-
     for await (const chunk of iterator) {
+      this.state.isThinking = !!chunk.message.thinking
+
       if (this.abortController.signal.aborted) {
         response.abort()
         return
       }
 
-      this.state.isThinking = !!chunk.message.thinking
-
-      await this.setResponse(chunk)
+      await this.setResponse(this.getFormattedResponse(chunk))
     }
   }
 }

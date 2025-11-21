@@ -6,7 +6,7 @@ import BaseSession from '@/sessions/BaseSession'
 import OllamaSession from '@/sessions/OllamaSession'
 import { useAppStore } from '@/stores/app-store'
 import { clone, throttle } from 'lodash-es'
-import { computed, onBeforeMount, ref, useTemplateRef, watch, type Ref } from 'vue'
+import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './_components/ChatInput.vue'
 import ChatMessages from './_components/ChatMessages.vue'
@@ -18,7 +18,7 @@ const router = useRouter()
 
 const input = defineModel<string>('input', { default: '' })
 
-const chat = ref<BaseSession>(new OllamaSession()) as Ref<BaseSession>
+const chat = ref<BaseSession>(new OllamaSession())
 const think = ref<boolean>(false)
 const currentMessageId = ref<number>()
 const stickScrollToBottom = ref<boolean>(true)
@@ -32,14 +32,14 @@ onBeforeMount(async () => {
 })
 
 const onSendMessage = async () => {
-  const session = (appStore.activeSession = await getOrCreateSession())
+  chat.value = new OllamaSession()
 
-  chat.value.resetState()
+  appStore.activeSession = await getOrCreateSession()
 
   await createOrUpdateMessage({
     content: input.value,
     role: 'user',
-    sessionId: session.id,
+    sessionId: appStore.activeSession.id,
   })
 
   input.value = ''
@@ -47,9 +47,9 @@ const onSendMessage = async () => {
   stickScrollToBottom.value = true
   scrollToBottom()
 
-  registerChatListener(session.id)
+  registerChatListener(appStore.activeSession.id)
 
-  await fetchResponse(session.id)
+  await handleResponse(appStore.activeSession.id)
 }
 
 const registerChatListener = (sessionId: number) => {
@@ -72,10 +72,10 @@ const registerChatListener = (sessionId: number) => {
   })
 }
 
-const fetchResponse = async (sessionId: number) => {
+const handleResponse = async (sessionId: number) => {
   if (!appStore.selectedModel) throw new Error('No model selected')
 
-  await chat.value.fetchResponse({
+  await chat.value.handleResponse({
     sessionId,
     model: appStore.selectedModel.name,
     stream: true,
@@ -105,7 +105,7 @@ const getOrCreateSession = async () => {
   return (await db.sessions.get(id))!
 }
 
-const stopMessage = () => {
+const stopStreaming = () => {
   chat.value.abort()
 }
 
@@ -164,7 +164,7 @@ watch(
         class="w-3/4"
         :chat-state="chat.state"
         @send="onSendMessage"
-        @stop="stopMessage"
+        @stop="stopStreaming"
       />
     </div>
   </div>

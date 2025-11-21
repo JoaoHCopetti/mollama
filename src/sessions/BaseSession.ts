@@ -1,14 +1,21 @@
-import type { ChatResponse, ChatState, FetchResponseOptions } from '@/types'
+import type { ChatResponse, ChatState, FetchResponseOptions, Model } from '@/types'
+import { omit } from 'lodash-es'
 
 export default abstract class BaseSession {
   public state: ChatState
-  public response!: ChatResponse
+  public response: ChatResponse
 
   protected abortController: AbortController
   protected responseChangeCallback?: CallableFunction
+  protected model!: Model
 
   constructor() {
-    this.initResponse()
+    this.response = {
+      content: '',
+      thinking: '',
+      model: { id: 'n-a', name: 'N/A' },
+    }
+
     this.state = {
       isLoading: false,
       isThinking: false,
@@ -18,17 +25,28 @@ export default abstract class BaseSession {
     this.abortController = new AbortController()
   }
 
-  public abstract setResponse(response: any): void
-  public abstract fetchResponse(options: FetchResponseOptions): Promise<void>
+  public async setResponse(response: Partial<ChatResponse>) {
+    const { content, thinking } = response
+
+    if (content) {
+      this.response.content += content || ''
+    }
+
+    if (thinking) {
+      this.response.thinking += thinking || ''
+    }
+
+    Object.assign<ChatResponse, Partial<ChatResponse>>(this.response, omit(response, ['content', 'thinking']))
+
+    if (this.responseChangeCallback) {
+      await this.responseChangeCallback(this.response)
+    }
+  }
+
+  public abstract handleResponse(options: FetchResponseOptions): Promise<void>
 
   public onResponseChange(callback: (response: ChatResponse) => void) {
     this.responseChangeCallback = callback
-  }
-
-  public resetState() {
-    this.initResponse()
-    this.state = { isLoading: false, isThinking: false, isStreaming: false }
-    this.abortController = new AbortController()
   }
 
   public abort() {
@@ -41,13 +59,6 @@ export default abstract class BaseSession {
       isLoading: false,
       isStreaming: false,
       isThinking: false,
-    }
-  }
-
-  private initResponse() {
-    this.response = {
-      content: '',
-      model: { id: 'n-a', name: 'N/A' },
     }
   }
 }
