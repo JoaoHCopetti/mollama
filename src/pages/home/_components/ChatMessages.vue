@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { db } from '@/database/db'
 import type { MessageData } from '@/database/Message'
+import type { ChatState } from '@/types'
 import { liveQuery, type Subscription } from 'dexie'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import ChatMessagesItem from './ChatMessagesItem.vue'
 
 const props = defineProps<{
   sessionId: number
+  chatState: ChatState
+  currentMessageId?: number
 }>()
 
 const messages = ref<MessageData[]>([])
@@ -44,23 +47,11 @@ onBeforeUnmount(() => {
       v-for="message in messages"
       :key="message.id"
     >
-      <ChatMessagesItem :message="message" />
+      <ChatMessagesItem
+        :chat-state="chatState"
+        :message="message"
+        :current-message-id="currentMessageId"
+      />
     </template>
   </div>
 </template>
-
-<style>
-pre {
-  line-height: 1.25rem !important;
-  background-color: var(--color-base-200);
-  padding: 1rem;
-  border-radius: 0.25rem;
-}
-
-code:not([class]) {
-  color: var(--color-warning-content);
-  background-color: var(--color-warning);
-  padding: 2px 5px;
-  border-radius: 0.2rem;
-}
-</style>

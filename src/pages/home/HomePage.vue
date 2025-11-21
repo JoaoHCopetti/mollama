@@ -97,6 +97,10 @@ const getOrCreateSession = async () => {
 
   return (await db.sessions.get(id))!
 }
+
+const stopMessage = () => {
+  chat.value.abort()
+}
 </script>
 
 <template>
@@ -106,6 +110,8 @@ const getOrCreateSession = async () => {
         v-if="activeSession"
         class="w-3/4"
         :session-id="activeSession.id"
+        :chat-state="chat.state"
+        :current-message-id="currentMessageId"
       />
     </div>
 
@@ -116,6 +122,7 @@ const getOrCreateSession = async () => {
         class="w-3/4"
         :chat-state="chat.state"
         @send="onSendMessage"
+        @stop="stopMessage"
       />
     </div>
   </div>

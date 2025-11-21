@@ -94,7 +94,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
 
       <div>
         <button
-          v-if="true"
+          v-if="!chatState.isLoading"
           class="btn btn-primary"
           :disabled="input.trim() === ''"
           @click="onMessageSend"
