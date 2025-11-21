@@ -108,6 +108,7 @@ const getOrCreateSession = async () => {
 const stopMessage = () => {
   chat.value.abort()
 }
+
 const scrollToBottom = () => {
   if (messagesContainer.value) {
     messagesContainer.value.scrollTo({ top: messagesContainer.value.scrollHeight })

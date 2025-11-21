@@ -5,7 +5,6 @@ export default abstract class BaseSession {
   public response: ChatResponse
 
   protected abortController: AbortController
-  protected finishCallback?: CallableFunction
   protected responseChangeCallback?: CallableFunction
 
   constructor() {
@@ -35,22 +34,16 @@ export default abstract class BaseSession {
     this.abortController = new AbortController()
   }
 
-  public onFinish(callback: (response: ChatResponse) => void) {
-    this.finishCallback = callback
-  }
-
   public abort() {
     this.abortController.abort()
     this.finish()
   }
 
   protected finish() {
-    this.state.isLoading = false
-    this.state.isStreaming = false
-    this.state.isThinking = false
-
-    if (this.finishCallback) {
-      this.finishCallback(this.response)
+    this.state = {
+      isLoading: false,
+      isStreaming: false,
+      isThinking: false,
     }
   }
 }
