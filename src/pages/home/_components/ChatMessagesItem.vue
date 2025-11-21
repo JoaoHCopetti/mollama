@@ -34,17 +34,16 @@ const htmlThinking = computed(() => props.message.thinking && appStore.markdown.
         <span>Thinking</span>
       </template>
 
-      <div v-else-if="message.thinking && !chatState.isThinking">
+      <div v-else-if="message.thinking">
         <span>Done thinking</span>
       </div>
     </div>
 
-    <div v-if="htmlThinking">
-      <div
-        class="text-sm text-gray-500 mb-3 whitespace-pre-line"
-        v-html="htmlThinking"
-      />
-    </div>
+    <div
+      v-if="message.thinking"
+      class="text-sm text-gray-500 mb-3 whitespace-pre-line"
+      v-html="htmlThinking"
+    />
 
     <div v-html="htmlContent" />
   </div>
