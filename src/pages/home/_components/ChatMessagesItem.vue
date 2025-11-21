@@ -1,19 +1,18 @@
 <script setup lang="ts">
+import { useUtils } from '@/composables/use-utils'
 import type { MessageData } from '@/database/Message'
-import { useAppStore } from '@/stores/app-store'
 import type { ChatState } from '@/types'
 import { computed } from 'vue'
 
-const appStore = useAppStore()
-
+const { markdown } = useUtils()
 const props = defineProps<{
   message: MessageData
   chatState: ChatState
   currentMessageId?: number
 }>()
 
-const htmlContent = computed(() => appStore.markdown.render(props.message.content))
-const htmlThinking = computed(() => props.message.thinking && appStore.markdown.render(props.message.thinking))
+const htmlContent = computed(() => markdown.render(props.message.content))
+const htmlThinking = computed(() => props.message.thinking && markdown.render(props.message.thinking))
 </script>
 
 <!-- eslint-disable vue/no-v-html -->
