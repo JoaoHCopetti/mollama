@@ -1,7 +1,7 @@
 import { retrieveContext } from '@/services/chat-service'
 import type { ChatResponse, FetchResponseOptions } from '@/types'
 import { Ollama, type Message, type ChatResponse as OllamaChatResponse } from 'ollama/browser'
-import BaseSession from './BaseChat'
+import BaseSession from './BaseSession'
 
 const ollama = new Ollama()
 

@@ -2,22 +2,19 @@ import type { ChatResponse, ChatState, FetchResponseOptions } from '@/types'
 
 export default abstract class BaseSession {
   public state: ChatState
-  public response: ChatResponse
+  public response!: ChatResponse
 
   protected abortController: AbortController
   protected responseChangeCallback?: CallableFunction
 
   constructor() {
-    this.response = {
-      content: '',
-      thinking: '',
-      done: false,
-    }
+    this.initResponse()
     this.state = {
       isLoading: false,
       isThinking: false,
       isStreaming: false,
     }
+
     this.abortController = new AbortController()
   }
 
@@ -29,7 +26,7 @@ export default abstract class BaseSession {
   }
 
   public resetState() {
-    this.response = { content: '', thinking: '', done: false }
+    this.initResponse()
     this.state = { isLoading: false, isThinking: false, isStreaming: false }
     this.abortController = new AbortController()
   }
@@ -44,6 +41,13 @@ export default abstract class BaseSession {
       isLoading: false,
       isStreaming: false,
       isThinking: false,
+    }
+  }
+
+  private initResponse() {
+    this.response = {
+      content: '',
+      model: { id: 'n-a', name: 'N/A' },
     }
   }
 }

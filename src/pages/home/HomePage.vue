@@ -2,8 +2,8 @@
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import { db } from '@/database/db'
 import { createOrUpdateMessage } from '@/services/chat-service'
-import BaseSession from '@/sessions/BaseChat'
-import OllamaSession from '@/sessions/OllamaChat'
+import BaseSession from '@/sessions/BaseSession'
+import OllamaSession from '@/sessions/OllamaSession'
 import { useAppStore } from '@/stores/app-store'
 import { clone, throttle } from 'lodash-es'
 import { computed, onBeforeMount, ref, useTemplateRef, watch, type Ref } from 'vue'
@@ -132,7 +132,7 @@ const handleMessagesScroll = throttle(() => {
 }, 50)
 
 watch(
-  () => chat.value.response.content || chat.value.response.thinking,
+  () => chat.value.response?.content || chat.value.response?.thinking,
   () => {
     if (stickScrollToBottom.value) {
       scrollToBottom()

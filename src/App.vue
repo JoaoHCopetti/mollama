@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
-import { useAppStore } from './stores/app-store'
+import { ProvidersEnum, useAppStore } from './stores/app-store'
 
 const appStore = useAppStore()
 
 onBeforeMount(() => {
-  appStore.init('ollama')
+  appStore.init(ProvidersEnum.Ollama)
 })
 </script>
 

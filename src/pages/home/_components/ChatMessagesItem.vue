@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { useUtils } from '@/composables/use-utils'
 import type { MessageData } from '@/database/Message'
 import type { ChatState } from '@/types'
+import { markdown } from '@/utils'
 import { computed } from 'vue'
 
-const { markdown } = useUtils()
 const props = defineProps<{
   message: MessageData
   chatState: ChatState

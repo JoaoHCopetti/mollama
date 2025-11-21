@@ -6,10 +6,12 @@ import type { Model } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-type AvailableProviders = 'ollama'
+export enum ProvidersEnum {
+  Ollama,
+}
 
-const getProvider = (provider: AvailableProviders = 'ollama'): BaseProvider | undefined => {
-  if (provider === 'ollama') {
+const getProvider = (provider: ProvidersEnum): BaseProvider | undefined => {
+  if (provider === ProvidersEnum.Ollama) {
     return new OllamaProvider()
   }
 
@@ -23,7 +25,7 @@ export const useAppStore = defineStore('app', () => {
   const selectedModel = ref<Model>()
   const activeSession = ref<SessionData>()
 
-  const init = async (provider: AvailableProviders = 'ollama') => {
+  const init = async (provider: ProvidersEnum) => {
     const providerInstance = getProvider(provider)
 
     if (!providerInstance) {
