@@ -69,7 +69,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
       ref="textareaRef"
       v-model="input"
       name="message"
-      class="bg-transparent min-h-20 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
+      class="bg-transparent font-sans text-[1rem] min-h-20 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
       placeholder="Type anything..."
       @input="adjustTextareaHeight"
       @keydown="onMessageSend"
@@ -113,10 +113,3 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
     </div>
   </div>
 </template>
-
-<style>
-textarea {
-  font-family: 'Albert Sans';
-  font-size: 1.05rem;
-}
-</style>
