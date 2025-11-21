@@ -49,7 +49,5 @@ export const useAppStore = defineStore('app', () => {
     selectedModel,
     activeSession,
     selectModel,
-    setItem: storage.setItem,
-    getItem: storage.getItem,
   }
 })

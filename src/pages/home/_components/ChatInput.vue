@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { LocalStorageEnum } from '@/composables/use-local-storage'
-import { useAppStore } from '@/stores/app-store'
+import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import type { ChatState } from '@/types'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import ChatInputModels from './ChatInputModels.vue'
@@ -13,12 +12,13 @@ defineProps<{
   chatState: ChatState
 }>()
 
+const storage = useLocalStorage()
+
 const input = defineModel<string>('input', { default: '' })
 const think = defineModel<boolean>('think', { default: false })
 
 const textareaRef = useTemplateRef('textareaRef')
 const isTextareaFocused = ref<boolean>(false)
-const appStore = useAppStore()
 
 onMounted(() => {
   adjustTextareaHeight()
@@ -37,7 +37,7 @@ const adjustTextareaHeight = () => {
 const onThinkChange = (e: Event) => {
   const target = e.target as HTMLInputElement
 
-  appStore.setItem(LocalStorageEnum.Think, target.checked)
+  storage.setItem(LocalStorageEnum.Think, target.checked)
 }
 
 const onMessageSend = (event: KeyboardEvent | PointerEvent) => {

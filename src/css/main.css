@@ -4,6 +4,7 @@
 @import "./base.css";
 @import "./daisyui-custom.css";
 @import "./colors.css";
+@import "./utilities.css";
 @import 'highlight.js/styles/stackoverflow-dark.min.css';
 
 :root,

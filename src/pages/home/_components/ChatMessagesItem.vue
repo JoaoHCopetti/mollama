@@ -31,7 +31,7 @@ const htmlThinking = computed(() => props.message.thinking && appStore.markdown.
       <template v-if="chatState.isThinking && message.id === currentMessageId">
         <span class="loading loading-ring loading-xs mr-1" />
 
-        <span>Thinking</span>
+        <span class="animated-text">Thinking</span>
       </template>
 
       <div v-else-if="message.thinking">

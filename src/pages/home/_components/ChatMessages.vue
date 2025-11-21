@@ -43,15 +43,12 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="mx-auto flex flex-col gap-10">
-    <template
+    <ChatMessagesItem
       v-for="message in messages"
       :key="message.id"
-    >
-      <ChatMessagesItem
-        :chat-state="chatState"
-        :message="message"
-        :current-message-id="currentMessageId"
-      />
-    </template>
+      :chat-state="chatState"
+      :message="message"
+      :current-message-id="currentMessageId"
+    />
   </div>
 </template>
