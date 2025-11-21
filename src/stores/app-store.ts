@@ -1,31 +1,39 @@
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
-import type { ModelData } from '@/database/Model'
 import type { SessionData } from '@/database/Session'
-import { Ollama } from 'ollama'
+import type { BaseProvider } from '@/providers/BaseProvider'
+import OllamaProvider from '@/providers/OllamaProvider'
+import type { Model } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useAppStore = defineStore('app', () => {
-  const storage = useLocalStorage()
-  const ollama = new Ollama()
+type AvailableProviders = 'ollama'
 
-  const availableModels = ref<ModelData[]>([])
-  const selectedModel = ref<ModelData>()
-  const activeSession = ref<SessionData>()
-
-  const init = async () => {
-    ollama.list().then((response) => {
-      const models = response.models.map<ModelData>((model) => ({
-        id: +new Date(),
-        name: model.name,
-        parameterSize: model.details.parameter_size,
-      }))
-
-      availableModels.value = models
-    })
+const getProvider = (provider: AvailableProviders = 'ollama'): BaseProvider | undefined => {
+  if (provider === 'ollama') {
+    return new OllamaProvider()
   }
 
-  const selectModel = (model: ModelData) => {
+  return undefined
+}
+
+export const useAppStore = defineStore('app', () => {
+  const storage = useLocalStorage()
+
+  const availableModels = ref<Model[]>([])
+  const selectedModel = ref<Model>()
+  const activeSession = ref<SessionData>()
+
+  const init = async (provider: AvailableProviders = 'ollama') => {
+    const providerInstance = getProvider(provider)
+
+    if (!providerInstance) {
+      throw new Error('No provider specified')
+    }
+
+    availableModels.value = await providerInstance.fetchModels()
+  }
+
+  const selectModel = (model: Model) => {
     selectedModel.value = model
     storage.setItem(LocalStorageEnum.SelectedModel, model)
   }

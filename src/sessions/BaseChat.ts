@@ -1,6 +1,6 @@
 import type { ChatResponse, ChatState, FetchResponseOptions } from '@/types'
 
-export default abstract class BaseChat {
+export default abstract class BaseSession {
   public state: ChatState
   public response: ChatResponse
 

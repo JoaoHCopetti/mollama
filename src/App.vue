@@ -6,7 +6,7 @@ import { useAppStore } from './stores/app-store'
 const appStore = useAppStore()
 
 onBeforeMount(() => {
-  appStore.init()
+  appStore.init('ollama')
 })
 </script>
 

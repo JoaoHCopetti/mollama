@@ -1,11 +1,11 @@
 import { retrieveContext } from '@/services/chat-service'
 import type { ChatResponse, FetchResponseOptions } from '@/types'
 import { Ollama, type Message, type ChatResponse as OllamaChatResponse } from 'ollama/browser'
-import BaseChat from './BaseChat'
+import BaseSession from './BaseChat'
 
 const ollama = new Ollama()
 
-export default class OllamaChat extends BaseChat {
+export default class OllamaSession extends BaseSession {
   public async setResponse(response: Partial<OllamaChatResponse>) {
     const { message } = response
 

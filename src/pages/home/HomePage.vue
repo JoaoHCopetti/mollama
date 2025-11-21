@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import { db } from '@/database/db'
-import BaseChat from '@/providers/BaseChat'
-import OllamaChat from '@/providers/OllamaChat'
 import { createOrUpdateMessage } from '@/services/chat-service'
+import BaseSession from '@/sessions/BaseChat'
+import OllamaSession from '@/sessions/OllamaChat'
 import { useAppStore } from '@/stores/app-store'
 import { clone, throttle } from 'lodash-es'
 import { computed, onBeforeMount, ref, useTemplateRef, watch, type Ref } from 'vue'
@@ -18,7 +18,7 @@ const router = useRouter()
 
 const input = defineModel<string>('input', { default: '' })
 
-const chat = ref<BaseChat>(new OllamaChat()) as Ref<BaseChat>
+const chat = ref<BaseSession>(new OllamaSession()) as Ref<BaseSession>
 const think = ref<boolean>(false)
 const currentMessageId = ref<number>()
 const stickScrollToBottom = ref<boolean>(true)

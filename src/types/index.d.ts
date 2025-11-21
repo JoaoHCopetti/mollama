@@ -1,8 +1,8 @@
-import type { ModelData } from '@/database/Model'
+import type { Model } from '@/database/Model'
 
 type ChatResponse = {
   content: string
-  model: ModelData
+  model: Model
   done?: boolean
   thinking?: string
   totalDuration?: number
@@ -26,4 +26,11 @@ type FetchResponseOptions = {
   think?: 'low' | 'medium' | 'high' | boolean
 }
 
-export { ChatResponse, ChatState, FetchResponseOptions }
+type Model = {
+  id: string
+  name: string
+  parameterSize?: string
+  isCloud?: boolean
+}
+
+export { ChatResponse, ChatState, FetchResponseOptions, Model }
