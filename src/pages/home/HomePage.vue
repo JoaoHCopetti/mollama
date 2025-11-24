@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { useElementScroll } from '@/composables/use-element-scroll'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import { db } from '@/database/db'
 import { createOrUpdateMessage } from '@/services/chat-service'
 import BaseSession from '@/sessions/BaseSession'
 import OllamaSession from '@/sessions/OllamaSession'
 import { useAppStore } from '@/stores/app-store'
-import { clone, throttle } from 'lodash-es'
+import { clone } from 'lodash-es'
 import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './_components/ChatInput.vue'
@@ -15,15 +16,13 @@ const appStore = useAppStore()
 const storage = useLocalStorage()
 const route = useRoute()
 const router = useRouter()
+const messagesScroll = useElementScroll(useTemplateRef('messagesRef'))
 
 const input = defineModel<string>('input', { default: '' })
 
 const chat = ref<BaseSession>(new OllamaSession())
 const think = ref<boolean>(false)
 const currentMessageId = ref<number>()
-const stickScrollToBottom = ref<boolean>(true)
-
-const messagesContainer = useTemplateRef('messagesContainer')
 
 const activeSession = computed(() => appStore.activeSession)
 
@@ -44,8 +43,8 @@ const onSendMessage = async () => {
 
   input.value = ''
 
-  stickScrollToBottom.value = true
-  scrollToBottom()
+  messagesScroll.stickScrollToBottom.value = true
+  messagesScroll.scrollToBottom()
 
   registerChatListener(appStore.activeSession.id)
 
@@ -109,33 +108,11 @@ const stopStreaming = () => {
   chat.value.abort()
 }
 
-const scrollToBottom = () => {
-  if (messagesContainer.value) {
-    messagesContainer.value.scrollTo({ top: messagesContainer.value.scrollHeight })
-  }
-}
-
-const handleMessagesScroll = throttle(() => {
-  if (!messagesContainer.value) {
-    return
-  }
-
-  const maxScrollTop = messagesContainer.value.scrollHeight - messagesContainer.value.clientHeight
-  const isBottomHit = Math.trunc(maxScrollTop) - 10 <= Math.trunc(messagesContainer.value.scrollTop)
-
-  if (isBottomHit) {
-    stickScrollToBottom.value = true
-    return
-  }
-
-  stickScrollToBottom.value = false
-}, 50)
-
 watch(
   () => chat.value.response?.content || chat.value.response?.thinking,
   () => {
-    if (stickScrollToBottom.value) {
-      scrollToBottom()
+    if (messagesScroll.stickScrollToBottom.value) {
+      messagesScroll.scrollToBottom()
     }
   },
 )
@@ -144,9 +121,9 @@ watch(
 <template>
   <div class="h-full flex flex-col">
     <div
-      ref="messagesContainer"
+      ref="messagesRef"
       class="mt-10 h-full overflow-auto"
-      @scroll="handleMessagesScroll"
+      @scroll="messagesScroll.handleBottomFixedScroll"
     >
       <ChatMessages
         v-if="activeSession"
