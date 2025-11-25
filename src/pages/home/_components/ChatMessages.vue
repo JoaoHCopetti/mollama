@@ -32,7 +32,7 @@ const setupLiveQuery = () => {
 }
 
 const registerCopyListeners = () => {
-  const copyButtons = document.querySelectorAll('.language button')
+  const copyButtons = document.querySelectorAll('.md-fence-wrapper .md-fence-header button')
 
   if (!copyButtons.length) {
     return
@@ -46,7 +46,6 @@ const registerCopyListeners = () => {
         return
       }
 
-      console.log('copied')
       copyToClipboard(code.textContent)
     })
   })
