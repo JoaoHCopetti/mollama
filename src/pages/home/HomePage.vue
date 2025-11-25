@@ -122,12 +122,12 @@ watch(
   <div class="h-full flex flex-col">
     <div
       ref="messagesRef"
-      class="mt-10 h-full overflow-auto"
+      class="h-full overflow-auto"
       @scroll="messagesScroll.handleBottomFixedScroll"
     >
       <ChatMessages
         v-if="activeSession"
-        class="w-3/4"
+        class="w-3/4 mt-5"
         :session-id="activeSession.id"
         :chat-state="chat.state"
         :current-message-id="currentMessageId"
