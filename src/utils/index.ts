@@ -1,7 +1,7 @@
 import hljs from 'highlight.js'
 import 'highlight.js/styles/stackoverflow-dark.min.css'
 import MarkdownIt from 'markdown-it'
-import { fenceWrapperPlugin, tableWrapperPlugin } from './markdown-plugins'
+import { fenceWrapperPlugin, tableWrapperPlugin } from './markdown-it-plugins'
 
 export const markdown = new MarkdownIt({
   html: true,

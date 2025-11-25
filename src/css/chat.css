@@ -1,8 +1,5 @@
 @import './chat/chat-table.css';
-@import './chat//chat-fence.css';
-
-:root {
-}
+@import './chat/chat-fence.css';
 
 @layer components {
   .message-container p {
