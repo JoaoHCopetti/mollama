@@ -12,17 +12,19 @@ export const tableWrapperPlugin = (md: MarkdownIt) => {
   const defaultTableClose = md.renderer.rules.table_close
 
   md.renderer.rules.table_open = (tokens, idx, options, env, self) => {
-    const original = defaultTableOpen
+    const originalRender = defaultTableOpen
       ? defaultTableOpen(tokens, idx, options, env, self)
       : self.renderToken(tokens, idx, options)
-    return `<div class="${className}">${original}`
+
+    return `<div class="${className}">${originalRender}`
   }
 
   md.renderer.rules.table_close = (tokens, idx, options, env, self) => {
-    const original = defaultTableClose
+    const originalRender = defaultTableClose
       ? defaultTableClose(tokens, idx, options, env, self)
       : self.renderToken(tokens, idx, options)
-    return `${original}</div>`
+
+    return `${originalRender}</div>`
   }
 }
 

@@ -12,7 +12,7 @@
   }
 
   .message-container .md-fence-wrapper pre {
-    @apply px-3 py-3;
+    @apply px-3 py-3 leading-5 overflow-auto;
   }
 
   .message-container .md-fence-wrapper .md-fence-header {
