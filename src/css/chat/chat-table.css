@@ -1,0 +1,29 @@
+@layer components {
+  .message-container .md-table-wrapper {
+    @apply rounded-lg overflow-auto my-5;
+  }
+
+  .message-container table {
+    @apply border-collapse w-full;
+  }
+
+  .message-container table tbody tr:nth-child(odd) td {
+    @apply bg-gray-700;
+  }
+
+  .message-container table tbody tr:nth-child(even) td {
+    @apply bg-gray-800;
+  }
+
+  .message-container table th {
+    @apply bg-gray-900 text-white/70 text-[0.8rem] py-3 px-5 leading-5 uppercase;
+  }
+
+  .message-container table td {
+    @apply bg-base-200 py-2 px-5 border-none text-[0.9rem] leading-6;
+  }
+
+  .message-container table tr:not(:last-child) td {
+    @apply border-b;
+  }
+}

@@ -1,0 +1,25 @@
+@layer components {
+  .message-container code:not([class]) {
+    @apply text-warning-content bg-warning py-1 px-1.5 mr-[2px] rounded-[0.2rem];
+  }
+
+  .message-container .md-fence-wrapper pre {
+    @apply p-0 m-0;
+  }
+
+  .message-container .md-fence-wrapper {
+    @apply bg-gray-800 rounded-lg my-5;
+  }
+
+  .message-container .md-fence-wrapper pre {
+    @apply px-3 py-3;
+  }
+
+  .message-container .md-fence-wrapper .md-fence-header {
+    @apply bg-gray-900 px-3 py-2 text-sm rounded-t-lg uppercase font-bold;
+  }
+
+  .message-container .md-fence-wrapper .md-fence-header .language-name {
+    @apply text-white/50;
+  }
+}

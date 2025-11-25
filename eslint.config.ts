@@ -1,8 +1,5 @@
 import pluginVitest from '@vitest/eslint-plugin'
-import {
-  defineConfigWithVueTs,
-  vueTsConfigs,
-} from '@vue/eslint-config-typescript'
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import pluginVue from 'eslint-plugin-vue'
 import { globalIgnores } from 'eslint/config'
@@ -33,10 +30,7 @@ export default defineConfigWithVueTs(
   {
     rules: {
       '@typescript-eslint/no-explicit-any': ['off'],
-      'vue/padding-line-between-tags': [
-        'error',
-        [{ blankLine: 'always', prev: '*', next: '*' }],
-      ],
+      'vue/padding-line-between-tags': ['error', [{ blankLine: 'always', prev: '*', next: '*' }]],
       'vue/component-name-in-template-casing': ['warn', 'PascalCase'],
       'vue/padding-line-between-blocks': ['warn', 'always'],
       'vue/html-self-closing': [

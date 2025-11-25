@@ -14,13 +14,15 @@ const htmlContent = computed(() =>
   props.message.role === 'user' ? props.message.content : markdown.render(props.message.content),
 )
 
-const htmlThinking = computed(() => props.message.thinking && markdown.render(props.message.thinking))
+const htmlThinking = computed(
+  () => props.message.thinking && markdown.render(props.message.thinking),
+)
 </script>
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div
-    class="chat-container py-3 rounded-2xl last:mb-10 w-4/5 wrap-break-word leading-7"
+    class="message-container py-3 rounded-2xl last:mb-10 w-4/5 wrap-break-word leading-7"
     :class="{
       'bg-base-200 ml-auto px-4': message.role === 'user',
     }"

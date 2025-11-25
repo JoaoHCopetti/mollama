@@ -2,6 +2,7 @@
 import { db } from '@/database/db'
 import type { MessageData } from '@/database/Message'
 import type { ChatState } from '@/types'
+import { copyToClipboard } from '@/utils'
 import { liveQuery, type Subscription } from 'dexie'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import ChatMessagesItem from './ChatMessagesItem.vue'
@@ -20,7 +21,9 @@ const setupLiveQuery = () => {
     subscription.value.unsubscribe()
   }
 
-  const messagesObservable = liveQuery(() => db.messages.where('sessionId').equals(props.sessionId).toArray())
+  const messagesObservable = liveQuery(() =>
+    db.messages.where('sessionId').equals(props.sessionId).toArray(),
+  )
 
   subscription.value = messagesObservable.subscribe({
     next: (result) => (messages.value = result),
@@ -28,10 +31,43 @@ const setupLiveQuery = () => {
   })
 }
 
-watch(() => props.sessionId, setupLiveQuery)
+const registerCopyListeners = () => {
+  const copyButtons = document.querySelectorAll('.language button')
+
+  if (!copyButtons.length) {
+    return
+  }
+
+  copyButtons?.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const code = btn.closest('.md-fence-wrapper')?.querySelector('pre code')
+
+      if (!code) {
+        return
+      }
+
+      console.log('copied')
+      copyToClipboard(code.textContent)
+    })
+  })
+}
+
+watch(
+  () => props.sessionId,
+  () => {
+    setupLiveQuery()
+    setTimeout(() => {
+      registerCopyListeners()
+    }, 100)
+  },
+)
 
 onMounted(() => {
   setupLiveQuery()
+
+  setTimeout(() => {
+    registerCopyListeners()
+  }, 100)
 })
 
 onBeforeUnmount(() => {

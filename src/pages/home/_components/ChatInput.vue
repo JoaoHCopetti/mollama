@@ -31,7 +31,8 @@ const adjustTextareaHeight = () => {
 
   textarea.style.height = 'auto'
   textarea.style.height =
-    (textarea.scrollHeight < MAX_TEXTAREA_HEIGHT ? textarea.scrollHeight : MAX_TEXTAREA_HEIGHT) + 'px'
+    (textarea.scrollHeight < MAX_TEXTAREA_HEIGHT ? textarea.scrollHeight : MAX_TEXTAREA_HEIGHT) +
+    'px'
 }
 
 const onThinkChange = (e: Event) => {

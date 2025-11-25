@@ -1,13 +1,11 @@
+@import './chat/chat-table.css';
+@import './chat//chat-code.css';
+
+:root {
+}
+
 @layer components {
-  .chat-container pre {
-    @apply p-4 rounded-sm bg-base-200 leading-5 overflow-x-auto;
-  }
-
-  .chat-container code:not([class]) {
-    @apply text-warning-content bg-warning py-1 px-1.5 mr-[2px] rounded-[0.2rem];
-  }
-
-  .chat-container p {
+  .message-container p {
     @apply m-0 pb-0;
   }
 }

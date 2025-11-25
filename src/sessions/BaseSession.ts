@@ -36,7 +36,10 @@ export default abstract class BaseSession {
       this.response.thinking += thinking || ''
     }
 
-    Object.assign<ChatResponse, Partial<ChatResponse>>(this.response, omit(response, ['content', 'thinking']))
+    Object.assign<ChatResponse, Partial<ChatResponse>>(
+      this.response,
+      omit(response, ['content', 'thinking']),
+    )
 
     if (this.responseChangeCallback) {
       await this.responseChangeCallback(this.response)

@@ -1,7 +1,10 @@
 import { db } from '@/database/db'
 import type { MessageInput } from '@/database/Message'
 
-export const createOrUpdateMessage = async (message: Omit<MessageInput, 'createdAt' | 'updatedAt'>, id?: number) => {
+export const createOrUpdateMessage = async (
+  message: Omit<MessageInput, 'createdAt' | 'updatedAt'>,
+  id?: number,
+) => {
   const now = new Date().toISOString()
 
   if (id) {
