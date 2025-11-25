@@ -81,11 +81,11 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
       <div class="flex items-center gap-2">
         <ChatInputModels />
 
-        <label class="label bg-base-200 py-1 pl-2 pr-3 text-sm rounded-full">
+        <label class="dui-label bg-base-200 py-1 pl-2 pr-3 text-sm rounded-full">
           <input
             v-model="think"
             type="checkbox"
-            class="toggle bg-base-300 border-base-300 toggle-primary"
+            class="dui-toggle bg-base-300 border-base-300 dui-toggle-primary"
             @input="onThinkChange"
           />
           Think
@@ -95,7 +95,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
       <div>
         <button
           v-if="!chatState.isLoading"
-          class="btn btn-primary"
+          class="dui-btn dui-btn-primary"
           :disabled="input.trim() === ''"
           @click="onMessageSend"
         >
@@ -104,7 +104,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
 
         <button
           v-else
-          class="btn btn-error"
+          class="dui-btn dui-btn-error"
           @click="$emit('stop')"
         >
           Stop

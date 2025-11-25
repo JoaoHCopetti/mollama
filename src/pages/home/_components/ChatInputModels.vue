@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
-import type { ModelData } from '@/database/Model'
 import { useAppStore } from '@/stores/app-store'
+import type { Model } from '@/types'
 import { focusChatTextarea } from '@/utils'
 import { computed, onMounted } from 'vue'
 
@@ -10,7 +10,7 @@ const appStore = useAppStore()
 const models = computed(() => appStore.availableModels)
 const appStorage = useLocalStorage()
 
-const onModelClick = (model: ModelData) => {
+const onModelClick = (model: Model) => {
   appStore.selectModel(model)
 
   focusChatTextarea()
@@ -26,18 +26,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="dropdown dropdown-top">
+  <div class="dui-dropdown dui-dropdown-top">
     <div
       tabindex="0"
       role="button"
-      class="btn"
+      class="dui-btn"
     >
       {{ appStore.selectedModel?.name || 'Select a model' }}
     </div>
 
     <ul
       tabindex="-1"
-      class="dropdown-content menu bg-base-100 rounded-box z-1 w-72 p-2 shadow-sm"
+      class="dui-dropdown-content dui-menu bg-base-100 rounded-box z-1 w-72 p-2 shadow-sm"
     >
       <li
         v-for="model in models"

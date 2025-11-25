@@ -1,4 +1,3 @@
-import { sfcPlugin } from '@mdit-vue/plugin-sfc'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/stackoverflow-dark.min.css'
 import MarkdownIt from 'markdown-it'
@@ -36,6 +35,7 @@ export const focusChatTextarea = () => {
 }
 
 export const markdown = new MarkdownIt({
+  html: true,
   highlight: (str, lang) => {
     if (lang && hljs.getLanguage(lang)) {
       return hljs.highlight(str, { language: lang }).value
@@ -43,4 +43,4 @@ export const markdown = new MarkdownIt({
 
     return str
   },
-}).use(sfcPlugin)
+})

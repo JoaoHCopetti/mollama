@@ -10,14 +10,17 @@ const props = defineProps<{
   currentMessageId?: number
 }>()
 
-const htmlContent = computed(() => markdown.render(props.message.content))
+const htmlContent = computed(() =>
+  props.message.role === 'user' ? props.message.content : markdown.render(props.message.content),
+)
+
 const htmlThinking = computed(() => props.message.thinking && markdown.render(props.message.thinking))
 </script>
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div
-    class="py-3 w-full rounded-2xl last:mb-10 max-w-4/5 wrap-break-word leading-7"
+    class="chat-container py-3 rounded-2xl last:mb-10 w-4/5 wrap-break-word leading-7"
     :class="{
       'bg-base-200 ml-auto px-4': message.role === 'user',
     }"
@@ -43,23 +46,9 @@ const htmlThinking = computed(() => props.message.thinking && markdown.render(pr
       v-html="htmlThinking"
     />
 
-    <div v-html="htmlContent" />
+    <div
+      :class="{ 'whitespace-pre-line': message.role === 'user' }"
+      v-html="htmlContent"
+    />
   </div>
 </template>
-
-<style>
-pre {
-  line-height: 1.25rem !important;
-  background-color: var(--color-base-200);
-  padding: 1rem;
-  border-radius: 0.25rem;
-}
-
-code:not([class]) {
-  color: var(--color-warning-content);
-  background-color: var(--color-warning);
-  padding: 2px 4px;
-  margin-right: 2px;
-  border-radius: 0.2rem;
-}
-</style>
