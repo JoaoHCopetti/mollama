@@ -12,8 +12,7 @@ export const useElementScroll = (el: Readonly<ShallowRef<HTMLDivElement | null>>
 
   const handleBottomFixedScroll = throttle(() => {
     if (!el.value) {
-      throw new Error("Failed to handle scroll: couldn't access template ref element")
-      return
+      throw new Error('Failed to handle scroll: template ref element is undefined')
     }
 
     const maxScrollTop = el.value.scrollHeight - el.value.clientHeight
