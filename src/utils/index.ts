@@ -20,7 +20,9 @@ export const timeDiffForHumans = (date: Date): string => {
   const now = new Date()
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000)
 
-  if (seconds < 60) return 'just now'
+  if (seconds < 60) {
+    return 'just now'
+  }
 
   const intervals: [string, number][] = [
     ['month', 2592000],

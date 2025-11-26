@@ -41,6 +41,7 @@ export default defineConfigWithVueTs(
           },
         },
       ],
+      curly: ['error', 'all'],
     },
   },
 )

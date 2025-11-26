@@ -25,7 +25,9 @@ onMounted(() => {
 })
 
 const adjustTextareaHeight = () => {
-  if (!textareaRef.value) return
+  if (!textareaRef.value) {
+    return
+  }
 
   const textarea = textareaRef.value
 
@@ -42,7 +44,9 @@ const onThinkChange = (e: Event) => {
 }
 
 const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
-  if (input.value.trim() === '') return
+  if (input.value.trim() === '') {
+    return
+  }
 
   if (event instanceof PointerEvent) {
     emit('send')
@@ -50,7 +54,9 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
   }
 
   if (event.key === 'Enter') {
-    if (event.shiftKey) return
+    if (event.shiftKey) {
+      return
+    }
 
     event.preventDefault()
     emit('send')
