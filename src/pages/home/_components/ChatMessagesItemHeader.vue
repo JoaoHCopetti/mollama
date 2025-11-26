@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ModelInfo from '@/components/ModelInfo.vue'
+import AppModelInfo from '@/components/AppModelInfo.vue'
 import type { MessageData } from '@/database/Message'
 import type { ChatState } from '@/types'
 
@@ -16,7 +16,7 @@ defineProps<{
       v-if="message.model"
       class="uppercase font-bold text-sm mb-3"
     >
-      <ModelInfo :model="message.model" />
+      <AppModelInfo :model="message.model" />
     </div>
 
     <div

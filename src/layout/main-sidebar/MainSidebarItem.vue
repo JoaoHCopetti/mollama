@@ -14,8 +14,8 @@ const date = computed(() => timeDiffForHumans(new Date(props.session.createdAt))
     is="li"
     v-slot="{ isActive }"
     :to="`/sessions/${session.id}`"
-    class="flex flex-col no-underline rounded gap-2 p-3 m-1 bg-base-100 hover:bg-base-300 relative transition-all cursor-pointer active:scale-[1.01]"
-    active-class="border-l-4 border-primary"
+    class="flex flex-col no-underline rounded gap-2 p-3 m-1 bg-base-100 hover:bg-base-300 relative transition-all cursor-pointer active:scale-[1.01] border-l-0 border-primary duration-150"
+    active-class="border-l-4"
   >
     <div
       class="truncate text-white"

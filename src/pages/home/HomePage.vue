@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppTransition from '@/components/AppTransition.vue'
 import { useAutoScroll } from '@/composables/use-auto-scroll'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import BaseSession from '@/providers/sessions/BaseSession'
@@ -114,13 +115,24 @@ const stopStreaming = () => {
       class="h-full overflow-auto"
       @scroll="messagesScroll.handleBottomFixedScroll"
     >
-      <ChatMessages
-        v-if="activeSession"
-        class="w-3/4 mt-5"
-        :session-id="activeSession.id"
-        :chat-state="session.state"
-        :last-message-id="lastMessageId"
-      />
+      <AppTransition
+        mode="out-in"
+        from-class="opacity-0"
+        to-class="opacity-100"
+      >
+        <ChatMessages
+          v-if="activeSession"
+          :key="activeSession.id"
+          class="w-3/4 mt-5"
+          :session-id="activeSession.id"
+          :chat-state="session.state"
+          :last-message-id="lastMessageId"
+        />
+
+        <div v-else>
+          <!-- TODO: Fancy message here -->
+        </div>
+      </AppTransition>
     </div>
 
     <div class="mb-5">

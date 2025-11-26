@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import ModelInfo from '@/components/ModelInfo.vue'
+import ModelInfo from '@/components/AppModelInfo.vue'
 import { useAppStore } from '@/stores/app-store'
 import type { Model } from '@/types'
 import { focusChatTextarea } from '@/utils'
+import { PhCloud, PhDesktop } from '@phosphor-icons/vue'
 import { computed } from 'vue'
 
 const appStore = useAppStore()
@@ -43,10 +44,14 @@ const onModelClick = (model: Model) => {
         @click.prevent="onModelClick(model)"
       >
         <a class="truncate">
-          <ModelInfo
-            :model="model"
-            display-prop="fullName"
+          <Component
+            :is="model.isCloud ? PhCloud : PhDesktop"
+            weight="fill"
           />
+
+          <div>{{ model.prettyName }}</div>
+
+          <span class="dui-badge dui-badge-sm opacity-50 border-0">{{ model.parameterSize }}</span>
         </a>
       </li>
     </ul>

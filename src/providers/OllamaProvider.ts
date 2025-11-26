@@ -9,30 +9,34 @@ export default class OllamaProvider implements BaseProvider {
     return new OllamaSession(model)
   }
 
-  private getPrettyName = (model: ModelResponse) => {
-    const name = model.name.split(':')[0]
+  private getLabels = (model: ModelResponse) => {
+    const name = model.name.split(':')[0]!
+    const nameParts = name.split('/')
+    const [user, prettyName] = nameParts.length === 2 ? [nameParts[0], nameParts[1]] : [name, name]
 
-    if (!name) {
-      return model.name
+    return {
+      name,
+      fullName: model.name,
+      prettyName: prettyName || name,
+      user,
     }
-
-    return name.split('/')[1] || name
-  }
-
-  private getModelUserName = (model: ModelResponse) => {
-    return model.name.split('/')[0]
   }
 
   async getModels(): Promise<Model[]> {
     const ollama = new Ollama()
 
-    return (await ollama.list()).models.map((model) => ({
-      id: model.digest,
-      fullName: model.name,
-      prettyName: this.getPrettyName(model),
-      user: this.getModelUserName(model),
-      isCloud: 'remote_host' in model,
-      parameterSize: model.details.parameter_size,
-    }))
+    return (await ollama.list()).models.map((model) => {
+      const { fullName, name, prettyName, user } = this.getLabels(model)
+
+      return {
+        id: model.digest,
+        name,
+        fullName,
+        prettyName,
+        user,
+        isCloud: 'remote_host' in model,
+        parameterSize: model.details.parameter_size,
+      }
+    })
   }
 }
