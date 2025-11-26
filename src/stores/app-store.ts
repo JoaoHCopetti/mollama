@@ -4,18 +4,10 @@ import type { BaseProvider } from '@/providers/BaseProvider'
 import OllamaProvider from '@/providers/OllamaProvider'
 import type { Model } from '@/types'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, shallowRef, type ShallowRef } from 'vue'
 
 export enum ProvidersEnum {
   Ollama,
-}
-
-const getProvider = (provider: ProvidersEnum): BaseProvider | undefined => {
-  if (provider === ProvidersEnum.Ollama) {
-    return new OllamaProvider()
-  }
-
-  return undefined
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -24,15 +16,25 @@ export const useAppStore = defineStore('app', () => {
   const availableModels = ref<Model[]>([])
   const selectedModel = ref<Model>()
   const activeSession = ref<SessionData>()
+  const provider = shallowRef<BaseProvider>() as ShallowRef<BaseProvider>
 
-  const init = async (provider: ProvidersEnum) => {
-    const providerInstance = getProvider(provider)
+  const init = async (providerEnum: ProvidersEnum) => {
+    const providerInstance = getProvider(providerEnum)
 
     if (!providerInstance) {
       throw new Error('No provider specified')
     }
 
+    provider.value = providerInstance
     availableModels.value = await providerInstance.fetchModels()
+  }
+
+  const getProvider = (provider: ProvidersEnum): BaseProvider | undefined => {
+    if (provider === ProvidersEnum.Ollama) {
+      return new OllamaProvider()
+    }
+
+    return undefined
   }
 
   const selectModel = (model: Model) => {
@@ -46,5 +48,6 @@ export const useAppStore = defineStore('app', () => {
     selectedModel,
     activeSession,
     selectModel,
+    provider,
   }
 })

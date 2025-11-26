@@ -3,18 +3,18 @@ import type { MessageInput } from '@/database/Message'
 import type { SessionInput } from '@/database/Session'
 
 export const createOrUpdateMessage = async (
-  message: Omit<MessageInput, 'createdAt' | 'updatedAt'>,
+  messageInput: Omit<MessageInput, 'createdAt' | 'updatedAt'>,
   id?: number,
 ) => {
   const now = new Date().toISOString()
 
   if (id) {
-    await db.messages.update(id, { ...message, updatedAt: now })
+    await db.messages.update(id, { ...messageInput, updatedAt: now })
     return id
   }
 
   return await db.messages.add({
-    ...message,
+    ...messageInput,
     createdAt: now,
     updatedAt: now,
   })

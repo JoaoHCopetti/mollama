@@ -2,21 +2,25 @@ import type { ChatResponse, ChatState, FetchResponseOptions, Model } from '@/typ
 import { omit } from 'lodash-es'
 
 export default abstract class BaseSession {
-  public state: ChatState
-  public response: ChatResponse
+  public lastState!: ChatState
+  public lastResponse!: ChatResponse
 
-  protected abortController: AbortController
+  protected abortController!: AbortController
   protected responseChangeCallback?: CallableFunction
-  protected model!: Model
+  protected currentModel!: Model
 
   constructor() {
-    this.response = {
+    this.resetState()
+  }
+
+  private resetState = () => {
+    this.lastResponse = {
       content: '',
       thinking: '',
-      model: { id: 'n-a', name: 'N/A' },
+      model: { id: 'N/A', name: 'N/A' },
     }
 
-    this.state = {
+    this.lastState = {
       isLoading: false,
       isThinking: false,
       isStreaming: false,
@@ -29,20 +33,20 @@ export default abstract class BaseSession {
     const { content, thinking } = response
 
     if (content) {
-      this.response.content += content || ''
+      this.lastResponse.content += content || ''
     }
 
     if (thinking) {
-      this.response.thinking += thinking || ''
+      this.lastResponse.thinking += thinking || ''
     }
 
     Object.assign<ChatResponse, Partial<ChatResponse>>(
-      this.response,
+      this.lastResponse,
       omit(response, ['content', 'thinking']),
     )
 
     if (this.responseChangeCallback) {
-      await this.responseChangeCallback(this.response)
+      await this.responseChangeCallback(this.lastResponse)
     }
   }
 
@@ -58,10 +62,6 @@ export default abstract class BaseSession {
   }
 
   protected finish() {
-    this.state = {
-      isLoading: false,
-      isStreaming: false,
-      isThinking: false,
-    }
+    this.resetState()
   }
 }

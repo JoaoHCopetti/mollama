@@ -10,6 +10,11 @@ export const useAutoScroll = (el: Readonly<ShallowRef<HTMLDivElement | null>>) =
     }
   }
 
+  const stickAndScrollToBottom = () => {
+    stickScrollToBottom.value = true
+    scrollToBottom()
+  }
+
   const handleBottomFixedScroll = throttle(() => {
     if (!el.value) {
       throw new Error('Failed to handle scroll: template ref element is undefined')
@@ -34,5 +39,11 @@ export const useAutoScroll = (el: Readonly<ShallowRef<HTMLDivElement | null>>) =
     })
   }
 
-  return { registerWatcher, stickScrollToBottom, scrollToBottom, handleBottomFixedScroll }
+  return {
+    registerWatcher,
+    stickScrollToBottom,
+    stickAndScrollToBottom,
+    scrollToBottom,
+    handleBottomFixedScroll,
+  }
 }

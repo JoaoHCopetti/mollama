@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useAutoScroll } from '@/composables/use-auto-scroll'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
+import BaseSession from '@/providers/sessions/BaseSession'
 import { createOrUpdateMessage, getOrCreateSession } from '@/services/chat-service'
-import BaseSession from '@/sessions/BaseSession'
-import OllamaSession from '@/sessions/OllamaSession'
 import { useAppStore } from '@/stores/app-store'
+import { clone } from 'lodash-es'
 import { computed, onBeforeMount, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './_components/ChatInput.vue'
@@ -18,7 +18,7 @@ const messagesScroll = useAutoScroll(useTemplateRef('messagesRef'))
 
 const input = defineModel<string>('input', { default: '' })
 
-const chat = ref<BaseSession>(new OllamaSession())
+const session = ref<BaseSession>(appStore.provider.createSession())
 const think = ref<boolean>(false)
 const currentMessageId = ref<number>()
 
@@ -28,30 +28,32 @@ onBeforeMount(async () => {
   think.value = storage.getItem(LocalStorageEnum.Think) || false
 })
 
-messagesScroll.registerWatcher(() => chat.value.response.content || chat.value.response.thinking)
+messagesScroll.registerWatcher(
+  () => session.value.lastResponse.content || session.value.lastResponse.thinking,
+)
 
 const onSendMessage = async () => {
   if (!appStore.selectedModel) {
     throw new Error('No model selected')
   }
 
-  chat.value = new OllamaSession()
+  const content = input.value
+  input.value = ''
+
+  session.value = appStore.provider.createSession()
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: input.value,
-    lastModel: appStore.selectedModel,
+    lastModel: clone(appStore.selectedModel),
   })
 
   await createOrUpdateMessage({
-    content: input.value,
+    content,
     role: 'user',
     sessionId: appStore.activeSession.id,
   })
 
-  input.value = ''
-
-  messagesScroll.stickScrollToBottom.value = true
-  messagesScroll.scrollToBottom()
+  messagesScroll.stickAndScrollToBottom()
 
   registerChatListener(appStore.activeSession.id)
 
@@ -61,7 +63,7 @@ const onSendMessage = async () => {
 const registerChatListener = (sessionId: number) => {
   currentMessageId.value = undefined
 
-  chat.value.onResponseChange(async (response) => {
+  session.value.onResponseChange(async (response) => {
     currentMessageId.value = await createOrUpdateMessage(
       {
         sessionId,
@@ -83,7 +85,7 @@ const handleResponse = async (sessionId: number) => {
     throw new Error('No model selected')
   }
 
-  await chat.value.handleResponse({
+  await session.value.handleResponse({
     sessionId,
     model: appStore.selectedModel.name,
     stream: true,
@@ -98,7 +100,7 @@ const handleResponse = async (sessionId: number) => {
 }
 
 const stopStreaming = () => {
-  chat.value.abort()
+  session.value.abort()
 }
 </script>
 
@@ -113,7 +115,7 @@ const stopStreaming = () => {
         v-if="activeSession"
         class="w-3/4 mt-5"
         :session-id="activeSession.id"
-        :chat-state="chat.state"
+        :chat-state="session.lastState"
         :current-message-id="currentMessageId"
       />
     </div>
@@ -123,7 +125,7 @@ const stopStreaming = () => {
         v-model:input="input"
         v-model:think="think"
         class="w-3/4"
-        :chat-state="chat.state"
+        :chat-state="session.lastState"
         @send="onSendMessage"
         @stop="stopStreaming"
       />
