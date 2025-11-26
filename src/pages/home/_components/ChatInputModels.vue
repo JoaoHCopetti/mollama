@@ -1,28 +1,18 @@
 <script setup lang="ts">
-import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import { useAppStore } from '@/stores/app-store'
 import type { Model } from '@/types'
 import { focusChatTextarea } from '@/utils'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
 const appStore = useAppStore()
 
 const models = computed(() => appStore.availableModels)
-const appStorage = useLocalStorage()
 
 const onModelClick = (model: Model) => {
   appStore.selectModel(model)
 
   focusChatTextarea()
 }
-
-onMounted(() => {
-  const model = appStorage.getItem(LocalStorageEnum.SelectedModel)
-
-  if (model) {
-    appStore.selectModel(model)
-  }
-})
 </script>
 
 <template>

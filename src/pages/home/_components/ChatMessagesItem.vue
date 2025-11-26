@@ -32,7 +32,7 @@ const htmlThinking = computed(
       class="text-sm text-gray-400 mb-2"
     >
       <template v-if="chatState.isThinking && message.id === currentMessageId">
-        <span class="loading loading-ring loading-xs mr-1" />
+        <span class="dui-loading dui-loading-ring dui-loading-xs mr-1" />
 
         <span class="animated-text">Thinking</span>
       </template>

@@ -25,6 +25,8 @@ const currentMessageId = ref<number>()
 const activeSession = computed(() => appStore.activeSession)
 
 onBeforeMount(async () => {
+  appStore.selectModel(storage.getItem(LocalStorageEnum.SelectedModel) || undefined)
+
   think.value = storage.getItem(LocalStorageEnum.Think) || false
 })
 
@@ -43,7 +45,7 @@ const onSendMessage = async () => {
   session.value = appStore.provider.createSession()
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
-    title: input.value,
+    title: content,
     lastModel: clone(appStore.selectedModel),
   })
 
