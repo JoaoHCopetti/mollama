@@ -43,7 +43,10 @@ const onModelClick = (model: Model) => {
         @click.prevent="onModelClick(model)"
       >
         <a class="truncate">
-          <ModelInfo :model="model" />
+          <ModelInfo
+            :model="model"
+            display-prop="fullName"
+          />
         </a>
       </li>
     </ul>

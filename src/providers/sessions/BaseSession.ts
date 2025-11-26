@@ -16,7 +16,7 @@ export default abstract class BaseSession {
     this.response = {
       content: '',
       thinking: '',
-      model: { id: 'N/A', fullName: 'N/A' },
+      model: { id: 'N/A', fullName: 'N/A', prettyName: 'N/A' },
     }
 
     this.state = {

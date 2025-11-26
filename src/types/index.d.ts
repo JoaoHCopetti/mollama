@@ -30,6 +30,7 @@ type Model = {
   id: string
   fullName: string
   prettyName: string
+  user?: string
   parameterSize?: string
   isCloud?: boolean
 }

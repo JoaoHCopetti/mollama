@@ -2,9 +2,13 @@
 import type { Model } from '@/types'
 import { PhCloud, PhDesktop } from '@phosphor-icons/vue'
 
-defineProps<{
-  model: Model
-}>()
+withDefaults(
+  defineProps<{
+    model: Model
+    displayProp?: keyof Model
+  }>(),
+  { displayProp: 'prettyName' },
+)
 </script>
 
 <template>
@@ -19,10 +23,10 @@ defineProps<{
       weight="fill"
     />
 
-    <span>{{ model.prettyName }}</span>
+    <span>{{ model[displayProp] }}</span>
 
-    <span class="dui-badge dui-badge-sm bg-primary/10 border-0 font-bold">{{
-      model.parameterSize
-    }}</span>
+    <span class="dui-badge dui-badge-sm bg-primary/10 border-0 font-bold opacity-50">
+      {{ model.parameterSize }}
+    </span>
   </div>
 </template>
