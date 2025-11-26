@@ -1,4 +1,4 @@
-import { retrieveContext } from '@/services/chat-service'
+import type { MessageData } from '@/database/Message'
 import type { ChatResponse, FetchResponseOptions } from '@/types'
 import { Ollama, type Message, type ChatResponse as OllamaChatResponse } from 'ollama/browser'
 import BaseSession from './BaseSession'
@@ -6,30 +6,29 @@ import BaseSession from './BaseSession'
 const ollama = new Ollama()
 
 export default class OllamaSession extends BaseSession {
-  public async handleResponse(options: FetchResponseOptions): Promise<void> {
-    const context = await retrieveContext(options.sessionId)
-
+  public async performHandleResponse(
+    options: FetchResponseOptions,
+    context: MessageData[],
+  ): Promise<void> {
     const formattedContext = context.map((message) => ({
       content: message.content,
       role: message.role,
       thinking: message.thinking,
     }))
 
-    this.lastState.isLoading = true
+    this.state.isLoading = true
 
     if (!options.stream) {
       await this.fetchStaticResponse(options, formattedContext)
     } else {
-      this.lastState.isStreaming = true
+      this.state.isStreaming = true
       await this.fetchStreamedResponse(options, formattedContext)
     }
-
-    this.finish()
   }
 
   protected getFormattedResponse = (response: OllamaChatResponse): ChatResponse => {
     return {
-      model: this.currentModel,
+      model: this.model,
       content: response.message.content,
       thinking: response.message.thinking,
       done: response.done,
@@ -61,9 +60,10 @@ export default class OllamaSession extends BaseSession {
     const iterator = response[Symbol.asyncIterator]()
 
     for await (const chunk of iterator) {
-      this.lastState.isThinking = !!chunk.message.thinking
+      this.state.isThinking = !!chunk.message.thinking
 
       if (this.abortController.signal.aborted) {
+        console.log('hi')
         response.abort()
         return
       }

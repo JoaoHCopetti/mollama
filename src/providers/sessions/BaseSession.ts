@@ -1,26 +1,24 @@
+import type { MessageData } from '@/database/Message'
+import { retrieveContext } from '@/services/chat-service'
 import type { ChatResponse, ChatState, FetchResponseOptions, Model } from '@/types'
 import { omit } from 'lodash-es'
 
 export default abstract class BaseSession {
-  public lastState!: ChatState
-  public lastResponse!: ChatResponse
+  public state: ChatState
+  public response: ChatResponse
 
-  protected abortController!: AbortController
+  protected abortController: AbortController
   protected responseChangeCallback?: CallableFunction
-  protected currentModel!: Model
+  protected model!: Model
 
   constructor() {
-    this.resetState()
-  }
-
-  private resetState = () => {
-    this.lastResponse = {
+    this.response = {
       content: '',
       thinking: '',
       model: { id: 'N/A', name: 'N/A' },
     }
 
-    this.lastState = {
+    this.state = {
       isLoading: false,
       isThinking: false,
       isStreaming: false,
@@ -33,24 +31,34 @@ export default abstract class BaseSession {
     const { content, thinking } = response
 
     if (content) {
-      this.lastResponse.content += content || ''
+      this.response.content += content || ''
     }
 
     if (thinking) {
-      this.lastResponse.thinking += thinking || ''
+      this.response.thinking += thinking || ''
     }
 
     Object.assign<ChatResponse, Partial<ChatResponse>>(
-      this.lastResponse,
+      this.response,
       omit(response, ['content', 'thinking']),
     )
 
     if (this.responseChangeCallback) {
-      await this.responseChangeCallback(this.lastResponse)
+      await this.responseChangeCallback(this.response)
     }
   }
 
-  public abstract handleResponse(options: FetchResponseOptions): Promise<void>
+  public async handleResponse(options: FetchResponseOptions) {
+    const context = await retrieveContext(options.sessionId)
+
+    await this.performHandleResponse(options, context)
+    this.finish()
+  }
+
+  protected abstract performHandleResponse(
+    options: FetchResponseOptions,
+    context: MessageData[],
+  ): Promise<void>
 
   public onResponseChange(callback: (response: ChatResponse) => void) {
     this.responseChangeCallback = callback
@@ -62,6 +70,10 @@ export default abstract class BaseSession {
   }
 
   protected finish() {
-    this.resetState()
+    this.state = {
+      isLoading: false,
+      isStreaming: false,
+      isThinking: false,
+    }
   }
 }

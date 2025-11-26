@@ -31,7 +31,7 @@ onBeforeMount(async () => {
 })
 
 messagesScroll.registerWatcher(
-  () => session.value.lastResponse.content || session.value.lastResponse.thinking,
+  () => session.value.response.content || session.value.response.thinking,
 )
 
 const onSendMessage = async () => {
@@ -117,7 +117,7 @@ const stopStreaming = () => {
         v-if="activeSession"
         class="w-3/4 mt-5"
         :session-id="activeSession.id"
-        :chat-state="session.lastState"
+        :chat-state="session.state"
         :current-message-id="currentMessageId"
       />
     </div>
@@ -127,7 +127,7 @@ const stopStreaming = () => {
         v-model:input="input"
         v-model:think="think"
         class="w-3/4"
-        :chat-state="session.lastState"
+        :chat-state="session.state"
         @send="onSendMessage"
         @stop="stopStreaming"
       />
