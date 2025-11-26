@@ -16,7 +16,7 @@ export default class OllamaProvider implements BaseProvider {
     return (await ollama.list()).models.map((model) => ({
       id: 'ollama:' + kebabCase(model.name),
       name: model.name,
-      isCloud: false,
+      isCloud: model.name.includes('-cloud'),
       parameterSize: model.details.parameter_size,
     }))
   }

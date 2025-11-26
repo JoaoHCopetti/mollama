@@ -1,7 +1,7 @@
 import { db } from '@/database/db'
 import type { MessageInput } from '@/database/Message'
 import type { SessionInput } from '@/database/Session'
-import { toRaw } from 'vue'
+import { omit } from 'lodash-es'
 
 export const createOrUpdateMessage = async (
   messageInput: Omit<MessageInput, 'createdAt' | 'updatedAt'>,
@@ -11,16 +11,16 @@ export const createOrUpdateMessage = async (
 
   if (id) {
     await db.messages.update(id, {
-      ...messageInput,
-      model: toRaw(messageInput.model),
+      ...omit(messageInput, ['role', 'model']),
       updatedAt: now,
     })
+
     return id
   }
 
   return await db.messages.add({
     ...messageInput,
-    model: toRaw(messageInput.model),
+    model: messageInput.model,
     createdAt: now,
     updatedAt: now,
   })

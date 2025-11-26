@@ -11,6 +11,7 @@ defineProps<{
 
 <template>
   <div>
+    {{ message.model }}
     <div
       v-if="message.thinking"
       class="text-sm text-gray-400 mb-2"
