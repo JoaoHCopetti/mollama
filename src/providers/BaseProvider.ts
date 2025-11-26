@@ -3,5 +3,5 @@ import type { Model } from '@/types'
 
 export interface BaseProvider {
   createSession(model?: Model): BaseSession
-  fetchModels(): Promise<Model[]>
+  getModels(): Promise<Model[]>
 }

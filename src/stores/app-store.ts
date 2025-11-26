@@ -26,7 +26,7 @@ export const useAppStore = defineStore('app', () => {
     }
 
     provider.value = providerInstance
-    availableModels.value = await providerInstance.fetchModels()
+    availableModels.value = await providerInstance.getModels()
   }
 
   const getProvider = (provider: ProvidersEnum): BaseProvider | undefined => {
@@ -37,9 +37,15 @@ export const useAppStore = defineStore('app', () => {
     return undefined
   }
 
-  const selectModel = (model: Model) => {
-    selectedModel.value = model
-    storage.setItem(LocalStorageEnum.SelectedModel, model)
+  const selectModel = (modelId?: string) => {
+    selectedModel.value = availableModels.value.find(({ id }) => id === modelId)
+
+    if (!modelId) {
+      storage.removeItem(LocalStorageEnum.SelectedModelId)
+      return
+    }
+
+    storage.setItem(LocalStorageEnum.SelectedModelId, modelId)
   }
 
   return {

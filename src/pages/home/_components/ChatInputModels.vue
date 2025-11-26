@@ -7,9 +7,10 @@ import { computed } from 'vue'
 const appStore = useAppStore()
 
 const models = computed(() => appStore.availableModels)
+const selectedModel = computed(() => appStore.selectedModel)
 
 const onModelClick = (model: Model) => {
-  appStore.selectModel(model)
+  appStore.selectModel(model.id)
 
   focusChatTextarea()
 }
@@ -22,7 +23,7 @@ const onModelClick = (model: Model) => {
       role="button"
       class="dui-btn"
     >
-      {{ appStore.selectedModel?.name || 'Select a model' }}
+      {{ selectedModel?.name || 'Select a model' }}
     </div>
 
     <ul

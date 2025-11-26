@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
 import { ProvidersEnum, useAppStore } from './stores/app-store'
 
 const appStore = useAppStore()
 
-onBeforeMount(() => {
-  appStore.init(ProvidersEnum.Ollama)
+const isBooted = ref(false)
+
+onBeforeMount(async () => {
+  await appStore.init(ProvidersEnum.Ollama)
+  isBooted.value = true
 })
 </script>
 
@@ -15,7 +18,7 @@ onBeforeMount(() => {
     <MainSidebar class="min-w-3/12 max-w-3/12" />
 
     <div class="max-w-3/4 min-w-3/4">
-      <RouterView />
+      <RouterView v-if="isBooted" />
     </div>
   </main>
 </template>

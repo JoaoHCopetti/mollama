@@ -10,13 +10,13 @@ export default class OllamaProvider implements BaseProvider {
     return new OllamaSession(model)
   }
 
-  async fetchModels(): Promise<Model[]> {
+  async getModels(): Promise<Model[]> {
     const ollama = new Ollama()
 
     return (await ollama.list()).models.map((model) => ({
       id: 'ollama:' + kebabCase(model.name),
       name: model.name,
-      isCloud: model.name.includes('-cloud'),
+      isCloud: 'remote_host' in model,
       parameterSize: model.details.parameter_size,
     }))
   }

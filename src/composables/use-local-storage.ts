@@ -1,5 +1,5 @@
 export enum LocalStorageEnum {
-  SelectedModel = 'selected-model',
+  SelectedModelId = 'selected-model-id',
   Think = 'think',
 }
 
@@ -18,5 +18,9 @@ export const useLocalStorage = () => {
     return JSON.parse(value)
   }
 
-  return { getItem, setItem }
+  const removeItem = (key: LocalStorageEnum) => {
+    localStorage.removeItem(key)
+  }
+
+  return { getItem, setItem, removeItem }
 }

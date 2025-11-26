@@ -25,7 +25,7 @@ const lastMessageId = ref<number>()
 const activeSession = computed(() => appStore.activeSession)
 
 onBeforeMount(async () => {
-  appStore.selectModel(storage.getItem(LocalStorageEnum.SelectedModel) || undefined)
+  appStore.selectModel(storage.getItem(LocalStorageEnum.SelectedModelId))
 
   think.value = storage.getItem(LocalStorageEnum.Think) || false
 })
