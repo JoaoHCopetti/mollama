@@ -1,11 +1,5 @@
 @layer utilities {
   .animated-text {
-    background: linear-gradient(
-      45deg,
-      var(--color-gray-400),
-      var(--color-gray-500),
-      var(--color-gray-400)
-    );
     background-size: 200% 100%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -13,7 +7,7 @@
     animation: bg-position-animate 1s linear infinite;
   }
 
-@keyframes bg-position-animate {
+  @keyframes bg-position-animate {
     0% {
       background-position: 200% 0%;
     }

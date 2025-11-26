@@ -26,7 +26,9 @@ defineProps<{
       <template v-if="isLastMessage && chatState.isThinking">
         <span class="dui-loading dui-loading-ring dui-loading-xs mr-1" />
 
-        <span class="animated-text">Thinking</span>
+        <span class="animated-text bg-linear-to-br from-gray-500 via-gray-300 to-gray-500">
+          Thinking
+        </span>
       </template>
 
       <div v-else>
