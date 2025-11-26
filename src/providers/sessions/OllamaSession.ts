@@ -63,7 +63,6 @@ export default class OllamaSession extends BaseSession {
       this.state.isThinking = !!chunk.message.thinking
 
       if (this.abortController.signal.aborted) {
-        console.log('hi')
         response.abort()
         return
       }

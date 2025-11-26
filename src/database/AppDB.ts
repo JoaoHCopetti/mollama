@@ -7,7 +7,7 @@ export default class AppDB extends Dexie {
   messages!: EntityTable<Message, 'id'>
 
   constructor() {
-    super('ollama')
+    super('mollama')
 
     this.version(1).stores({
       sessions: '++id, title, lastModel, createdAt, updatedAt',
