@@ -43,13 +43,13 @@ const onModelClick = (model: Model) => {
         class="text-xs"
         @click.prevent="onModelClick(model)"
       >
-        <a class="truncate">
+        <a>
           <Component
             :is="model.isCloud ? PhCloud : PhDesktop"
             weight="fill"
           />
 
-          <div>{{ model.prettyName }}</div>
+          <div class="truncate">{{ model.name }}</div>
 
           <span class="dui-badge dui-badge-sm opacity-50 border-0">{{ model.parameterSize }}</span>
         </a>
