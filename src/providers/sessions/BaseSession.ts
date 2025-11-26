@@ -27,6 +27,11 @@ export default abstract class BaseSession {
     this.abortController = new AbortController()
   }
 
+  protected abstract performHandleResponse(
+    options: FetchResponseOptions,
+    context: MessageData[],
+  ): Promise<void>
+
   public async setResponse(response: Partial<ChatResponse>) {
     const { content, thinking } = response
 
@@ -51,14 +56,12 @@ export default abstract class BaseSession {
   public async handleResponse(options: FetchResponseOptions) {
     const context = await retrieveContext(options.sessionId)
 
+    this.state.isLoading = true
+
     await this.performHandleResponse(options, context)
+
     this.finish()
   }
-
-  protected abstract performHandleResponse(
-    options: FetchResponseOptions,
-    context: MessageData[],
-  ): Promise<void>
 
   public onResponseChange(callback: (response: ChatResponse) => void) {
     this.responseChangeCallback = callback

@@ -10,7 +10,7 @@ import ChatMessagesItem from './ChatMessagesItem.vue'
 const props = defineProps<{
   sessionId: number
   chatState: ChatState
-  currentMessageId?: number
+  lastMessageId?: number
 }>()
 
 const messages = ref<MessageData[]>([])
@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
       :key="message.id"
       :chat-state="chatState"
       :message="message"
-      :current-message-id="currentMessageId"
+      :is-last-message="lastMessageId === message.id"
     />
   </div>
 </template>

@@ -20,7 +20,7 @@ const input = defineModel<string>('input', { default: '' })
 
 const session = ref<BaseSession>(appStore.provider.createSession())
 const think = ref<boolean>(false)
-const currentMessageId = ref<number>()
+const lastMessageId = ref<number>()
 
 const activeSession = computed(() => appStore.activeSession)
 
@@ -63,17 +63,17 @@ const onSendMessage = async () => {
 }
 
 const registerChatListener = (sessionId: number) => {
-  currentMessageId.value = undefined
+  lastMessageId.value = undefined
 
   session.value.onResponseChange(async (response) => {
-    currentMessageId.value = await createOrUpdateMessage(
+    lastMessageId.value = await createOrUpdateMessage(
       {
         sessionId,
         content: response.content,
         thinking: response.thinking,
         role: 'assistant',
       },
-      currentMessageId.value,
+      lastMessageId.value,
     )
 
     if (response.done) {
@@ -118,7 +118,7 @@ const stopStreaming = () => {
         class="w-3/4 mt-5"
         :session-id="activeSession.id"
         :chat-state="session.state"
-        :current-message-id="currentMessageId"
+        :last-message-id="lastMessageId"
       />
     </div>
 

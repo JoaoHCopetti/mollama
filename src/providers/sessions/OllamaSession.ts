@@ -16,8 +16,6 @@ export default class OllamaSession extends BaseSession {
       thinking: message.thinking,
     }))
 
-    this.state.isLoading = true
-
     if (!options.stream) {
       await this.fetchStaticResponse(options, formattedContext)
     } else {

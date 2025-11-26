@@ -3,11 +3,12 @@ import type { MessageData } from '@/database/Message'
 import type { ChatState } from '@/types'
 import { markdown } from '@/utils'
 import { computed } from 'vue'
+import ChatMessagesItemHeader from './ChatMessagesItemHeader.vue'
 
 const props = defineProps<{
   message: MessageData
   chatState: ChatState
-  currentMessageId?: number
+  isLastMessage: boolean
 }>()
 
 const htmlContent = computed(() =>
@@ -27,20 +28,11 @@ const htmlThinking = computed(
       'bg-base-200 ml-auto px-4': message.role === 'user',
     }"
   >
-    <div
-      v-if="message.thinking"
-      class="text-sm text-gray-400 mb-2"
-    >
-      <template v-if="chatState.isThinking && message.id === currentMessageId">
-        <span class="dui-loading dui-loading-ring dui-loading-xs mr-1" />
-
-        <span class="animated-text">Thinking</span>
-      </template>
-
-      <div v-else-if="message.thinking">
-        <span>Done thinking</span>
-      </div>
-    </div>
+    <ChatMessagesItemHeader
+      :message="message"
+      :chat-state="chatState"
+      :is-last-message="isLastMessage"
+    />
 
     <div
       v-if="message.thinking"
