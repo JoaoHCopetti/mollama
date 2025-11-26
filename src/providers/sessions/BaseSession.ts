@@ -9,9 +9,10 @@ export default abstract class BaseSession {
 
   protected abortController: AbortController
   protected responseChangeCallback?: CallableFunction
-  protected model!: Model
+  protected model?: Model
 
-  constructor() {
+  constructor(model?: Model) {
+    this.model = model
     this.response = {
       content: '',
       thinking: '',

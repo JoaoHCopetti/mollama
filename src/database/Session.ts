@@ -1,10 +1,10 @@
+import type { Model } from '@/types'
 import { Entity } from 'dexie'
 import type AppDB from './AppDB'
-import type { ModelData } from './Model'
 
 export default class Session extends Entity<AppDB> {
   id!: number
-  lastModel!: ModelData
+  lastModel!: Model
   title!: string
   createdAt!: string
   updatedAt!: string

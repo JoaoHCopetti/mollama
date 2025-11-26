@@ -42,7 +42,7 @@ const onSendMessage = async () => {
   const content = input.value
   input.value = ''
 
-  session.value = appStore.provider.createSession()
+  session.value = appStore.provider.createSession(appStore.selectedModel)
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: content,
@@ -72,6 +72,7 @@ const registerChatListener = (sessionId: number) => {
         content: response.content,
         thinking: response.thinking,
         role: 'assistant',
+        model: response.model,
       },
       lastMessageId.value,
     )

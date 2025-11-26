@@ -11,12 +11,12 @@ const props = defineProps<{
   isLastMessage: boolean
 }>()
 
-const htmlContent = computed(() =>
-  props.message.role === 'user' ? props.message.content : markdown.render(props.message.content),
-)
-
 const htmlThinking = computed(
   () => props.message.thinking && markdown.render(props.message.thinking),
+)
+
+const htmlContent = computed(() =>
+  props.message.role === 'user' ? props.message.content : markdown.render(props.message.content),
 )
 </script>
 
