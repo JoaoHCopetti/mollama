@@ -90,7 +90,7 @@ const handleResponse = async (sessionId: number) => {
 
   await session.value.handleResponse({
     sessionId,
-    model: appStore.selectedModel.name,
+    model: appStore.selectedModel.fullName,
     stream: true,
     think: think.value,
     messages: [

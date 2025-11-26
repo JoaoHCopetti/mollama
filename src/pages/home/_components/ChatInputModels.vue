@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ModelInfo from '@/components/ModelInfo.vue'
 import { useAppStore } from '@/stores/app-store'
 import type { Model } from '@/types'
 import { focusChatTextarea } from '@/utils'
@@ -23,7 +24,12 @@ const onModelClick = (model: Model) => {
       role="button"
       class="dui-btn"
     >
-      {{ selectedModel?.name || 'Select a model' }}
+      <ModelInfo
+        v-if="selectedModel"
+        :model="selectedModel"
+      />
+
+      <span v-else> Select a model</span>
     </div>
 
     <ul
@@ -36,7 +42,9 @@ const onModelClick = (model: Model) => {
         class="text-xs"
         @click.prevent="onModelClick(model)"
       >
-        <a class="truncate">{{ model.name }}</a>
+        <a class="truncate">
+          <ModelInfo :model="model" />
+        </a>
       </li>
     </ul>
   </div>

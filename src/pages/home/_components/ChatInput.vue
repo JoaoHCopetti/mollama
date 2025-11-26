@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import type { ChatState } from '@/types'
+import { PhArrowFatUp, PhStop } from '@phosphor-icons/vue'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import ChatInputModels from './ChatInputModels.vue'
 
@@ -106,7 +107,10 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
           :disabled="input.trim() === ''"
           @click="onMessageSend"
         >
-          Send
+          <PhArrowFatUp
+            class="text-xl"
+            weight="fill"
+          />
         </button>
 
         <button
@@ -114,7 +118,10 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
           class="dui-btn dui-btn-error"
           @click="$emit('stop')"
         >
-          Stop
+          <PhStop
+            weight="fill"
+            class="text-xl"
+          />
         </button>
       </div>
     </div>

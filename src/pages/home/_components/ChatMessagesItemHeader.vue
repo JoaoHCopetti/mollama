@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ModelInfo from '@/components/ModelInfo.vue'
 import type { MessageData } from '@/database/Message'
 import type { ChatState } from '@/types'
 
@@ -11,7 +12,13 @@ defineProps<{
 
 <template>
   <div>
-    {{ message.model }}
+    <div
+      v-if="message.model"
+      class="uppercase font-bold text-sm mb-3"
+    >
+      <ModelInfo :model="message.model" />
+    </div>
+
     <div
       v-if="message.thinking"
       class="text-sm text-gray-400 mb-2"

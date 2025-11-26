@@ -28,7 +28,8 @@ type FetchResponseOptions = {
 
 type Model = {
   id: string
-  name: string
+  fullName: string
+  prettyName: string
   parameterSize?: string
   isCloud?: boolean
 }

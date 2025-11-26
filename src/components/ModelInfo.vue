@@ -1,0 +1,28 @@
+<script setup lang="ts">
+import type { Model } from '@/types'
+import { PhCloud, PhDesktop } from '@phosphor-icons/vue'
+
+defineProps<{
+  model: Model
+}>()
+</script>
+
+<template>
+  <div class="flex items-center gap-2">
+    <PhCloud
+      v-if="model.isCloud"
+      weight="fill"
+    />
+
+    <PhDesktop
+      v-else
+      weight="fill"
+    />
+
+    <span>{{ model.prettyName }}</span>
+
+    <span class="dui-badge dui-badge-sm bg-primary/10 border-0 font-bold">{{
+      model.parameterSize
+    }}</span>
+  </div>
+</template>
