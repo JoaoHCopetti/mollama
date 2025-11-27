@@ -2,6 +2,7 @@ import type { Model } from '@/database/Model'
 
 type ChatResponse = {
   content: string
+  state: ChatState
   model?: Model
   done?: boolean
   thinking?: string

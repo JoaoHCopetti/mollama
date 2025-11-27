@@ -1,10 +1,9 @@
 import type { MessageData } from '@/database/Message'
 import { retrieveContext } from '@/services/chat-service'
-import type { ChatResponse, ChatState, FetchResponseOptions, Model } from '@/types'
+import type { ChatResponse, FetchResponseOptions, Model } from '@/types'
 import { omit } from 'lodash-es'
 
 export default abstract class BaseSession {
-  public state: ChatState
   public response: ChatResponse
 
   protected abortController: AbortController
@@ -16,12 +15,11 @@ export default abstract class BaseSession {
     this.response = {
       content: '',
       thinking: '',
-    }
-
-    this.state = {
-      isLoading: false,
-      isThinking: false,
-      isStreaming: false,
+      state: {
+        isLoading: false,
+        isThinking: false,
+        isStreaming: false,
+      },
     }
 
     this.abortController = new AbortController()
@@ -36,11 +34,11 @@ export default abstract class BaseSession {
     const { content, thinking } = response
 
     if (content) {
-      this.response.content += content || ''
+      this.response.content += content
     }
 
     if (thinking) {
-      this.response.thinking += thinking || ''
+      this.response.thinking += thinking
     }
 
     Object.assign<ChatResponse, Partial<ChatResponse>>(
@@ -56,11 +54,11 @@ export default abstract class BaseSession {
   public async handleResponse(options: FetchResponseOptions) {
     const context = await retrieveContext(options.sessionId)
 
-    this.state.isLoading = true
+    this.response.state.isLoading = true
 
     await this.performHandleResponse(options, context)
 
-    this.finish()
+    await this.finish()
   }
 
   public onResponseChange(callback: (response: ChatResponse) => void) {
@@ -72,11 +70,17 @@ export default abstract class BaseSession {
     this.finish()
   }
 
-  protected finish() {
-    this.state = {
+  protected async finish() {
+    this.response.state = {
       isLoading: false,
       isStreaming: false,
       isThinking: false,
+    }
+
+    this.response.done = true
+
+    if (this.responseChangeCallback) {
+      await this.responseChangeCallback(this.response)
     }
   }
 }

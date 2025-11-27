@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import type { MessageData } from '@/database/Message'
-import type { ChatState } from '@/types'
+import type { MessageInput } from '@/database/Message'
 import { markdown } from '@/utils'
 import { computed } from 'vue'
 import ChatMessagesItemHeader from './ChatMessagesItemHeader.vue'
 
 const props = defineProps<{
-  message: MessageData
-  chatState: ChatState
-  isLastMessage: boolean
+  message: MessageInput
 }>()
 
 const htmlThinking = computed(
@@ -28,11 +25,7 @@ const htmlContent = computed(() =>
       'bg-base-200 ml-auto px-4': message.role === 'user',
     }"
   >
-    <ChatMessagesItemHeader
-      :message="message"
-      :chat-state="chatState"
-      :is-last-message="isLastMessage"
-    />
+    <ChatMessagesItemHeader :message="message" />
 
     <div
       v-if="message.thinking"

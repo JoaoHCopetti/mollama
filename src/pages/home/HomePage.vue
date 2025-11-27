@@ -2,11 +2,11 @@
 import AppTransition from '@/components/AppTransition.vue'
 import { useAutoScroll } from '@/composables/use-auto-scroll'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
+import type { MessageInput } from '@/database/Message'
 import BaseSession from '@/providers/sessions/BaseSession'
-import { createOrUpdateMessage, getOrCreateSession } from '@/services/chat-service'
+import { createMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
-import { clone } from 'lodash-es'
-import { computed, onBeforeMount, ref, useTemplateRef } from 'vue'
+import { onBeforeMount, ref, toRaw, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './_components/ChatInput.vue'
 import ChatMessages from './_components/ChatMessages.vue'
@@ -21,9 +21,7 @@ const input = defineModel<string>('input', { default: '' })
 
 const session = ref<BaseSession>(appStore.provider.createSession())
 const think = ref<boolean>(false)
-const lastMessageId = ref<number>()
-
-const activeSession = computed(() => appStore.activeSession)
+const currentMessage = ref<MessageInput>()
 
 onBeforeMount(async () => {
   appStore.selectModel(storage.getItem(LocalStorageEnum.SelectedModelId))
@@ -47,10 +45,10 @@ const onSendMessage = async () => {
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: content,
-    lastModel: clone(appStore.selectedModel),
+    lastModel: toRaw(appStore.selectedModel),
   })
 
-  await createOrUpdateMessage({
+  await createMessage({
     content,
     role: 'user',
     sessionId: appStore.activeSession.id,
@@ -64,21 +62,22 @@ const onSendMessage = async () => {
 }
 
 const registerChatListener = (sessionId: number) => {
-  lastMessageId.value = undefined
-
   session.value.onResponseChange(async (response) => {
-    lastMessageId.value = await createOrUpdateMessage(
-      {
-        sessionId,
-        content: response.content,
-        thinking: response.thinking,
-        role: 'assistant',
-        model: response.model,
-      },
-      lastMessageId.value,
-    )
+    const message: MessageInput = {
+      content: response.content,
+      thinking: response.thinking,
+      role: 'assistant',
+      sessionId: appStore.activeSession!.id,
+      model: response.model,
+      response,
+    }
+
+    currentMessage.value = message
 
     if (response.done) {
+      await createMessage(message)
+      currentMessage.value = undefined
+
       router.push(`/sessions/${sessionId}`)
     }
   })
@@ -121,12 +120,11 @@ const stopStreaming = () => {
         to-class="opacity-100"
       >
         <ChatMessages
-          v-if="activeSession"
-          :key="activeSession.id"
+          v-if="appStore.activeSession"
+          :key="appStore.activeSession.id"
+          :session-id="appStore.activeSession.id"
+          :current-message="currentMessage"
           class="w-3/4 mt-5"
-          :session-id="activeSession.id"
-          :chat-state="session.state"
-          :last-message-id="lastMessageId"
         />
 
         <div v-else>
@@ -140,7 +138,7 @@ const stopStreaming = () => {
         v-model:input="input"
         v-model:think="think"
         class="w-3/4"
-        :chat-state="session.state"
+        :is-loading="!!currentMessage?.response?.state.isLoading"
         @send="onSendMessage"
         @stop="stopStreaming"
       />

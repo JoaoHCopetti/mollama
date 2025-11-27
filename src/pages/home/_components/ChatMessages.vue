@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { db } from '@/database/db'
-import type { MessageData } from '@/database/Message'
-import type { ChatState } from '@/types'
+import type { MessageData, MessageInput } from '@/database/Message'
 import { copyToClipboard } from '@/utils'
 import { liveQuery, type Subscription } from 'dexie'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -9,8 +8,7 @@ import ChatMessagesItem from './ChatMessagesItem.vue'
 
 const props = defineProps<{
   sessionId: number
-  chatState: ChatState
-  lastMessageId?: number
+  currentMessage?: MessageInput
 }>()
 
 const messages = ref<MessageData[]>([])
@@ -81,9 +79,12 @@ onBeforeUnmount(() => {
     <ChatMessagesItem
       v-for="message in messages"
       :key="message.id"
-      :chat-state="chatState"
       :message="message"
-      :is-last-message="lastMessageId === message.id"
+    />
+
+    <ChatMessagesItem
+      v-if="currentMessage"
+      :message="currentMessage"
     />
   </div>
 </template>

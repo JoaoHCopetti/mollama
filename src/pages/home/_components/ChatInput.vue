@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
-import type { ChatState } from '@/types'
 import { PhArrowFatUp, PhStop } from '@phosphor-icons/vue'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import ChatInputModels from './ChatInputModels.vue'
@@ -10,7 +9,7 @@ const MAX_TEXTAREA_HEIGHT = 150
 const emit = defineEmits(['send', 'stop'])
 
 defineProps<{
-  chatState: ChatState
+  isLoading: boolean
 }>()
 
 const storage = useLocalStorage()
@@ -102,7 +101,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
 
       <div>
         <button
-          v-if="!chatState.isLoading"
+          v-if="!isLoading"
           class="dui-btn dui-btn-primary"
           :disabled="input.trim() === ''"
           @click="onMessageSend"

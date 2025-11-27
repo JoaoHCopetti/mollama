@@ -19,7 +19,7 @@ export default class OllamaSession extends BaseSession {
     if (!options.stream) {
       await this.fetchStaticResponse(options, formattedContext)
     } else {
-      this.state.isStreaming = true
+      this.response.state.isStreaming = true
       await this.fetchStreamedResponse(options, formattedContext)
     }
   }
@@ -27,9 +27,10 @@ export default class OllamaSession extends BaseSession {
   protected getFormattedResponse = (response: OllamaChatResponse): ChatResponse => {
     return {
       model: this.model,
+      state: this.response.state,
       content: response.message.content,
       thinking: response.message.thinking,
-      done: response.done,
+      done: false,
       promptDuration: response.prompt_eval_duration,
       promptTokens: response.prompt_eval_count,
       responseDuration: response.eval_duration,
@@ -58,7 +59,7 @@ export default class OllamaSession extends BaseSession {
     const iterator = response[Symbol.asyncIterator]()
 
     for await (const chunk of iterator) {
-      this.state.isThinking = !!chunk.message.thinking
+      this.response.state.isThinking = !!chunk.message.thinking
 
       if (this.abortController.signal.aborted) {
         response.abort()
