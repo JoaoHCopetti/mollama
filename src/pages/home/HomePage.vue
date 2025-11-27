@@ -2,11 +2,11 @@
 import AppTransition from '@/components/AppTransition.vue'
 import { useAutoScroll } from '@/composables/use-auto-scroll'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
-import type { MessageInput } from '@/database/Message'
+import type { MessageInput, TempMessage } from '@/database/Message'
 import BaseSession from '@/providers/sessions/BaseSession'
 import { createMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
-import { onBeforeMount, ref, toRaw, useTemplateRef } from 'vue'
+import { onBeforeMount, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './_components/ChatInput.vue'
 import ChatMessages from './_components/ChatMessages.vue'
@@ -21,7 +21,7 @@ const input = defineModel<string>('input', { default: '' })
 
 const session = ref<BaseSession>(appStore.provider.createSession())
 const think = ref<boolean>(false)
-const currentMessage = ref<MessageInput>()
+const currentMessage = ref<TempMessage>()
 
 onBeforeMount(async () => {
   appStore.selectModel(storage.getItem(LocalStorageEnum.SelectedModelId))
@@ -45,7 +45,7 @@ const onSendMessage = async () => {
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: content,
-    lastModel: toRaw(appStore.selectedModel),
+    lastModel: appStore.selectedModel,
   })
 
   await createMessage({

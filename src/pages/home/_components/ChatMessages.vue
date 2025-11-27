@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { db } from '@/database/db'
-import type { MessageData, MessageInput } from '@/database/Message'
+import type { MessageData, TempMessage } from '@/database/Message'
 import { copyToClipboard } from '@/utils'
 import { liveQuery, type Subscription } from 'dexie'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -8,7 +8,7 @@ import ChatMessagesItem from './ChatMessagesItem.vue'
 
 const props = defineProps<{
   sessionId: number
-  currentMessage?: MessageInput
+  currentMessage?: TempMessage
 }>()
 
 const messages = ref<MessageData[]>([])

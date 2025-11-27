@@ -35,13 +35,13 @@ export const getOrCreateSession = async (
     throw new Error("The specified session id doesn't exist and no new session data was provided")
   }
 
-  const timestamp = new Date().toISOString()
+  const now = new Date().toISOString()
 
   const newId = await db.sessions.add({
     title: sessionInput.title.substring(0, 100),
-    lastModel: sessionInput.lastModel,
-    createdAt: timestamp,
-    updatedAt: timestamp,
+    lastModel: toRaw(sessionInput.lastModel),
+    createdAt: now,
+    updatedAt: now,
   })
 
   return (await db.sessions.get(newId))!

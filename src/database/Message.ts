@@ -16,3 +16,4 @@ export default class Message extends Entity<AppDB> {
 
 export type MessageData = Omit<Message, 'table' | 'db'>
 export type MessageInput = Omit<MessageData, 'id' | 'createdAt' | 'updatedAt'>
+export type TempMessage = Omit<MessageData, 'id' | 'createdAt' | 'updatedAt'>

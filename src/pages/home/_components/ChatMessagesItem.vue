@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { MessageInput } from '@/database/Message'
+import type { MessageData, TempMessage } from '@/database/Message'
 import { markdown } from '@/utils'
 import { computed } from 'vue'
 import ChatMessagesItemHeader from './ChatMessagesItemHeader.vue'
 
 const props = defineProps<{
-  message: MessageInput
+  message: MessageData | TempMessage
 }>()
 
 const htmlThinking = computed(
