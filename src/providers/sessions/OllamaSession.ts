@@ -19,7 +19,6 @@ export default class OllamaSession extends BaseSession {
     if (!options.stream) {
       await this.fetchStaticResponse(options, formattedContext)
     } else {
-      this.message!.state.isStreaming = true
       await this.fetchStreamedResponse(options, formattedContext)
     }
   }
@@ -42,6 +41,8 @@ export default class OllamaSession extends BaseSession {
     })
 
     const iterator = response[Symbol.asyncIterator]()
+
+    this.message!.state.isStreaming = true
 
     for await (const chunk of iterator) {
       this.message!.state.isThinking = !!chunk.message.thinking

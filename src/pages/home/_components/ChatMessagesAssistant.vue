@@ -2,15 +2,12 @@
 import type { AssistantMessage, AssistantMessageTemp } from '@/database/Message'
 import { markdown } from '@/utils'
 import { computed } from 'vue'
-import ChatMessagesItemHeader from './ChatMessagesItemHeader.vue'
+import ChatMessagesSharedHeader from './ChatMessagesSharedHeader.vue'
+import ChatMessagesSharedThinking from './ChatMessagesSharedThinking.vue'
 
 const props = defineProps<{
   message: AssistantMessage | AssistantMessageTemp
 }>()
-
-const htmlThinking = computed(
-  () => props.message.thinking && markdown.render(props.message.thinking),
-)
 
 const htmlContent = computed(() => markdown.render(props.message.content))
 </script>
@@ -18,12 +15,15 @@ const htmlContent = computed(() => markdown.render(props.message.content))
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="message-container py-3 rounded-2xl last:mb-10 w-4/5 wrap-break-word leading-7">
-    <ChatMessagesItemHeader :message="message" />
+    <ChatMessagesSharedHeader :message="message" />
 
-    <div
-      v-if="htmlThinking"
-      class="text-sm text-gray-500 mb-3"
-      v-html="htmlThinking"
+    <div v-if="message.state.isLoading && !message.state.isStreaming && !message.thinking">
+      Loading
+    </div>
+
+    <ChatMessagesSharedThinking
+      v-if="message.thinking"
+      :message="message"
     />
 
     <div v-html="htmlContent" />
