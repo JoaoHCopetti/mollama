@@ -69,7 +69,6 @@ export default abstract class BaseSession {
 
   protected async finish() {
     if (!this.message) {
-      console.warn('No message is set when calling finish method')
       return
     }
 

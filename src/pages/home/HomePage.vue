@@ -118,7 +118,7 @@ const onChatMessagesMount = () => {
   <div class="h-full flex flex-col">
     <div
       ref="messagesRef"
-      class="h-full overflow-auto"
+      class="h-full overflow-auto scroll-smooth"
     >
       <ChatMessages
         v-if="appStore.activeSession"

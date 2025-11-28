@@ -45,7 +45,9 @@ export default class OllamaSession extends BaseSession {
     this.message!.state.isStreaming = true
 
     for await (const chunk of iterator) {
-      this.message!.state.isThinking = !!chunk.message.thinking
+      if (this.message) {
+        this.message.state.isThinking = !!chunk.message.thinking
+      }
 
       if (this.abortController.signal.aborted) {
         response.abort()
