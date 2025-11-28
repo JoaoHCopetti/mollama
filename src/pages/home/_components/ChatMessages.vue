@@ -3,11 +3,12 @@ import { db } from '@/database/db'
 import type { AssistantMessage, AssistantMessageTemp, MessageData } from '@/database/Message'
 import { copyToClipboard } from '@/utils'
 import { liveQuery, type Subscription } from 'dexie'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
 import ChatMessagesUser from './ChatMessagesUser.vue'
 
+const emit = defineEmits(['messages-mounted'])
 const props = defineProps<{
   sessionId: number
   currentAssistMessage?: AssistantMessageTemp
@@ -15,6 +16,38 @@ const props = defineProps<{
 
 const messages = ref<MessageData[]>([])
 const subscription = ref<Subscription>()
+
+onMounted(() => {
+  setupLiveQuery()
+
+  setTimeout(() => {
+    registerCopyListeners()
+  }, 100)
+})
+
+onBeforeUnmount(() => {
+  if (subscription.value) {
+    subscription.value.unsubscribe()
+  }
+})
+
+watch(
+  () => messages.value,
+  (value) => {
+    if (value) {
+      onMessagesMounted()
+    }
+  },
+  { once: true },
+)
+
+const onMessagesMounted = () => {
+  if (props.currentAssistMessage || messages.value.length) {
+    nextTick(() => {
+      emit('messages-mounted')
+    })
+  }
+}
 
 const setupLiveQuery = () => {
   if (subscription.value) {
@@ -26,7 +59,9 @@ const setupLiveQuery = () => {
   )
 
   subscription.value = messagesObservable.subscribe({
-    next: (result) => (messages.value = result),
+    next: (result) => {
+      messages.value = result
+    },
     error: (error) => console.error(error),
   })
 }
@@ -50,24 +85,10 @@ const registerCopyListeners = () => {
     })
   })
 }
-
-onMounted(() => {
-  setupLiveQuery()
-
-  setTimeout(() => {
-    registerCopyListeners()
-  }, 100)
-})
-
-onBeforeUnmount(() => {
-  if (subscription.value) {
-    subscription.value.unsubscribe()
-  }
-})
 </script>
 
 <template>
-  <div class="mx-auto flex flex-col gap-10">
+  <div class="flex flex-col gap-10">
     <template
       v-for="message in messages"
       :key="message.id"
@@ -86,6 +107,7 @@ onBeforeUnmount(() => {
     <ChatMessagesAssistant
       v-if="currentAssistMessage"
       :message="currentAssistMessage"
+      @vue:mounted="onMessagesMounted"
     />
   </div>
 </template>

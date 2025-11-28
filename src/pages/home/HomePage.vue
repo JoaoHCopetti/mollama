@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import AppTransition from '@/components/AppTransition.vue'
 import { useAutoScroll } from '@/composables/use-auto-scroll'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import BaseSession from '@/providers/sessions/BaseSession'
 import { createMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
-import { computed, onBeforeMount, ref, useTemplateRef } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './_components/ChatInput.vue'
 import ChatMessages from './_components/ChatMessages.vue'
@@ -14,7 +13,8 @@ const appStore = useAppStore()
 const storage = useLocalStorage()
 const route = useRoute()
 const router = useRouter()
-const messagesScroll = useAutoScroll(useTemplateRef('messagesRef'))
+const messagesRef = ref<HTMLDivElement>()
+const autoScrollMessages = useAutoScroll()
 
 const input = defineModel<string>('input', { default: '' })
 
@@ -24,14 +24,17 @@ const think = ref<boolean>(false)
 const currentAssistMessage = computed(() => session.value?.message)
 
 onBeforeMount(async () => {
-  appStore.selectModel(storage.getItem(LocalStorageEnum.SelectedModelId))
+  const selectedModel = storage.getItem(LocalStorageEnum.SelectedModelId)
+
+  appStore.selectModel(selectedModel)
 
   think.value = storage.getItem(LocalStorageEnum.Think) || false
 })
 
-messagesScroll.registerWatcher(
-  () => currentAssistMessage.value?.content || currentAssistMessage.value?.thinking,
-)
+autoScrollMessages.registerWatcher([
+  () => currentAssistMessage.value?.thinking,
+  () => currentAssistMessage.value?.content,
+])
 
 const onSendMessage = async () => {
   if (!appStore.selectedModel) {
@@ -39,8 +42,8 @@ const onSendMessage = async () => {
   }
 
   const content = input.value
-  input.value = ''
 
+  input.value = ''
   session.value = appStore.provider.createSession(appStore.selectedModel)
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
@@ -53,8 +56,6 @@ const onSendMessage = async () => {
     role: 'user',
     sessionId: appStore.activeSession.id,
   })
-
-  messagesScroll.stickAndScrollToBottom()
 
   registerChatListener(appStore.activeSession.id)
 
@@ -103,6 +104,14 @@ const stopStreaming = () => {
     session.value.abort()
   }
 }
+
+const onChatMessagesMount = () => {
+  if (messagesRef.value) {
+    autoScrollMessages.init(messagesRef.value)
+
+    autoScrollMessages.stickAndScrollToBottom()
+  }
+}
 </script>
 
 <template>
@@ -110,25 +119,19 @@ const stopStreaming = () => {
     <div
       ref="messagesRef"
       class="h-full overflow-auto"
-      @scroll="messagesScroll.handleBottomFixedScroll"
     >
-      <AppTransition
-        mode="out-in"
-        from-class="opacity-0"
-        to-class="opacity-100"
-      >
-        <ChatMessages
-          v-if="appStore.activeSession"
-          :key="appStore.activeSession.id"
-          :session-id="appStore.activeSession.id"
-          :current-assist-message="currentAssistMessage"
-          class="w-3/4 mt-5"
-        />
+      <ChatMessages
+        v-if="appStore.activeSession"
+        :key="appStore.activeSession.id"
+        :session-id="appStore.activeSession.id"
+        :current-assist-message="currentAssistMessage"
+        class="w-3/4 mt-5 mx-auto"
+        @messages-mounted="onChatMessagesMount"
+      />
 
-        <div v-else>
-          <!-- TODO: Fancy message here -->
-        </div>
-      </AppTransition>
+      <div v-else>
+        <!-- TODO: Fancy message here -->
+      </div>
     </div>
 
     <div class="mb-5">

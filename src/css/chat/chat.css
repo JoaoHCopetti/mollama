@@ -3,6 +3,6 @@
 
 @layer components {
   .message-container p {
-    @apply m-0 pb-0;
+    @apply pb-3;
   }
 }

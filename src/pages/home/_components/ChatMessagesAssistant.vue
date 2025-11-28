@@ -22,7 +22,7 @@ const htmlContent = computed(() => markdown.render(props.message.content))
 
     <div
       v-if="htmlThinking"
-      class="text-sm text-gray-500 mb-3 whitespace-pre-line"
+      class="text-sm text-gray-500 mb-3"
       v-html="htmlThinking"
     />
 

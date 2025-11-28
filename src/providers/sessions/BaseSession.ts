@@ -91,11 +91,12 @@ export default abstract class BaseSession {
   private getInitMessage(): AssistantMessageTemp {
     return {
       content: '',
+      thinking: '',
       role: 'assistant',
       response: {
         done: false,
       },
-      model: this.model!,
+      model: this.model,
       state: {
         isLoading: false,
         isStreaming: false,

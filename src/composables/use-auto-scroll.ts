@@ -1,8 +1,20 @@
 import { throttle } from 'lodash-es'
-import { ref, watch, type ShallowRef, type WatchSource } from 'vue'
+import { onBeforeUnmount, ref, watch, type WatchSource } from 'vue'
 
-export const useAutoScroll = (el: Readonly<ShallowRef<HTMLDivElement | null>>) => {
+export const useAutoScroll = () => {
   const stickScrollToBottom = ref<boolean>()
+  const el = ref<HTMLDivElement>()
+
+  onBeforeUnmount(() => {
+    if (el.value) {
+      el.value.removeEventListener('scroll', handleBottomFixedScroll)
+    }
+  })
+
+  const init = (refEl: HTMLDivElement) => {
+    el.value = refEl
+    el.value.addEventListener('scroll', handleBottomFixedScroll)
+  }
 
   const scrollToBottom = () => {
     if (el.value) {
@@ -29,9 +41,9 @@ export const useAutoScroll = (el: Readonly<ShallowRef<HTMLDivElement | null>>) =
     }
 
     stickScrollToBottom.value = false
-  }, 50)
+  }, 25)
 
-  const registerWatcher = (source: WatchSource) => {
+  const registerWatcher = (source: WatchSource[]) => {
     watch(source, () => {
       if (stickScrollToBottom.value) {
         scrollToBottom()
@@ -40,6 +52,7 @@ export const useAutoScroll = (el: Readonly<ShallowRef<HTMLDivElement | null>>) =
   }
 
   return {
+    init,
     registerWatcher,
     stickScrollToBottom,
     stickAndScrollToBottom,
