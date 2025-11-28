@@ -27,7 +27,6 @@ export const useAutoScroll = () => {
   }
 
   const handleBottomFixedScroll = () => {
-    console.log('hi')
     if (!el.value) {
       throw new Error('Failed to handle scroll: template ref element is undefined')
     }

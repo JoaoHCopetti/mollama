@@ -64,11 +64,11 @@ export default abstract class BaseSession {
 
   public abort() {
     this.abortController.abort()
-    this.finish()
   }
 
   protected async finish() {
     if (!this.message) {
+      console.warn('No message is set when attempting to finish')
       return
     }
 
