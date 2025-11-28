@@ -89,9 +89,12 @@ const registerCopyListeners = () => {
 
 <template>
   <div class="flex flex-col gap-10">
-    <template
+    <div
       v-for="message in messages"
       :key="message.id"
+      :class="{
+        'last:mb-10': !currentAssistMessage,
+      }"
     >
       <ChatMessagesAssistant
         v-if="message.role === 'assistant'"
@@ -102,10 +105,11 @@ const registerCopyListeners = () => {
         v-else
         :message="message"
       />
-    </template>
+    </div>
 
     <ChatMessagesAssistant
       v-if="currentAssistMessage"
+      class="mb-10"
       :message="currentAssistMessage"
       @vue:mounted="onMessagesMounted"
     />
