@@ -8,9 +8,9 @@ export default abstract class BaseSession {
 
   protected abortController: AbortController
   protected messageChangeCallback?: CallableFunction
-  protected model?: Model
+  protected model!: Model
 
-  constructor(model?: Model) {
+  constructor(model: Model) {
     this.model = model
 
     this.abortController = new AbortController()
@@ -95,6 +95,7 @@ export default abstract class BaseSession {
       response: {
         done: false,
       },
+      model: this.model!,
       state: {
         isLoading: false,
         isStreaming: false,

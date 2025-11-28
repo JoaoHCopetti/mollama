@@ -18,11 +18,9 @@ export default class Message extends Entity<AppDB> {
 export type MessageData = Omit<Message, 'table' | 'db'>
 
 export type UserMessage = Omit<MessageData, 'state' | 'response' | 'thinking' | 'model'>
-export type AssistantMessage = MessageData & {
-  state: MessageState
-  response: ResponseDetails
-  model: Model
-}
+export type AssistantMessage = MessageData &
+  Required<Pick<MessageData, 'model' | 'response' | 'state'>>
+
 export type AssistantMessageTemp = Omit<
   AssistantMessage,
   'id' | 'createdAt' | 'updatedAt' | 'sessionId'

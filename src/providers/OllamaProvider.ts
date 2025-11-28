@@ -5,7 +5,7 @@ import { Ollama, type ModelResponse } from 'ollama'
 import type { BaseProvider } from './BaseProvider'
 
 export default class OllamaProvider implements BaseProvider {
-  createSession(model?: Model): BaseSession {
+  createSession(model: Model): BaseSession {
     return new OllamaSession(model)
   }
 

@@ -18,10 +18,10 @@ const messagesScroll = useAutoScroll(useTemplateRef('messagesRef'))
 
 const input = defineModel<string>('input', { default: '' })
 
-const session = ref<BaseSession>(appStore.provider.createSession())
+const session = ref<BaseSession>()
 const think = ref<boolean>(false)
 
-const currentAssistMessage = computed(() => session.value.message)
+const currentAssistMessage = computed(() => session.value?.message)
 
 onBeforeMount(async () => {
   appStore.selectModel(storage.getItem(LocalStorageEnum.SelectedModelId))
@@ -62,6 +62,10 @@ const onSendMessage = async () => {
 }
 
 const registerChatListener = (sessionId: number) => {
+  if (!session.value) {
+    return
+  }
+
   session.value.onMessageChange(async (message) => {
     if (message.response?.done) {
       await createMessage({ ...message, sessionId })
@@ -74,6 +78,10 @@ const registerChatListener = (sessionId: number) => {
 const handleResponse = async (sessionId: number) => {
   if (!appStore.selectedModel) {
     throw new Error('No model selected')
+  }
+
+  if (!session.value) {
+    throw new Error('No session active')
   }
 
   await session.value.handleResponse({
@@ -91,7 +99,9 @@ const handleResponse = async (sessionId: number) => {
 }
 
 const stopStreaming = () => {
-  session.value.abort()
+  if (session.value) {
+    session.value.abort()
+  }
 }
 </script>
 
