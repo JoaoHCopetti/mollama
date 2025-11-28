@@ -1,11 +1,11 @@
 import type { AssistantMessageTemp, MessageData } from '@/database/Message'
 import type { FetchResponseOptions } from '@/types'
 import { Ollama, type Message, type ChatResponse as OllamaChatResponse } from 'ollama/browser'
-import BaseSession from './BaseSession'
+import BaseRequest from '../BaseRequest'
 
 const ollama = new Ollama()
 
-export default class OllamaSession extends BaseSession {
+export default class OllamaRequest extends BaseRequest {
   public async performHandleResponse(
     options: FetchResponseOptions,
     context: MessageData[],

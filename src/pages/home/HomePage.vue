@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAutoScroll } from '@/composables/use-auto-scroll'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
-import BaseSession from '@/providers/sessions/BaseSession'
+import BaseRequest from '@/providers/BaseRequest'
 import { createMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
 import { computed, onBeforeMount, ref } from 'vue'
@@ -18,10 +18,10 @@ const autoScrollMessages = useAutoScroll()
 
 const input = defineModel<string>('input', { default: '' })
 
-const session = ref<BaseSession>()
+const request = ref<BaseRequest>()
 const think = ref<boolean>(false)
 
-const currentAssistMessage = computed(() => session.value?.message)
+const currentAssistMessage = computed(() => request.value?.message)
 
 onBeforeMount(async () => {
   const selectedModel = storage.getItem(LocalStorageEnum.SelectedModelId)
@@ -44,7 +44,7 @@ const onSendMessage = async () => {
   const content = input.value
 
   input.value = ''
-  session.value = appStore.provider.createSession(appStore.selectedModel)
+  request.value = appStore.provider.createRequest(appStore.selectedModel)
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: content,
@@ -57,17 +57,17 @@ const onSendMessage = async () => {
     sessionId: appStore.activeSession.id,
   })
 
-  registerChatListener(appStore.activeSession.id)
+  registerRequestListener(appStore.activeSession.id)
 
-  await handleResponse(appStore.activeSession.id)
+  await handleRequest(appStore.activeSession.id)
 }
 
-const registerChatListener = (sessionId: number) => {
-  if (!session.value) {
+const registerRequestListener = (sessionId: number) => {
+  if (!request.value) {
     return
   }
 
-  session.value.onMessageChange(async (message) => {
+  request.value.onMessageChange(async (message) => {
     if (message.response?.done) {
       await createMessage({ ...message, sessionId })
 
@@ -76,16 +76,16 @@ const registerChatListener = (sessionId: number) => {
   })
 }
 
-const handleResponse = async (sessionId: number) => {
+const handleRequest = async (sessionId: number) => {
   if (!appStore.selectedModel) {
     throw new Error('No model selected')
   }
 
-  if (!session.value) {
+  if (!request.value) {
     throw new Error('No session active')
   }
 
-  await session.value.handleResponse({
+  await request.value.handleRequest({
     sessionId,
     model: appStore.selectedModel.fullName,
     stream: true,
@@ -100,8 +100,8 @@ const handleResponse = async (sessionId: number) => {
 }
 
 const stopStreaming = () => {
-  if (session.value) {
-    session.value.abort()
+  if (request.value) {
+    request.value.abort()
   }
 }
 

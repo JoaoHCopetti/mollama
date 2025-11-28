@@ -1,12 +1,12 @@
-import type BaseSession from '@/providers/sessions/BaseSession'
-import OllamaSession from '@/providers/sessions/OllamaSession'
+import type BaseRequest from '@/providers/BaseRequest'
+import OllamaRequest from '@/providers/ollama/OllamaRequest'
 import type { Model } from '@/types'
 import { Ollama, type ModelResponse } from 'ollama'
-import type { BaseProvider } from './BaseProvider'
+import type { BaseProvider } from '../BaseProvider'
 
 export default class OllamaProvider implements BaseProvider {
-  createSession(model: Model): BaseSession {
-    return new OllamaSession(model)
+  createRequest(model: Model): BaseRequest {
+    return new OllamaRequest(model)
   }
 
   private getLabels = (model: ModelResponse) => {

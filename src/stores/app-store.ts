@@ -1,7 +1,7 @@
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import type { SessionData } from '@/database/Session'
 import type { BaseProvider } from '@/providers/BaseProvider'
-import OllamaProvider from '@/providers/OllamaProvider'
+import OllamaProvider from '@/providers/ollama/OllamaProvider'
 import type { Model } from '@/types'
 import { defineStore } from 'pinia'
 import { ref, shallowRef, type ShallowRef } from 'vue'

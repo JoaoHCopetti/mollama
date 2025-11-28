@@ -1,7 +1,7 @@
-import type BaseSession from '@/providers/sessions/BaseSession'
+import type BaseRequest from '@/providers/BaseRequest'
 import type { Model } from '@/types'
 
 export interface BaseProvider {
-  createSession(model: Model): BaseSession
+  createRequest(model: Model): BaseRequest
   getModels(): Promise<Model[]>
 }

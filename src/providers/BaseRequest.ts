@@ -3,7 +3,7 @@ import { retrieveContext } from '@/services/chat-service'
 import type { FetchResponseOptions, Model } from '@/types'
 import { omit } from 'lodash-es'
 
-export default abstract class BaseSession {
+export default abstract class BaseRequest {
   public message?: AssistantMessageTemp
 
   protected abortController: AbortController
@@ -46,7 +46,7 @@ export default abstract class BaseSession {
     }
   }
 
-  public async handleResponse(options: FetchResponseOptions) {
+  public async handleRequest(options: FetchResponseOptions) {
     const context = await retrieveContext(options.sessionId)
 
     this.message = this.getInitMessage()
