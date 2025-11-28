@@ -1,5 +1,5 @@
-import type { MessageData } from '@/database/Message'
-import type { ChatResponse, FetchResponseOptions } from '@/types'
+import type { AssistantMessageTemp, MessageData } from '@/database/Message'
+import type { FetchResponseOptions } from '@/types'
 import { Ollama, type Message, type ChatResponse as OllamaChatResponse } from 'ollama/browser'
 import BaseSession from './BaseSession'
 
@@ -19,23 +19,8 @@ export default class OllamaSession extends BaseSession {
     if (!options.stream) {
       await this.fetchStaticResponse(options, formattedContext)
     } else {
-      this.response.state.isStreaming = true
+      this.message!.state.isStreaming = true
       await this.fetchStreamedResponse(options, formattedContext)
-    }
-  }
-
-  protected getFormattedResponse = (response: OllamaChatResponse): ChatResponse => {
-    return {
-      model: this.model,
-      state: this.response.state,
-      content: response.message.content,
-      thinking: response.message.thinking,
-      done: false,
-      promptDuration: response.prompt_eval_duration,
-      promptTokens: response.prompt_eval_count,
-      responseDuration: response.eval_duration,
-      responseTokens: response.eval_count,
-      totalDuration: response.total_duration,
     }
   }
 
@@ -46,7 +31,7 @@ export default class OllamaSession extends BaseSession {
       stream: false,
     })
 
-    this.setResponse(this.getFormattedResponse(response))
+    this.setMessage(this.getFormattedMessage(response))
   }
 
   protected async fetchStreamedResponse(options: FetchResponseOptions, context: Message[]) {
@@ -59,14 +44,33 @@ export default class OllamaSession extends BaseSession {
     const iterator = response[Symbol.asyncIterator]()
 
     for await (const chunk of iterator) {
-      this.response.state.isThinking = !!chunk.message.thinking
+      this.message!.state.isThinking = !!chunk.message.thinking
 
       if (this.abortController.signal.aborted) {
         response.abort()
         return
       }
 
-      await this.setResponse(this.getFormattedResponse(chunk))
+      await this.setMessage(this.getFormattedMessage(chunk))
+    }
+  }
+
+  protected getFormattedMessage = (
+    response: OllamaChatResponse,
+  ): Omit<AssistantMessageTemp, 'state'> => {
+    return {
+      content: response.message.content,
+      thinking: response.message.thinking,
+      role: 'assistant',
+      model: this.model!,
+      response: {
+        done: false,
+        promptDuration: response.prompt_eval_duration,
+        promptTokens: response.prompt_eval_count,
+        responseDuration: response.eval_duration,
+        responseTokens: response.eval_count,
+        totalDuration: response.total_duration,
+      },
     }
   }
 }

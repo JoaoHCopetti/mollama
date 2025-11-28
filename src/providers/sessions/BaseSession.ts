@@ -1,26 +1,17 @@
-import type { MessageData } from '@/database/Message'
+import type { AssistantMessage, AssistantMessageTemp, MessageData } from '@/database/Message'
 import { retrieveContext } from '@/services/chat-service'
-import type { ChatResponse, FetchResponseOptions, Model } from '@/types'
+import type { FetchResponseOptions, Model } from '@/types'
 import { omit } from 'lodash-es'
 
 export default abstract class BaseSession {
-  public response: ChatResponse
+  public message?: AssistantMessageTemp
 
   protected abortController: AbortController
-  protected responseChangeCallback?: CallableFunction
+  protected messageChangeCallback?: CallableFunction
   protected model?: Model
 
   constructor(model?: Model) {
     this.model = model
-    this.response = {
-      content: '',
-      thinking: '',
-      state: {
-        isLoading: false,
-        isThinking: false,
-        isStreaming: false,
-      },
-    }
 
     this.abortController = new AbortController()
   }
@@ -30,39 +21,45 @@ export default abstract class BaseSession {
     context: MessageData[],
   ): Promise<void>
 
-  public async setResponse(response: Partial<ChatResponse>) {
-    const { content, thinking } = response
+  public async setMessage(message: Partial<AssistantMessage>) {
+    const { content, thinking } = message
+
+    if (!this.message) {
+      this.message = this.getInitMessage()
+    }
 
     if (content) {
-      this.response.content += content
+      this.message.content += content
     }
 
     if (thinking) {
-      this.response.thinking += thinking
+      this.message.thinking += thinking
     }
 
-    Object.assign<ChatResponse, Partial<ChatResponse>>(
-      this.response,
-      omit(response, ['content', 'thinking']),
+    Object.assign<AssistantMessageTemp, Partial<AssistantMessageTemp>>(
+      this.message,
+      omit(message, ['content', 'thinking']),
     )
 
-    if (this.responseChangeCallback) {
-      await this.responseChangeCallback(this.response)
+    if (this.messageChangeCallback) {
+      await this.messageChangeCallback(this.message)
     }
   }
 
   public async handleResponse(options: FetchResponseOptions) {
     const context = await retrieveContext(options.sessionId)
 
-    this.response.state.isLoading = true
+    this.message = this.getInitMessage()
+
+    this.message.state.isLoading = true
 
     await this.performHandleResponse(options, context)
 
     await this.finish()
   }
 
-  public onResponseChange(callback: (response: ChatResponse) => void) {
-    this.responseChangeCallback = callback
+  public onMessageChange(callback: (message: AssistantMessage) => void) {
+    this.messageChangeCallback = callback
   }
 
   public abort() {
@@ -71,16 +68,38 @@ export default abstract class BaseSession {
   }
 
   protected async finish() {
-    this.response.state = {
+    if (!this.message) {
+      console.warn('No message is set when calling finish method')
+      return
+    }
+
+    this.message.state = {
       isLoading: false,
       isStreaming: false,
       isThinking: false,
     }
 
-    this.response.done = true
+    this.message.response.done = true
 
-    if (this.responseChangeCallback) {
-      await this.responseChangeCallback(this.response)
+    if (this.messageChangeCallback) {
+      await this.messageChangeCallback(this.message)
+    }
+
+    this.message = undefined
+  }
+
+  private getInitMessage(): AssistantMessageTemp {
+    return {
+      content: '',
+      role: 'assistant',
+      response: {
+        done: false,
+      },
+      state: {
+        isLoading: false,
+        isStreaming: false,
+        isThinking: false,
+      },
     }
   }
 }

@@ -11,7 +11,8 @@ export default class AppDB extends Dexie {
 
     this.version(1).stores({
       sessions: '++id, title, lastModel, createdAt, updatedAt',
-      messages: '++id, sessionId, role, content, thinking, createdAt, updatedAt',
+      messages:
+        '++id, sessionId, model, role, content, thinking, state, response, createdAt, updatedAt',
     })
 
     this.sessions.mapToClass(Session)

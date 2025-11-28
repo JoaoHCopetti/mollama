@@ -1,11 +1,7 @@
 import type { Model } from '@/database/Model'
 
-type ChatResponse = {
-  content: string
-  state: ChatState
-  model?: Model
-  done?: boolean
-  thinking?: string
+type ResponseDetails = {
+  done: boolean
   totalDuration?: number
   promptTokens?: number
   promptDuration?: number
@@ -13,7 +9,7 @@ type ChatResponse = {
   responseDuration?: number
 }
 
-interface ChatState {
+interface MessageState {
   isLoading: boolean
   isThinking: boolean
   isStreaming: boolean
@@ -37,4 +33,4 @@ type Model = {
   isCloud?: boolean
 }
 
-export { ChatResponse, ChatState, FetchResponseOptions, Model }
+export { FetchResponseOptions, MessageState, Model, ResponseDetails }

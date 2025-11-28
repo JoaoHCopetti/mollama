@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { db } from '@/database/db'
-import type { MessageData, TempMessage } from '@/database/Message'
+import type { AssistantMessage, AssistantMessageTemp, MessageData } from '@/database/Message'
 import { copyToClipboard } from '@/utils'
 import { liveQuery, type Subscription } from 'dexie'
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import ChatMessagesItem from './ChatMessagesItem.vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+
+import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
+import ChatMessagesUser from './ChatMessagesUser.vue'
 
 const props = defineProps<{
   sessionId: number
-  currentMessage?: TempMessage
+  currentAssistMessage?: AssistantMessageTemp
 }>()
 
 const messages = ref<MessageData[]>([])
@@ -49,16 +51,6 @@ const registerCopyListeners = () => {
   })
 }
 
-watch(
-  () => props.sessionId,
-  () => {
-    setupLiveQuery()
-    setTimeout(() => {
-      registerCopyListeners()
-    }, 100)
-  },
-)
-
 onMounted(() => {
   setupLiveQuery()
 
@@ -76,15 +68,24 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="mx-auto flex flex-col gap-10">
-    <ChatMessagesItem
+    <template
       v-for="message in messages"
       :key="message.id"
-      :message="message"
-    />
+    >
+      <ChatMessagesAssistant
+        v-if="message.role === 'assistant'"
+        :message="message as AssistantMessage"
+      />
 
-    <ChatMessagesItem
-      v-if="currentMessage"
-      :message="currentMessage"
+      <ChatMessagesUser
+        v-else
+        :message="message"
+      />
+    </template>
+
+    <ChatMessagesAssistant
+      v-if="currentAssistMessage"
+      :message="currentAssistMessage"
     />
   </div>
 </template>

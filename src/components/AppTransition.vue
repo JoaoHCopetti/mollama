@@ -3,11 +3,13 @@ withDefaults(
   defineProps<{
     fromClass?: string
     toClass?: string
+    mirror?: boolean
     activeClass?: string
   }>(),
   {
     fromClass: '',
     toClass: '',
+    mirror: true,
     activeClass: 'transition-all',
   },
 )
@@ -19,9 +21,9 @@ withDefaults(
     :enter-active-class="activeClass"
     :enter-from-class="fromClass"
     :enter-to-class="toClass"
-    :leave-from-class="toClass"
-    :leave-to-class="fromClass"
-    :leave-active-class="activeClass"
+    :leave-from-class="mirror ? toClass : ''"
+    :leave-to-class="mirror ? fromClass : ''"
+    :leave-active-class="mirror ? activeClass : ''"
   >
     <slot />
   </Transition>

@@ -1,4 +1,4 @@
-import type { ChatResponse, Model } from '@/types'
+import type { MessageState, Model, ResponseDetails } from '@/types'
 import { Entity } from 'dexie'
 import type AppDB from './AppDB'
 
@@ -9,11 +9,21 @@ export default class Message extends Entity<AppDB> {
   role!: 'user' | 'system' | 'assistant'
   content!: string
   thinking?: string
-  response?: ChatResponse
+  state?: MessageState
+  response?: ResponseDetails
   createdAt!: string
   updatedAt!: string
 }
 
 export type MessageData = Omit<Message, 'table' | 'db'>
-export type MessageInput = Omit<MessageData, 'id' | 'createdAt' | 'updatedAt'>
-export type TempMessage = Omit<MessageData, 'id' | 'createdAt' | 'updatedAt'>
+
+export type UserMessage = Omit<MessageData, 'state' | 'response' | 'thinking' | 'model'>
+export type AssistantMessage = MessageData & {
+  state: MessageState
+  response: ResponseDetails
+  model: Model
+}
+export type AssistantMessageTemp = Omit<
+  AssistantMessage,
+  'id' | 'createdAt' | 'updatedAt' | 'sessionId'
+>
