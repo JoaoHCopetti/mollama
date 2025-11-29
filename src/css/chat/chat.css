@@ -9,4 +9,8 @@
   .message-container div:not(:last-child) p {
     @apply pb-3!;
   }
+
+  .message-container hr {
+    @apply border-base-300;
+  }
 }

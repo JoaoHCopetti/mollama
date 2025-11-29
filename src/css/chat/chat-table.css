@@ -8,15 +8,15 @@
   }
 
   .message-container table tbody tr:nth-child(odd) td {
-    @apply bg-gray-700;
+    @apply bg-base-300;
   }
 
   .message-container table tbody tr:nth-child(even) td {
-    @apply bg-gray-800;
+    @apply bg-base-300;
   }
 
   .message-container table th {
-    @apply bg-gray-900 text-white/70 text-[0.8rem] py-3 px-5 leading-5 uppercase;
+    @apply bg-base-200 text-white/90 text-[0.75rem] py-3 px-5 leading-5 uppercase font-normal;
   }
 
   .message-container table td {
