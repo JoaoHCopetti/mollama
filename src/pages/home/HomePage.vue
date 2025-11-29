@@ -43,8 +43,9 @@ const onSendMessage = async () => {
 
   const content = input.value
 
-  input.value = ''
   request.value = appStore.provider.createRequest(appStore.selectedModel)
+
+  input.value = ''
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: content,
@@ -71,7 +72,9 @@ const registerRequestListener = (sessionId: number) => {
     if (message.response?.done) {
       await createMessage({ ...message, sessionId })
 
-      router.push(`/sessions/${sessionId}`)
+      if (!route.params.id) {
+        router.push(`/sessions/${sessionId}`)
+      }
     }
   })
 }
@@ -102,7 +105,10 @@ const handleRequest = async (sessionId: number) => {
 const stopStreaming = () => {
   if (request.value) {
     request.value.abort()
+    return
   }
+
+  request.value = undefined
 }
 
 const onChatMessagesMount = () => {
@@ -139,7 +145,7 @@ const onChatMessagesMount = () => {
         v-model:input="input"
         v-model:think="think"
         class="w-3/4"
-        :is-loading="!!currentAssistMessage?.state.isLoading"
+        :request="request"
         @send="onSendMessage"
         @stop="stopStreaming"
       />

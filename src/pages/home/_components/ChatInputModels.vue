@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ModelInfo from '@/components/AppModelInfo.vue'
+import AppModelInfo from '@/components/AppModelInfo.vue'
 import { useAppStore } from '@/stores/app-store'
 import type { Model } from '@/types'
 import { focusChatTextarea } from '@/utils'
@@ -25,7 +25,7 @@ const onModelClick = (model: Model) => {
       role="button"
       class="dui-btn"
     >
-      <ModelInfo
+      <AppModelInfo
         v-if="selectedModel"
         :model="selectedModel"
       />

@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
+import type BaseRequest from '@/providers/BaseRequest'
 import { PhArrowFatUp, PhStop } from '@phosphor-icons/vue'
-import { onMounted, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import ChatInputModels from './ChatInputModels.vue'
 
 const MAX_TEXTAREA_HEIGHT = 150
 
 const emit = defineEmits(['send', 'stop'])
 
-defineProps<{
-  isLoading: boolean
+const props = defineProps<{
+  request?: BaseRequest
 }>()
 
 const storage = useLocalStorage()
@@ -19,6 +20,8 @@ const think = defineModel<boolean>('think', { default: false })
 
 const textareaRef = useTemplateRef('textareaRef')
 const isTextareaFocused = ref<boolean>(false)
+
+const state = computed(() => props.request?.message?.state)
 
 onMounted(() => {
   adjustTextareaHeight()
@@ -44,6 +47,8 @@ const onThinkChange = (e: Event) => {
 }
 
 const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
+  setTimeout(adjustTextareaHeight, 100)
+
   if (input.value.trim() === '') {
     return
   }
@@ -53,11 +58,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
     return
   }
 
-  if (event.key === 'Enter') {
-    if (event.shiftKey) {
-      return
-    }
-
+  if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault()
     emit('send')
   }
@@ -76,12 +77,12 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
       ref="textareaRef"
       v-model="input"
       name="message"
-      class="bg-transparent font-sans text-[0.95rem] leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
+      class="bg-transparent h-14 font-sans text-[0.95rem] leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
       placeholder="Type anything..."
-      @input="adjustTextareaHeight"
       @keydown="onMessageSend"
       @focusin="isTextareaFocused = true"
       @focusout="isTextareaFocused = false"
+      @update:model-value="adjustTextareaHeight"
     />
 
     <div class="flex justify-between">
@@ -101,7 +102,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
 
       <div>
         <button
-          v-if="!isLoading"
+          v-if="!state?.isLoading"
           class="dui-btn dui-btn-primary"
           :disabled="input.trim() === ''"
           @click="onMessageSend"
@@ -115,6 +116,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
         <button
           v-else
           class="dui-btn dui-btn-error"
+          :disabled="state.isLoading && !state.isStreaming"
           @click="$emit('stop')"
         >
           <PhStop

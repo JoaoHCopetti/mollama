@@ -2,15 +2,7 @@
 @import './chat-fence.css';
 
 @layer components {
-  .message-container div:last-child p:last-child {
-    @apply p-0 m-0;
-  }
-
-  .message-container div:not(:last-child) p {
-    @apply pb-3!;
-  }
-
   .message-container hr {
-    @apply border-base-300;
+    @apply border-base-100;
   }
 }
