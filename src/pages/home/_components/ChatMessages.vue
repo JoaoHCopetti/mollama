@@ -1,28 +1,37 @@
 <script setup lang="ts">
 import { db } from '@/database/db'
 import type { AssistantMessage, AssistantMessageTemp, MessageData } from '@/database/Message'
-import { copyToClipboard } from '@/utils'
 import { liveQuery, type Subscription } from 'dexie'
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 
+import { useAutoScroll } from '@/composables/use-auto-scroll'
 import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
 import ChatMessagesUser from './ChatMessagesUser.vue'
 
-const emit = defineEmits(['messages-mounted'])
+defineEmits(['messages-mounted'])
+
 const props = defineProps<{
   sessionId: number
   currentAssistMessage?: AssistantMessageTemp
 }>()
 
+const autoScrollMessages = useAutoScroll()
+const messagesContainer = useTemplateRef('messagesContainer')
 const messages = ref<MessageData[]>([])
 const subscription = ref<Subscription>()
+const smoothScroll = ref<boolean>(false)
+
+autoScrollMessages.registerWatcher([
+  () => props.currentAssistMessage?.thinking,
+  () => props.currentAssistMessage?.content,
+])
 
 onMounted(() => {
   setupLiveQuery()
 
-  setTimeout(() => {
-    registerCopyListeners()
-  }, 100)
+  if (messagesContainer.value) {
+    autoScrollMessages.init(messagesContainer.value)
+  }
 })
 
 onBeforeUnmount(() => {
@@ -31,87 +40,59 @@ onBeforeUnmount(() => {
   }
 })
 
-watch(
-  () => messages.value,
-  (value) => {
-    if (value) {
-      onMessagesMounted()
-    }
-  },
-  { once: true },
-)
-
-const onMessagesMounted = () => {
-  if (props.currentAssistMessage || messages.value.length) {
-    nextTick(() => {
-      emit('messages-mounted')
-    })
-  }
-}
-
 const setupLiveQuery = () => {
-  if (subscription.value) {
-    subscription.value.unsubscribe()
-  }
-
   const messagesObservable = liveQuery(() =>
     db.messages.where('sessionId').equals(props.sessionId).toArray(),
   )
 
   subscription.value = messagesObservable.subscribe({
-    next: (result) => {
+    next: async (result) => {
       messages.value = result
+
+      await nextTick()
+      autoScrollMessages.stickAndScrollToBottom()
+
+      await nextTick()
+      smoothScroll.value = true
     },
     error: (error) => console.error(error),
-  })
-}
-
-const registerCopyListeners = () => {
-  const copyButtons = document.querySelectorAll('.md-fence-wrapper .md-fence-header button')
-
-  if (!copyButtons.length) {
-    return
-  }
-
-  copyButtons?.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const code = btn.closest('.md-fence-wrapper')?.querySelector('pre code')
-
-      if (!code) {
-        return
-      }
-
-      copyToClipboard(code.textContent)
-    })
   })
 }
 </script>
 
 <template>
-  <div class="flex flex-col gap-10">
-    <div
-      v-for="message in messages"
-      :key="message.id"
-      :class="{
-        'last:mb-10': !currentAssistMessage,
-      }"
-    >
-      <ChatMessagesAssistant
-        v-if="message.role === 'assistant'"
-        :message="message as AssistantMessage"
-      />
+  <div
+    ref="messagesContainer"
+    class="h-full overflow-auto"
+    :class="{
+      'scroll-smooth': smoothScroll,
+    }"
+  >
+    <div class="w-3/4 mt-5 mx-auto flex flex-col gap-10">
+      <div
+        v-for="message in messages"
+        :key="message.id"
+        :class="{
+          'last:mb-10': !currentAssistMessage,
+        }"
+      >
+        <ChatMessagesAssistant
+          v-if="message.role === 'assistant'"
+          :message="message as AssistantMessage"
+        />
 
-      <ChatMessagesUser
-        v-else
-        :message="message"
+        <ChatMessagesUser
+          v-else
+          :message="message"
+        />
+      </div>
+
+      <ChatMessagesAssistant
+        v-if="currentAssistMessage"
+        class="mb-10"
+        :message="currentAssistMessage"
+        @vue:mounted="autoScrollMessages.stickAndScrollToBottom()"
       />
     </div>
-
-    <ChatMessagesAssistant
-      v-if="currentAssistMessage"
-      class="mb-10"
-      :message="currentAssistMessage"
-      @vue:mounted="onMessagesMounted"
-    />
   </div>
 </template>

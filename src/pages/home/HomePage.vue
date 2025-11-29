@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAutoScroll } from '@/composables/use-auto-scroll'
+import AppTransition from '@/components/AppTransition.vue'
 import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
 import BaseRequest from '@/providers/BaseRequest'
 import { createMessage, getOrCreateSession } from '@/services/chat-service'
@@ -13,8 +13,6 @@ const appStore = useAppStore()
 const storage = useLocalStorage()
 const route = useRoute()
 const router = useRouter()
-const messagesRef = ref<HTMLDivElement>()
-const autoScrollMessages = useAutoScroll()
 
 const input = defineModel<string>('input', { default: '' })
 
@@ -30,11 +28,6 @@ onBeforeMount(async () => {
 
   think.value = storage.getItem(LocalStorageEnum.Think) || false
 })
-
-autoScrollMessages.registerWatcher([
-  () => currentAssistMessage.value?.thinking,
-  () => currentAssistMessage.value?.content,
-])
 
 const onSendMessage = async () => {
   if (!appStore.selectedModel) {
@@ -110,35 +103,29 @@ const stopStreaming = () => {
 
   request.value = undefined
 }
-
-const onChatMessagesMount = () => {
-  if (messagesRef.value) {
-    autoScrollMessages.init(messagesRef.value)
-
-    autoScrollMessages.stickAndScrollToBottom()
-  }
-}
 </script>
 
 <template>
   <div class="h-full flex flex-col">
-    <div
-      ref="messagesRef"
-      class="h-full overflow-auto scroll-smooth"
+    <AppTransition
+      from-class="opacity-0"
+      to-class="opacity-100"
+      active-class="animate-all duration-100"
     >
       <ChatMessages
         v-if="appStore.activeSession"
         :key="appStore.activeSession.id"
         :session-id="appStore.activeSession.id"
         :current-assist-message="currentAssistMessage"
-        class="w-3/4 mt-5 mx-auto"
-        @messages-mounted="onChatMessagesMount"
       />
 
-      <div v-else>
+      <div
+        v-else
+        class="h-full"
+      >
         <!-- TODO: Fancy message here -->
       </div>
-    </div>
+    </AppTransition>
 
     <div class="mb-5">
       <ChatInput
