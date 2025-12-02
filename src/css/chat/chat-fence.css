@@ -11,23 +11,7 @@
     @apply p-0 m-0;
   }
 
-  .message-container .md-fence-wrapper {
-    @apply bg-base-300 rounded-lg my-5;
-  }
-
   .message-container .md-fence-wrapper pre {
     @apply px-3 py-3 leading-5 overflow-auto;
-  }
-
-  .message-container .md-fence-wrapper .md-fence-header {
-    @apply bg-base-200 px-3 py-2 min-h-5 max-h-5 text-sm rounded-t-lg uppercase font-bold;
-  }
-
-  .message-container .md-fence-wrapper .md-fence-header button[id^='fence-copy'] {
-    @apply opacity-0 transition-all! duration-100;
-  }
-
-  .message-container .md-fence-wrapper:hover .md-fence-header button[id^='fence-copy'] {
-    @apply opacity-100;
   }
 }

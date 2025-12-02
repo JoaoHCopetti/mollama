@@ -12,12 +12,12 @@ const props = defineProps<{
 
 const toast = useToastStore()
 
-const copyToClipboardId = `fence-copy-${props.idx}`
+const copyButtonId = `fence-copy-${props.idx}`
 const buttonEl = ref<HTMLButtonElement | null>()
 
 onMounted(async () => {
   await nextTick()
-  buttonEl.value = document.getElementById(copyToClipboardId) as HTMLButtonElement
+  buttonEl.value = document.getElementById(copyButtonId) as HTMLButtonElement
 
   if (!buttonEl.value) {
     console.error("Couldn't find fence copy button")
@@ -52,13 +52,15 @@ const handleButtonClick = () => {
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="md-fence-wrapper">
-    <div class="md-fence-header flex justify-between items-center">
+  <div class="md-fence-wrapper group bg-base-300 rounded-lg my-5">
+    <div
+      class="md-fence-header flex justify-between items-center bg-base-200 px-3 py-2 min-h-5 max-h-5 text-sm rounded-t-lg uppercase font-bold"
+    >
       <span class="text-xs uppercase">{{ language || 'text' }}</span>
 
       <button
-        :id="copyToClipboardId"
-        class="dui-btn dui-btn-xs dui-btn-ghost"
+        :id="copyButtonId"
+        class="dui-btn dui-btn-xs dui-btn-ghost group-hover:opacity-100 opacity-0 transition-all"
       >
         <PhClipboard size="1rem" />
       </button>

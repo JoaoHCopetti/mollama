@@ -27,9 +27,6 @@ const htmlContent = computed(() => markdown.render(props.message.content))
       :message="message"
     />
 
-    <div
-      class="assistant-message"
-      v-html="htmlContent"
-    />
+    <div v-html="htmlContent" />
   </div>
 </template>
