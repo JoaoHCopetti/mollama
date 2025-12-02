@@ -1,6 +1,19 @@
 <script setup lang="ts">
+import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { PhChatCircleText } from '@phosphor-icons/vue'
-import { RouterLink } from 'vue-router'
+import { onMounted } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+
+const shortcutStore = useShortcutsStore()
+const router = useRouter()
+
+onMounted(() => {
+  shortcutStore.onPress('new-chat', () => {
+    router.push({ name: 'home' }).then(() => {
+      shortcutStore.trigger('chat-focus')
+    })
+  })
+})
 </script>
 
 <template>

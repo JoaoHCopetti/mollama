@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
+import { useLocalStorage } from '@/composables/use-local-storage'
 import type BaseRequest from '@/providers/BaseRequest'
+import { useShortcutsStore } from '@/stores/shortcuts-store'
+import { LocalStorageEnum } from '@/utils/enums'
 import { PhArrowFatUp, PhStop } from '@phosphor-icons/vue'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import ChatInputModels from './ChatInputModels.vue'
@@ -14,6 +16,7 @@ const props = defineProps<{
 }>()
 
 const storage = useLocalStorage()
+const shortcutsStore = useShortcutsStore()
 
 const input = defineModel<string>('input', { default: '' })
 const think = defineModel<boolean>('think', { default: false })
@@ -25,6 +28,16 @@ const state = computed(() => props.request?.message?.state)
 
 onMounted(() => {
   adjustTextareaHeight()
+
+  shortcutsStore.onPress('chat-focus', () => {
+    if (textareaRef.value) {
+      textareaRef.value.focus()
+    }
+  })
+
+  shortcutsStore.onPress('toggle-think', () => {
+    changeThink(!think.value)
+  })
 })
 
 const adjustTextareaHeight = () => {
@@ -41,9 +54,12 @@ const adjustTextareaHeight = () => {
 }
 
 const onThinkChange = (e: Event) => {
-  const target = e.target as HTMLInputElement
+  changeThink((e.target as HTMLInputElement).checked)
+}
 
-  storage.setItem(LocalStorageEnum.Think, target.checked)
+const changeThink = (value: boolean) => {
+  think.value = value
+  storage.setItem(LocalStorageEnum.Think, value)
 }
 
 const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
@@ -77,8 +93,8 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
       ref="textareaRef"
       v-model="input"
       name="message"
-      class="bg-transparent h-14 font-sans text-[0.95rem] leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
-      placeholder="Type anything..."
+      class="bg-transparent h-14 font-sans text-[0.95rem] placeholder-gray-500 leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
+      placeholder="Type anything (ALT + F)"
       @keydown="onMessageSend"
       @focusin="isTextareaFocused = true"
       @focusout="isTextareaFocused = false"
@@ -91,7 +107,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
 
         <label class="dui-label bg-base-200 py-1 pl-2 pr-3 text-sm rounded-full">
           <input
-            v-model="think"
+            :checked="think"
             type="checkbox"
             class="dui-toggle bg-base-300 border-base-300 dui-toggle-primary"
             @input="onThinkChange"

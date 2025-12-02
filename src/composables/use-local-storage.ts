@@ -1,7 +1,4 @@
-export enum LocalStorageEnum {
-  SelectedModelId = 'selected-model-id',
-  Think = 'think',
-}
+import type { LocalStorageEnum } from '@/utils/enums'
 
 export const useLocalStorage = () => {
   const setItem = (key: LocalStorageEnum, value: any) => {

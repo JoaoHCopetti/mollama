@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import AppTransition from '@/components/AppTransition.vue'
-import { LocalStorageEnum, useLocalStorage } from '@/composables/use-local-storage'
+import { useLocalStorage } from '@/composables/use-local-storage'
 import BaseRequest from '@/providers/BaseRequest'
 import { createMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
+import { LocalStorageEnum } from '@/utils/enums'
 import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './_components/ChatInput.vue'

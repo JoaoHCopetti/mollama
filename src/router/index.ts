@@ -1,7 +1,6 @@
 import { db } from '@/database/db'
 import HomePage from '@/pages/home/HomePage.vue'
 import { useAppStore } from '@/stores/app-store'
-import { focusChatTextarea } from '@/utils'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
@@ -16,9 +15,7 @@ const router = createRouter({
 
 router.afterEach((to) => {
   if (to.name && ['home', 'sessions.show'].includes(to.name.toString())) {
-    handleActiveSession(to).then(() => {
-      focusChatTextarea()
-    })
+    handleActiveSession(to)
   }
 })
 

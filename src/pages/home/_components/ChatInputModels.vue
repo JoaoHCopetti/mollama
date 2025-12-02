@@ -2,11 +2,11 @@
 import AppModelInfo from '@/components/AppModelInfo.vue'
 import { useAppStore } from '@/stores/app-store'
 import type { Model } from '@/types'
-import { focusChatTextarea } from '@/utils'
 import { PhCloud, PhDesktop } from '@phosphor-icons/vue'
-import { computed } from 'vue'
+import { computed, useTemplateRef, type ShallowRef } from 'vue'
 
 const appStore = useAppStore()
+const dropdownItemRef = useTemplateRef('dropdownItemRef') as Readonly<ShallowRef<HTMLLIElement[]>>
 
 const models = computed(() => appStore.availableModels)
 const selectedModel = computed(() => appStore.selectedModel)
@@ -14,13 +14,14 @@ const selectedModel = computed(() => appStore.selectedModel)
 const onModelClick = (model: Model) => {
   appStore.selectModel(model.id)
 
-  focusChatTextarea()
+  Object.values(dropdownItemRef.value).forEach((item) => item.blur())
 }
 </script>
 
 <template>
   <div class="dui-dropdown dui-dropdown-top">
     <div
+      ref="dropdownButtonRef"
       tabindex="0"
       role="button"
       class="dui-btn"
@@ -33,15 +34,15 @@ const onModelClick = (model: Model) => {
       <span v-else> Select a model</span>
     </div>
 
-    <ul
-      tabindex="-1"
-      class="dui-dropdown-content dui-menu bg-base-100 rounded-box z-1 w-72 p-2 shadow-sm"
-    >
+    <ul class="dui-dropdown-content dui-menu bg-base-100 rounded-box z-1 w-72 p-2 shadow-sm">
       <li
         v-for="model in models"
         :key="model.id"
+        ref="dropdownItemRef"
         class="text-xs"
-        @click.prevent="onModelClick(model)"
+        tabindex="0"
+        @click="onModelClick(model)"
+        @keypress.enter="onModelClick(model)"
       >
         <a>
           <Component
