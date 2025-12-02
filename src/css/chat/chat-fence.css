@@ -23,10 +23,6 @@
     @apply bg-base-200 px-3 py-2 min-h-5 max-h-5 text-sm rounded-t-lg uppercase font-bold;
   }
 
-  .message-container .md-fence-wrapper .md-fence-header .language-name {
-    @apply text-white/50 text-xs;
-  }
-
   .message-container .md-fence-wrapper .md-fence-header button[id^='fence-copy'] {
     @apply opacity-0 transition-all! duration-100;
   }

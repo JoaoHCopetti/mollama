@@ -54,7 +54,7 @@ const handleButtonClick = () => {
 <template>
   <div class="md-fence-wrapper">
     <div class="md-fence-header flex justify-between items-center">
-      <span class="language-name">{{ language }}</span>
+      <span class="text-xs uppercase">{{ language || 'text' }}</span>
 
       <button
         :id="copyToClipboardId"
