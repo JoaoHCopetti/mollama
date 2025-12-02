@@ -18,7 +18,7 @@ const date = computed(() => timeDiffForHumans(new Date(props.session.createdAt))
     active-class="border-l-4"
   >
     <div
-      class="truncate text-white"
+      class="truncate text-white text-sm"
       :class="{
         'font-semibold': isActive,
       }"

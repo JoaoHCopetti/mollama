@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import ToastComponent from './components/toast/ToastComponent.vue'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
 import { ProvidersEnum, useAppStore } from './stores/app-store'
 import { useShortcutsStore } from './stores/shortcuts-store'
@@ -23,9 +24,11 @@ onBeforeUnmount(() => {
 
 <template>
   <main class="h-full flex">
-    <MainSidebar class="min-w-3/12 max-w-3/12" />
+    <ToastComponent />
 
-    <div class="max-w-3/4 min-w-3/4">
+    <MainSidebar class="w-[400px]" />
+
+    <div class="w-full">
       <RouterView v-if="isBooted" />
     </div>
   </main>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useShortcutsStore } from '@/stores/shortcuts-store'
-import { PhChatCircleText } from '@phosphor-icons/vue'
+import { PhPlus } from '@phosphor-icons/vue'
 import { onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
@@ -21,9 +21,9 @@ onMounted(() => {
     to="/"
     class="dui-btn dui-btn-primary w-full px-0 mb-5 no-underline flex items-center gap-2 uppercase"
   >
-    <PhChatCircleText
+    <PhPlus
       class="text-lg"
-      weight="fill"
+      weight="bold"
     />
 
     <span class="text-xs">New chat</span>

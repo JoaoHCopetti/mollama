@@ -1,5 +1,7 @@
+import AppFenceBlock from '@/components/AppFenceBlock.vue'
 import 'highlight.js/styles/stackoverflow-dark.min.css'
 import MarkdownIt from 'markdown-it'
+import { renderVNode } from '.'
 
 const CUSTOM_WRAPPER_CLASSES = {
   table: 'md-table-wrapper',
@@ -29,7 +31,6 @@ export const tableWrapperPlugin = (md: MarkdownIt) => {
 }
 
 export const fenceWrapperPlugin = (md: MarkdownIt) => {
-  const className = CUSTOM_WRAPPER_CLASSES['fence']
   const defaultRenderer = md.renderer.rules.fence
 
   md.renderer.rules.fence = (tokens, idx, options, env, self) => {
@@ -41,14 +42,10 @@ export const fenceWrapperPlugin = (md: MarkdownIt) => {
       ? defaultRenderer(tokens, idx, options, env, self)
       : token?.content
 
-    return `
-        <div class="${className}">
-          <div class="md-fence-header flex justify-between items-center">
-            <span class="language-name">${language}</span>
-            <button class="dui-btn dui-btn-xs dui-btn-ghost">COPY</button>
-          </div>
-          ${originalRender}
-        </div>
-      `
+    return renderVNode(AppFenceBlock, {
+      language,
+      originalRender,
+      idx,
+    }).outerHTML
   }
 }

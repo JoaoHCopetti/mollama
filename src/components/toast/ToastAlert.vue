@@ -1,0 +1,39 @@
+<script setup lang="ts">
+import type { ToastType } from '@/stores/toast-store'
+import { PhCheckCircle, PhInfo, PhWarningCircle } from '@phosphor-icons/vue'
+import { computed, type Component } from 'vue'
+
+const TOAST_TYPES_MAP: Record<ToastType, { icon: Component }> = {
+  success: {
+    icon: PhCheckCircle,
+  },
+  error: {
+    icon: PhWarningCircle,
+  },
+  info: {
+    icon: PhInfo,
+  },
+}
+
+type ToastAlertTypes = {
+  type: ToastType
+  message: string
+}
+
+const props = defineProps<ToastAlertTypes>()
+const toastProps = computed(() => TOAST_TYPES_MAP[props.type])
+</script>
+
+<template>
+  <div
+    class="bg-base-300 shadow-xl rounded-md mb-2 px-2 py-3 flex items-center gap-2 flex-nowrap w-80 max-w-80"
+  >
+    <Component
+      :is="toastProps.icon"
+      weight="fill"
+      class="text-xl"
+    />
+
+    <span class="text-sm">{{ message }}</span>
+  </div>
+</template>

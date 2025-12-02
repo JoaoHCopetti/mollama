@@ -10,7 +10,6 @@ export const useAutoScroll = () => {
     }
   })
 
-  // Call it when the element exists
   const init = (refEl: HTMLDivElement) => {
     el.value = refEl
     el.value.addEventListener('scroll', handleBottomFixedScroll)
@@ -33,7 +32,7 @@ export const useAutoScroll = () => {
     }
 
     const maxScrollTop = el.value.scrollHeight - el.value.clientHeight
-    const isBottomHit = Math.trunc(maxScrollTop) - 25 <= Math.trunc(el.value.scrollTop)
+    const isBottomHit = Math.trunc(maxScrollTop) - 50 <= Math.trunc(el.value.scrollTop)
 
     if (isBottomHit) {
       stickScrollToBottom.value = true
