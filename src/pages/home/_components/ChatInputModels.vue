@@ -6,7 +6,9 @@ import { PhCloud, PhDesktop } from '@phosphor-icons/vue'
 import { computed, useTemplateRef, type ShallowRef } from 'vue'
 
 const appStore = useAppStore()
-const dropdownItemRef = useTemplateRef('dropdownItemRef') as Readonly<ShallowRef<HTMLLIElement[]>>
+const dropdownItemRef = useTemplateRef('dropdownItemRef') as Readonly<
+  ShallowRef<HTMLLIElement[] | null>
+>
 
 const models = computed(() => appStore.availableModels)
 const selectedModel = computed(() => appStore.selectedModel)
@@ -14,7 +16,9 @@ const selectedModel = computed(() => appStore.selectedModel)
 const onModelClick = (model: Model) => {
   appStore.selectModel(model.id)
 
-  Object.values(dropdownItemRef.value).forEach((item) => item.blur())
+  if (dropdownItemRef.value) {
+    Object.values(dropdownItemRef.value).forEach((item) => item.blur())
+  }
 }
 </script>
 
