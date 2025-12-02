@@ -23,12 +23,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main class="h-full flex">
-    <ToastComponent />
-
+  <main class="h-full flex relative">
     <MainSidebar class="w-[400px]" />
 
-    <div class="w-full">
+    <div class="w-full relative">
+      <ToastComponent />
+
       <RouterView v-if="isBooted" />
     </div>
   </main>

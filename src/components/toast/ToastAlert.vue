@@ -3,15 +3,18 @@ import type { ToastType } from '@/stores/toast-store'
 import { PhCheckCircle, PhInfo, PhWarningCircle } from '@phosphor-icons/vue'
 import { computed, type Component } from 'vue'
 
-const TOAST_TYPES_MAP: Record<ToastType, { icon: Component }> = {
+const TOAST_TYPES_MAP: Record<ToastType, { icon: Component; classNames: string }> = {
   success: {
     icon: PhCheckCircle,
+    classNames: 'bg-success text-success-content',
   },
   error: {
     icon: PhWarningCircle,
+    classNames: '',
   },
   info: {
     icon: PhInfo,
+    classNames: '',
   },
 }
 
@@ -27,6 +30,7 @@ const toastProps = computed(() => TOAST_TYPES_MAP[props.type])
 <template>
   <div
     class="bg-base-300 shadow-xl rounded-md mb-2 px-2 py-3 flex items-center gap-2 flex-nowrap w-80 max-w-80"
+    :class="toastProps.classNames"
   >
     <Component
       :is="toastProps.icon"
