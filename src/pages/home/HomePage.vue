@@ -7,6 +7,7 @@ import { useAppStore } from '@/stores/app-store'
 import { LocalStorageEnum } from '@/utils/enums'
 import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import ChatEmpty from './_components/ChatEmpty.vue'
 import ChatInput from './_components/ChatInput.vue'
 import ChatMessages from './_components/ChatMessages.vue'
 
@@ -120,12 +121,10 @@ const stopStreaming = () => {
         :current-assist-message="currentAssistMessage"
       />
 
-      <div
+      <ChatEmpty
         v-else
-        class="h-full"
-      >
-        <!-- TODO: Fancy message here -->
-      </div>
+        class="h-full w-full flex items-center justify-center"
+      />
     </AppTransition>
 
     <div class="mb-5">

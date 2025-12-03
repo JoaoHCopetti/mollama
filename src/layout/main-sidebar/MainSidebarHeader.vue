@@ -22,6 +22,7 @@ onMounted(() => {
       is="button"
       to="/"
       class="dui-btn dui-btn-primary dui-btn-block px-0 no-underline uppercase"
+      @click="shortcutStore.trigger('chat-focus')"
     >
       <PhNotePencil
         class="text-lg"

@@ -12,7 +12,7 @@ defineProps<{
     <TransitionGroup
       tag="ul"
       name="list"
-      class="flex flex-col pl-0 overflow-auto ml-3 pr-2"
+      class="flex flex-col pl-0 overflow-auto ml-3 pr-2 mt-0"
     >
       <MainSidebarItem
         v-for="session in sessions"

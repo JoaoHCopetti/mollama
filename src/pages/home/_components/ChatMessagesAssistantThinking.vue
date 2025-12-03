@@ -22,7 +22,10 @@ const htmlThinking = computed(
       <div v-if="message.state.isThinking">
         <span class="dui-loading dui-loading-ring dui-loading-xs mr-1" />
 
-        <span class="animated-text bg-linear-to-br from-gray-500 via-gray-300 to-gray-500">
+        <span
+          class="animated-text bg-linear-to-br from-gray-500 via-gray-300 to-gray-500"
+          :style="{ 'animation-duration': '1s' }"
+        >
           Thinking
         </span>
       </div>

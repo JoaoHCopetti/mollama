@@ -4,7 +4,8 @@
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    animation: bg-position-animate 1s linear infinite;
+    /* animation-name: ; */
+    animation: bg-position-animate linear infinite;
   }
 
   @keyframes bg-position-animate {
@@ -14,5 +15,16 @@
     100% {
       background-position: 0% 0%;
     }
+  }
+
+  .list-move,
+  .list-enter-active,
+  .list-leave-active {
+    @apply opacity-100 transition-all;
+  }
+
+  .list-enter-from,
+  .list-leave-to {
+    @apply opacity-0;
   }
 }
