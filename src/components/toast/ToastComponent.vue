@@ -13,7 +13,7 @@ const toasts = computed(() => toastStore.toasts)
   <TransitionGroup
     tag="div"
     class="fixed right-0 top-0 z-50 mt-5 mr-5"
-    name="toast"
+    name="list"
   >
     <ToastAlert
       v-for="toast in toasts"
@@ -23,18 +23,3 @@ const toasts = computed(() => toastStore.toasts)
     />
   </TransitionGroup>
 </template>
-
-<style>
-@reference "tailwindcss";
-
-.toast-move,
-.toast-enter-active,
-.toast-leave-active {
-  @apply opacity-100 transition-all;
-}
-
-.toast-enter-from,
-.toast-leave-to {
-  @apply opacity-0;
-}
-</style>

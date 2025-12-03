@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useShortcutsStore } from '@/stores/shortcuts-store'
-import { PhPlus } from '@phosphor-icons/vue'
+import { PhNotePencil } from '@phosphor-icons/vue'
 import { onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
@@ -17,15 +17,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <RouterLink
-    to="/"
-    class="dui-btn dui-btn-primary w-full px-0 mb-5 no-underline flex items-center gap-2 uppercase"
-  >
-    <PhPlus
-      class="text-lg"
-      weight="bold"
-    />
+  <div class="mx-4 mb-10">
+    <RouterLink
+      is="button"
+      to="/"
+      class="dui-btn dui-btn-primary dui-btn-block px-0 no-underline uppercase"
+    >
+      <PhNotePencil
+        class="text-lg"
+        weight="fill"
+      />
 
-    <span class="text-xs">New chat</span>
-  </RouterLink>
+      <span class="text-xs">New chat</span>
+    </RouterLink>
+  </div>
 </template>

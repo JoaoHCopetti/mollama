@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import type { SessionData } from '@/database/Session'
-import { timeDiffForHumans } from '@/utils'
-import { computed } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   session: SessionData
 }>()
-const date = computed(() => timeDiffForHumans(new Date(props.session.createdAt)))
 </script>
 
 <template>
@@ -14,20 +11,17 @@ const date = computed(() => timeDiffForHumans(new Date(props.session.createdAt))
     is="li"
     v-slot="{ isActive }"
     :to="`/sessions/${session.id}`"
-    class="flex flex-col no-underline rounded gap-2 p-3 m-1 bg-base-100 hover:bg-base-300 relative transition-all cursor-pointer active:scale-[1.01] border-l-0 border-primary duration-150"
-    active-class="border-l-4"
+    class="group bg-white/2 no-underline flex flex-col p-4 m-1 rounded-xl transition-all ease-out hover:bg-white/5 active:scale-[0.98]"
+    active-class="bg-white/10 hover:bg-white/15"
   >
     <div
-      class="truncate text-white text-sm"
+      class="text-sm font-medium tracking-wide truncate"
       :class="{
-        'font-semibold': isActive,
+        'text-white drop-shadow-md': isActive,
+        'text-white/80 group-hover:text-white': !isActive,
       }"
     >
       {{ session.title }}
-    </div>
-
-    <div class="text-xs text-gray-400">
-      <span>{{ date }}</span>
     </div>
   </RouterLink>
 </template>
