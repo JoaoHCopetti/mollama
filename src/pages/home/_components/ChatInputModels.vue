@@ -3,12 +3,10 @@ import AppModelInfo from '@/components/AppModelInfo.vue'
 import { useAppStore } from '@/stores/app-store'
 import type { Model } from '@/types'
 import { PhCloud, PhDesktop } from '@phosphor-icons/vue'
-import { computed, useTemplateRef, type ShallowRef } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 const appStore = useAppStore()
-const dropdownItemRef = useTemplateRef('dropdownItemRef') as Readonly<
-  ShallowRef<HTMLLIElement[] | null>
->
+const dropdownItemRef = useTemplateRef<HTMLLIElement>('dropdownItemRef')
 
 const models = computed(() => appStore.availableModels)
 const selectedModel = computed(() => appStore.selectedModel)
@@ -25,13 +23,13 @@ const onModelClick = (model: Model) => {
 <template>
   <div class="dui-dropdown dui-dropdown-top">
     <div
-      ref="dropdownButtonRef"
       tabindex="0"
       role="button"
       class="dui-btn"
     >
       <AppModelInfo
         v-if="selectedModel"
+        :key="selectedModel.id"
         :model="selectedModel"
       />
 

@@ -8,13 +8,15 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex items-center gap-2">
-    <Component
-      :is="model.isCloud ? PhCloud : PhDesktop"
-      weight="fill"
-    />
+  <div class="flex justify-between gap-2 w-52">
+    <div class="flex items-center gap-2">
+      <Component
+        :is="model.isCloud ? PhCloud : PhDesktop"
+        weight="fill"
+      />
 
-    <span>{{ model.prettyName }}</span>
+      <span class="truncate">{{ model.prettyName }}</span>
+    </div>
 
     <span class="dui-badge dui-badge-sm bg-primary/10 border-0 font-bold opacity-50">
       {{ model.parameterSize }}
