@@ -1,7 +1,7 @@
 import type BaseRequest from '@/providers/BaseRequest'
 import OllamaRequest from '@/providers/ollama/OllamaRequest'
 import type { Model } from '@/types'
-import { Ollama, type ModelResponse } from 'ollama'
+import { Ollama, type ModelResponse } from 'ollama/browser'
 import type { BaseProvider } from '../BaseProvider'
 
 export default class OllamaProvider implements BaseProvider {

@@ -4,7 +4,6 @@
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    /* animation-name: ; */
     animation: bg-position-animate linear infinite;
   }
 

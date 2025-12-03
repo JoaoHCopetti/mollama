@@ -25,6 +25,7 @@ coverage
 *.sw?
 .continue
 *.tsbuildinfo
+stats.html
 
 .eslintcache
 

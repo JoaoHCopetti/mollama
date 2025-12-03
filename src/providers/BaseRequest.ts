@@ -68,7 +68,7 @@ export default abstract class BaseRequest {
 
   protected async finish() {
     if (!this.message) {
-      console.warn('No message is set when attempting to finish')
+      console.warn('No message was set when attempting to finish')
       return
     }
 

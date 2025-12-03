@@ -1,5 +1,3 @@
-import type { Model } from '@/database/Model'
-
 type ResponseDetails = {
   done: boolean
   totalDuration?: number
@@ -33,4 +31,24 @@ type Model = {
   isCloud?: boolean
 }
 
-export { FetchResponseOptions, MessageState, Model, ResponseDetails }
+type ToastType = 'success' | 'info' | 'error'
+
+type Toast = {
+  id: string
+  type: ToastType
+  message: string
+}
+
+interface ToastOptions {
+  timeout?: number
+}
+
+export {
+  FetchResponseOptions,
+  MessageState,
+  Model,
+  ResponseDetails,
+  Toast,
+  ToastOptions,
+  ToastType,
+}

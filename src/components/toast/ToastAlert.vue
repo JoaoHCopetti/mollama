@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ToastType } from '@/stores/toast-store'
+import type { ToastType } from '@/types'
 import { PhCheckCircle, PhInfo, PhWarningCircle } from '@phosphor-icons/vue'
 import { computed, type Component } from 'vue'
 
@@ -10,11 +10,11 @@ const TOAST_TYPES_MAP: Record<ToastType, { icon: Component; classNames: string }
   },
   error: {
     icon: PhWarningCircle,
-    classNames: '',
+    classNames: 'bg-error text-error-content',
   },
   info: {
     icon: PhInfo,
-    classNames: '',
+    classNames: 'bg-primary text-primary-content',
   },
 }
 

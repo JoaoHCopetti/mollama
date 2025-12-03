@@ -5,18 +5,18 @@ type ShortcutActions = 'chat-focus' | 'new-chat' | 'toggle-think'
 type ShortcutCallbacks = Record<ShortcutActions, (e: KeyboardEvent) => void>
 type Shortcuts = Record<
   ShortcutActions,
-  { keys: Pick<KeyboardEvent, 'altKey' | 'ctrlKey' | 'code'> }
+  { keys: Pick<KeyboardEvent, 'altKey' | 'shiftKey' | 'ctrlKey' | 'code'> }
 >
 
 const DEFAULT_SHORTCUTS: Shortcuts = {
   'chat-focus': {
-    keys: { altKey: true, ctrlKey: false, code: 'KeyF' },
+    keys: { altKey: true, shiftKey: false, ctrlKey: false, code: 'KeyF' },
   },
   'new-chat': {
-    keys: { altKey: true, ctrlKey: false, code: 'KeyN' },
+    keys: { altKey: true, shiftKey: false, ctrlKey: false, code: 'KeyN' },
   },
   'toggle-think': {
-    keys: { altKey: true, ctrlKey: false, code: 'KeyT' },
+    keys: { altKey: true, shiftKey: false, ctrlKey: false, code: 'KeyT' },
   },
 }
 
@@ -49,7 +49,10 @@ export const useShortcutsStore = defineStore('shortcuts', () => {
 
   const isEventKeys = (event: KeyboardEvent, keys: Shortcuts[ShortcutActions]['keys']) => {
     return (
-      keys.altKey === event.altKey && keys.ctrlKey === event.ctrlKey && keys.code === event.code
+      keys.altKey === event.altKey &&
+      keys.ctrlKey === event.ctrlKey &&
+      keys.code === event.code &&
+      event.shiftKey === keys.shiftKey
     )
   }
 
@@ -63,7 +66,7 @@ export const useShortcutsStore = defineStore('shortcuts', () => {
 
   const onPress = (shortcut: ShortcutActions, callback: (e: KeyboardEvent) => void) => {
     if (callbacks.value[shortcut]) {
-      console.error(`Callback already registered for shortcut "${shortcut}"`)
+      console.error(`Shortcut '${shortcut}' is already registered`)
       return
     }
 

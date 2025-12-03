@@ -6,10 +6,7 @@ import BaseRequest from '../BaseRequest'
 const ollama = new Ollama()
 
 export default class OllamaRequest extends BaseRequest {
-  public async performHandleResponse(
-    options: FetchResponseOptions,
-    context: MessageData[],
-  ): Promise<void> {
+  public async performHandleResponse(options: FetchResponseOptions, context: MessageData[]) {
     const formattedContext = context.map((message) => ({
       content: message.content,
       role: message.role,
