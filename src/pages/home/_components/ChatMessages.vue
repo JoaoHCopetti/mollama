@@ -50,9 +50,8 @@ const setupLiveQuery = () => {
       messages.value = result
 
       await nextTick()
-      autoScrollMessages.stickAndScrollToBottom()
 
-      await nextTick()
+      autoScrollMessages.stickAndScrollToBottom()
       smoothScroll.value = true
     },
     error: (error) => console.error(error),
@@ -68,7 +67,7 @@ const setupLiveQuery = () => {
       'scroll-smooth': smoothScroll,
     }"
   >
-    <div class="w-3/4 mt-5 mx-auto flex flex-col gap-10">
+    <div class="w-3/4 mt-10 mx-auto flex flex-col gap-10">
       <div
         v-for="message in messages"
         :key="message.id"
@@ -83,6 +82,7 @@ const setupLiveQuery = () => {
 
         <ChatMessagesUser
           v-else
+          class="-mt-5"
           :message="message"
         />
       </div>
