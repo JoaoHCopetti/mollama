@@ -30,6 +30,9 @@ const htmlContent = computed(() => markdown.render(props.message.content))
 
     <div v-html="htmlContent" />
 
-    <ChatMessagesAssistantActions :message="message" />
+    <ChatMessagesAssistantActions
+      v-if="message.response.done"
+      :message="message"
+    />
   </div>
 </template>
