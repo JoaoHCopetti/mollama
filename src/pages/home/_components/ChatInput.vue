@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
 import type BaseRequest from '@/providers/BaseRequest'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
@@ -116,7 +117,10 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
         </label>
       </div>
 
-      <div>
+      <AppTransition
+        from-class="scale-95 opacity-0"
+        to-class="scale-100 opacity-100"
+      >
         <button
           v-if="!state?.isLoading"
           class="dui-btn dui-btn-primary"
@@ -140,7 +144,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
             class="text-xl"
           />
         </button>
-      </div>
+      </AppTransition>
     </div>
   </div>
 </template>
