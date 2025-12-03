@@ -2,6 +2,7 @@
 import type { AssistantMessage, AssistantMessageTemp } from '@/database/Message'
 import { markdown } from '@/utils'
 import { computed } from 'vue'
+import ChatMessagesAssistantActions from './ChatMessagesAssistantActions.vue'
 import ChatMessagesAssistantHeader from './ChatMessagesAssistantHeader.vue'
 import ChatMessagesAssistantThinking from './ChatMessagesAssistantThinking.vue'
 
@@ -14,7 +15,7 @@ const htmlContent = computed(() => markdown.render(props.message.content))
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="message-container rounded-2xl w-4/5 wrap-break-word leading-7">
+  <div class="message-container group rounded-2xl w-4/5 wrap-break-word leading-7">
     <ChatMessagesAssistantHeader :message="message" />
 
     <div
@@ -28,5 +29,7 @@ const htmlContent = computed(() => markdown.render(props.message.content))
     />
 
     <div v-html="htmlContent" />
+
+    <ChatMessagesAssistantActions :message="message" />
   </div>
 </template>

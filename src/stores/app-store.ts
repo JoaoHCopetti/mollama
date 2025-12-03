@@ -16,7 +16,7 @@ export const useAppStore = defineStore('app', () => {
 
   const availableModels = ref<Model[]>([])
   const selectedModel = ref<Model>()
-  const activeSession = ref<SessionData>()
+  const activeSession = ref<SessionData | null>()
   const provider = shallowRef<BaseProvider>() as ShallowRef<BaseProvider>
 
   const init = async (providerEnum: ProvidersEnum) => {

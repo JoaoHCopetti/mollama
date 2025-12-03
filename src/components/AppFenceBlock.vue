@@ -10,7 +10,7 @@ const props = defineProps<{
   originalRender: string
 }>()
 
-const toast = useToastStore()
+const toastStore = useToastStore()
 
 const copyButtonId = `fence-copy-${props.idx}`
 const buttonEl = ref<HTMLButtonElement | null>()
@@ -41,10 +41,10 @@ const handleButtonClick = () => {
 
   copyToClipboard(element.innerText.trim())
     .then(() => {
-      toast.success('Copied to clipboard!')
+      toastStore.success('Copied to clipboard!')
     })
     .catch((e) => {
-      toast.error('Error while trying to copy')
+      toastStore.error('Error while trying to copy')
       console.error(e)
     })
 }

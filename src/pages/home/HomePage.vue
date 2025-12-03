@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
-import { db } from '@/database/db'
 import BaseRequest from '@/providers/BaseRequest'
 import { createMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
@@ -25,29 +24,12 @@ const think = ref<boolean>(false)
 const currentAssistMessage = computed(() => request.value?.message)
 
 onBeforeMount(async () => {
-  handleActiveSession()
   const selectedModel = storage.getItem(LocalStorageEnum.SelectedModelId)
 
   appStore.selectModel(selectedModel)
 
   think.value = storage.getItem(LocalStorageEnum.Think) || false
 })
-
-const handleActiveSession = () => {
-  router.afterEach((to) => {
-    const sessionId = to.params.id
-
-    if (sessionId) {
-      db.sessions.get(+sessionId).then((result) => {
-        appStore.activeSession = result
-      })
-
-      return
-    }
-
-    appStore.activeSession = undefined
-  })
-}
 
 const onSendMessage = async () => {
   if (!appStore.selectedModel) {
@@ -140,7 +122,7 @@ const stopStreaming = () => {
       />
 
       <ChatEmpty
-        v-else
+        v-else-if="appStore.activeSession === null"
         class="h-full w-full flex items-center justify-center"
       />
     </AppTransition>

@@ -1,0 +1,34 @@
+<script setup lang="ts">
+import type { AssistantMessage, AssistantMessageTemp } from '@/database/Message'
+import { useToastStore } from '@/stores/toast-store'
+import { copyToClipboard } from '@/utils'
+import { PhClipboard } from '@phosphor-icons/vue'
+
+const props = defineProps<{
+  message: AssistantMessage | AssistantMessageTemp
+}>()
+
+const toastStore = useToastStore()
+
+const onCopyClick = () => {
+  copyToClipboard(props.message.content)
+    .then(() => {
+      toastStore.success('Copied to clipboard!')
+    })
+    .catch((e) => {
+      toastStore.error('Error while trying to copy')
+      console.error(e)
+    })
+}
+</script>
+
+<template>
+  <div class="bottom-actions transition-opacity group-hover:opacity-100 opacity-0">
+    <button
+      class="dui-btn bg-transparent border-0 hover:bg-white/10"
+      @click="onCopyClick"
+    >
+      <PhClipboard weight="bold" />
+    </button>
+  </div>
+</template>
