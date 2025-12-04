@@ -1,10 +1,10 @@
-import type { AssistantMessage, AssistantMessageTemp, MessageData } from '@/database/Message'
+import type { AssistantMessage, MessageData } from '@/database/Message'
 import { retrieveContext } from '@/services/chat-service'
 import type { FetchResponseOptions, Model } from '@/types'
 import { omit } from 'lodash-es'
 
 export default abstract class BaseRequest {
-  public message?: AssistantMessageTemp
+  public message?: AssistantMessage
 
   protected abortController: AbortController
   protected messageChangeCallback?: CallableFunction
@@ -36,7 +36,7 @@ export default abstract class BaseRequest {
       this.message.thinking += thinking
     }
 
-    Object.assign<AssistantMessageTemp, Partial<AssistantMessageTemp>>(
+    Object.assign<AssistantMessage, Partial<AssistantMessage>>(
       this.message,
       omit(message, ['content', 'thinking']),
     )
@@ -87,20 +87,17 @@ export default abstract class BaseRequest {
     this.message = undefined
   }
 
-  private getInitMessage(): AssistantMessageTemp {
+  private getInitMessage(): AssistantMessage {
     return {
-      content: '',
-      thinking: '',
-      role: 'assistant',
-      response: {
-        done: false,
-      },
       model: this.model,
+      content: '',
+      tokens: [],
       state: {
         isLoading: false,
         isStreaming: false,
         isThinking: false,
       },
+      response: { done: false },
     }
   }
 }

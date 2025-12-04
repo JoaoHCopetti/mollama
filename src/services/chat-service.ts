@@ -1,18 +1,27 @@
 import { db } from '@/database/db'
-import type { MessageData } from '@/database/Message'
+import type { AssistantMessage, MessageData } from '@/database/Message'
 import type { SessionInput } from '@/database/Session'
 import { toRaw } from 'vue'
 
-export const createMessage = async (
-  messageInput: Omit<MessageData, 'id' | 'createdAt' | 'updatedAt'>,
+export const createAssistMessage = async (sessionId: number, message: AssistantMessage) => {
+  const now = new Date().toISOString()
+
+  return await db.messages.add({
+    sessionId,
+    assistant: toRaw(message),
+    createdAt: now,
+    updatedAt: now,
+  })
+}
+
+export const createUserMessage = async (
+  messageInput: Omit<MessageData, 'id' | 'assistant' | 'createdAt' | 'updatedAt'>,
 ) => {
   const now = new Date().toISOString()
 
   return await db.messages.add({
     ...messageInput,
-    state: toRaw(messageInput.state),
-    model: toRaw(messageInput.model),
-    response: toRaw(messageInput.response),
+    user: toRaw(messageInput.user),
     createdAt: now,
     updatedAt: now,
   })

@@ -2,17 +2,31 @@ import Dexie, { type EntityTable } from 'dexie'
 import Message from './Message'
 import Session from './Session'
 
+const DATABASE_NAME = 'mollama'
+
 export default class AppDB extends Dexie {
   sessions!: EntityTable<Session, 'id'>
   messages!: EntityTable<Message, 'id'>
 
   constructor() {
-    super('mollama')
+    super(DATABASE_NAME)
 
     this.version(1).stores({
-      sessions: '++id, title, lastModel, createdAt, updatedAt',
-      messages:
-        '++id, sessionId, model, role, content, thinking, state, response, createdAt, updatedAt',
+      sessions: `
+        ++id,
+        title,
+        lastModel,
+        createdAt,
+        updatedAt
+      `,
+      messages: `
+        ++id,
+        sessionId,
+        user,
+        assistant,
+        createdAt,
+        updatedAt
+      `,
     })
 
     this.sessions.mapToClass(Session)

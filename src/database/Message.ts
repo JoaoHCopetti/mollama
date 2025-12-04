@@ -5,23 +5,43 @@ import type AppDB from './AppDB'
 export default class Message extends Entity<AppDB> {
   id!: number
   sessionId!: number
-  model?: Model
-  role!: 'user' | 'system' | 'assistant'
-  content!: string
-  thinking?: string
-  state?: MessageState
-  response?: ResponseDetails
+  user?: UserMessage
+  assistant?: AssistantMessage
   createdAt!: string
   updatedAt!: string
 }
 
-export type MessageData = Omit<Message, 'table' | 'db'>
+type AssistantMessage = {
+  model: Model
+  content: string
+  thinking?: string
+  tokens: { value: string; isThinking: boolean }[]
+  state: MessageState
+  response: ResponseDetails
+  system?: {
+    content: string
+  }
+}
 
-export type UserMessage = Omit<MessageData, 'state' | 'response' | 'thinking' | 'model'>
-export type AssistantMessage = MessageData &
-  Required<Pick<MessageData, 'model' | 'response' | 'state'>>
+interface MessageState {
+  isLoading: boolean
+  isThinking: boolean
+  isStreaming: boolean
+}
 
-export type AssistantMessageTemp = Omit<
-  AssistantMessage,
-  'id' | 'createdAt' | 'updatedAt' | 'sessionId'
->
+type ResponseDetails = {
+  done: boolean
+  totalDuration?: number
+  promptTokens?: number
+  promptDuration?: number
+  responseTokens?: number
+  responseDuration?: number
+}
+
+type UserMessage = {
+  content: string
+}
+
+type MessageData = Omit<Message, 'table' | 'db'>
+
+export type { AssistantMessage, MessageData, MessageState, UserMessage }

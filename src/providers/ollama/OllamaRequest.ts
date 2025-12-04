@@ -1,39 +1,22 @@
-import type { AssistantMessageTemp, MessageData } from '@/database/Message'
+import type { AssistantMessage, MessageData } from '@/database/Message'
 import type { FetchResponseOptions } from '@/types'
-import { Ollama, type Message, type ChatResponse as OllamaChatResponse } from 'ollama/browser'
+import {
+  Ollama,
+  type ChatResponse as OllamaChatResponse,
+  type Message as OllamaMessage,
+} from 'ollama/browser'
+
 import BaseRequest from '../BaseRequest'
 
 const ollama = new Ollama()
 
 export default class OllamaRequest extends BaseRequest {
   public async performHandleResponse(options: FetchResponseOptions, context: MessageData[]) {
-    const formattedContext = context.map((message) => ({
-      content: message.content,
-      role: message.role,
-      thinking: message.thinking,
-    }))
+    const formattedContext = this.getContext(context)
 
-    if (!options.stream) {
-      await this.fetchStaticResponse(options, formattedContext)
-    } else {
-      await this.fetchStreamedResponse(options, formattedContext)
-    }
-  }
-
-  protected async fetchStaticResponse(options: FetchResponseOptions, context: Message[]) {
     const response = await ollama.chat({
       ...options,
-      messages: [...context, ...options.messages],
-      stream: false,
-    })
-
-    this.setMessage(this.getFormattedMessage(response))
-  }
-
-  protected async fetchStreamedResponse(options: FetchResponseOptions, context: Message[]) {
-    const response = await ollama.chat({
-      ...options,
-      messages: [...context, ...options.messages],
+      messages: [...formattedContext, ...options.messages],
       stream: true,
     })
 
@@ -55,14 +38,31 @@ export default class OllamaRequest extends BaseRequest {
     }
   }
 
+  private getContext = (context: MessageData[]) => {
+    return context.map<OllamaMessage>((message) => {
+      const { content, thinking, system } = { ...message.assistant, ...message.user }
+
+      if (!content) {
+        throw Error(`Error while retrieving context, provided content is:` + content)
+      }
+
+      return {
+        content,
+        thinking,
+        system,
+        role: !!message.assistant ? 'assistant' : 'user',
+      }
+    })
+  }
+
   protected getFormattedMessage = (
     response: OllamaChatResponse,
-  ): Omit<AssistantMessageTemp, 'state'> => {
+  ): Omit<AssistantMessage, 'state'> => {
     return {
       content: response.message.content,
       thinking: response.message.thinking,
-      role: 'assistant',
       model: this.model!,
+      tokens: this.message?.tokens || [],
       response: {
         done: false,
         promptDuration: response.prompt_eval_duration,

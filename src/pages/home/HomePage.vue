@@ -2,7 +2,7 @@
 import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
 import BaseRequest from '@/providers/BaseRequest'
-import { createMessage, getOrCreateSession } from '@/services/chat-service'
+import { createAssistMessage, createUserMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
 import { LocalStorageEnum } from '@/utils/enums'
 import { computed, onBeforeMount, ref } from 'vue'
@@ -47,10 +47,9 @@ const onSendMessage = async () => {
     lastModel: appStore.selectedModel,
   })
 
-  await createMessage({
-    content,
-    role: 'user',
+  await createUserMessage({
     sessionId: appStore.activeSession.id,
+    user: { content },
   })
 
   registerRequestListener(appStore.activeSession.id)
@@ -65,7 +64,7 @@ const registerRequestListener = (sessionId: number) => {
 
   request.value.onMessageChange(async (message) => {
     if (message.response?.done) {
-      await createMessage({ ...message, sessionId })
+      await createAssistMessage(sessionId, message)
 
       if (!route.params.id) {
         router.push(`/sessions/${sessionId}`)
@@ -86,7 +85,6 @@ const handleRequest = async (sessionId: number) => {
   await request.value.handleRequest({
     sessionId,
     model: appStore.selectedModel.fullName,
-    stream: true,
     think: think.value,
     messages: [
       {

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { AssistantMessage, AssistantMessageTemp } from '@/database/Message'
+import type { AssistantMessage } from '@/database/Message'
 import { markdown } from '@/utils'
 import { computed } from 'vue'
 
 const props = defineProps<{
-  message: AssistantMessage | AssistantMessageTemp
+  message: AssistantMessage
 }>()
 
 const htmlThinking = computed(

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AppModelInfo from '@/components/AppModelInfo.vue'
-import type { AssistantMessage, AssistantMessageTemp } from '@/database/Message'
+import type { AssistantMessage } from '@/database/Message'
 
 defineProps<{
-  message: AssistantMessage | AssistantMessageTemp
+  message: AssistantMessage
 }>()
 </script>
 

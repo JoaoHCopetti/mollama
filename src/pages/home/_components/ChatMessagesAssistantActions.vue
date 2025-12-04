@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { AssistantMessage, AssistantMessageTemp } from '@/database/Message'
+import type { AssistantMessage } from '@/database/Message'
 import { useToastStore } from '@/stores/toast-store'
 import { copyToClipboard } from '@/utils'
 import { PhClipboard } from '@phosphor-icons/vue'
 
 const props = defineProps<{
-  message: AssistantMessage | AssistantMessageTemp
+  message: AssistantMessage
 }>()
 
 const toastStore = useToastStore()

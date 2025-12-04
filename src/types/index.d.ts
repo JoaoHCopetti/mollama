@@ -1,23 +1,13 @@
-type ResponseDetails = {
-  done: boolean
-  totalDuration?: number
-  promptTokens?: number
-  promptDuration?: number
-  responseTokens?: number
-  responseDuration?: number
-}
-
-interface MessageState {
-  isLoading: boolean
-  isThinking: boolean
-  isStreaming: boolean
-}
-
 type FetchResponseOptions = {
   sessionId: number
   model: string
-  messages: Pick<MessageData, 'role' | 'content'>[]
-  stream?: boolean
+  messages: {
+    content: string
+    thinking?: string
+    system?: string
+    role: 'assistant' | 'user'
+  }[]
+
   think?: 'low' | 'medium' | 'high' | boolean
 }
 
@@ -45,6 +35,7 @@ interface ToastOptions {
 
 export {
   FetchResponseOptions,
+  InputMessage,
   MessageState,
   Model,
   ResponseDetails,

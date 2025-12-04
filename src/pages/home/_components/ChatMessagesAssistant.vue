@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AssistantMessage, AssistantMessageTemp } from '@/database/Message'
+import type { AssistantMessage } from '@/database/Message'
 import { markdown } from '@/utils'
 import { computed } from 'vue'
 import ChatMessagesAssistantActions from './ChatMessagesAssistantActions.vue'
@@ -7,7 +7,7 @@ import ChatMessagesAssistantHeader from './ChatMessagesAssistantHeader.vue'
 import ChatMessagesAssistantThinking from './ChatMessagesAssistantThinking.vue'
 
 const props = defineProps<{
-  message: AssistantMessage | AssistantMessageTemp
+  message: AssistantMessage
 }>()
 
 const htmlContent = computed(() => markdown.render(props.message.content))
