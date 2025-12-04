@@ -30,10 +30,12 @@ export default abstract class BaseRequest {
 
     if (content) {
       this.message.content += content
+      this.message.tokens.push({ value: content, isThinking: false })
     }
 
     if (thinking) {
       this.message.thinking += thinking
+      this.message.tokens.push({ value: thinking, isThinking: true })
     }
 
     Object.assign<AssistantMessage, Partial<AssistantMessage>>(
