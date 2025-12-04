@@ -11,7 +11,7 @@ export default class Message extends Entity<AppDB> {
   updatedAt!: string
 }
 
-type AssistantMessage = {
+interface AssistantMessage {
   model: Model
   content: string
   thinking?: string
@@ -29,7 +29,7 @@ interface MessageState {
   isStreaming: boolean
 }
 
-type ResponseDetails = {
+interface ResponseDetails {
   done: boolean
   totalDuration?: number
   promptTokens?: number
@@ -38,7 +38,7 @@ type ResponseDetails = {
   responseDuration?: number
 }
 
-type UserMessage = {
+interface UserMessage {
   content: string
 }
 

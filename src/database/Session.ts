@@ -10,5 +10,7 @@ export default class Session extends Entity<AppDB> {
   updatedAt!: string
 }
 
-export type SessionData = Omit<Session, 'table' | 'db'>
-export type SessionInput = Omit<SessionData, 'id'>
+type SessionData = Omit<Session, 'table' | 'db'>
+type SessionInput = Omit<SessionData, 'id'>
+
+export type { SessionData, SessionInput }
