@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.1.17",
     "@types/markdown-it": "^14.1.2",
     "dexie": "^4.2.1",
+    "diff-dom": "^5.2.1",
     "highlight.js": "^11.11.1",
     "lodash-es": "^4.17.21",
     "markdown-it": "^14.1.0",

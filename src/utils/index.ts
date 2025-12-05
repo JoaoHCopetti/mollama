@@ -4,6 +4,7 @@ import MarkdownIt from 'markdown-it'
 import type { Component, VNode, VNodeProps } from 'vue'
 import { createVNode, render } from 'vue'
 import { fenceWrapperPlugin, tableWrapperPlugin } from './markdown-it-plugins'
+
 export const markdown = new MarkdownIt({
   html: true,
   highlight: (str, lang) => {
@@ -43,14 +44,6 @@ export const timeDiffForHumans = (date: Date): string => {
   return 'just now'
 }
 
-export const focusChatTextarea = () => {
-  const messageInput = document.querySelector<HTMLTextAreaElement>('#message')
-
-  if (messageInput) {
-    messageInput.focus()
-  }
-}
-
 export const copyToClipboard = async (text: string) => {
   try {
     await navigator.clipboard.writeText(text)
@@ -76,4 +69,12 @@ export const renderVNode = <
   render(vNode, container)
 
   return container
+}
+
+export const createElement = (tag: keyof HTMLElementTagNameMap, innerHTML: string) => {
+  const el = document.createElement(tag)
+
+  el.innerHTML = innerHTML
+
+  return el
 }

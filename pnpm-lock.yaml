@@ -20,6 +20,9 @@ importers:
       dexie:
         specifier: ^4.2.1
         version: 4.2.1
+      diff-dom:
+        specifier: ^5.2.1
+        version: 5.2.1
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
@@ -1249,6 +1252,9 @@ packages:
 
   dexie@4.2.1:
     resolution: {integrity: sha512-Ckej0NS6jxQ4Po3OrSQBFddayRhTCic2DoCAG5zacOfOVB9P2Q5Xc5uL/nVa7ZVs+HdMnvUPzLFCB/JwpB6Csg==}
+
+  diff-dom@5.2.1:
+    resolution: {integrity: sha512-G6WquwIa/XOxiYDYRMxfJj+c+a6LXMv7zgXoAQ3eRjTYkc8Lc4Aq97krTu/B15r243FR7dyeSxDenzKtO6sbfA==}
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -3542,6 +3548,8 @@ snapshots:
   detect-libc@2.1.2: {}
 
   dexie@4.2.1: {}
+
+  diff-dom@5.2.1: {}
 
   eastasianwidth@0.2.0: {}
 
