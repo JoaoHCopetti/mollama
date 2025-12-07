@@ -5,4 +5,8 @@
   .message-container hr {
     @apply border-base-100;
   }
+
+  .message-container code {
+    @apply text-warning-content bg-warning py-0.5 px-1 mr-[2px] rounded-[0.2rem];
+  }
 }

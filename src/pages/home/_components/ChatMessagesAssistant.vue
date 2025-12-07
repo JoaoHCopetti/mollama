@@ -23,7 +23,7 @@ onMounted(() => {
 })
 
 // Try to avoid text selection cancel
-// when new tokens are generated
+// when new tokens are being generated
 watch(htmlContent, (newHTML) => {
   if (!markdownRef.value) {
     return

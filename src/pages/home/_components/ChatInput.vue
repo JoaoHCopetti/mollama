@@ -4,7 +4,7 @@ import { useLocalStorage } from '@/composables/use-local-storage'
 import type BaseRequest from '@/providers/BaseRequest'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { LocalStorageEnum } from '@/utils/enums'
-import { PhArrowFatUp, PhStop } from '@phosphor-icons/vue'
+import { PhCaretCircleUp, PhStop } from '@phosphor-icons/vue'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import ChatInputModels from './ChatInputModels.vue'
 
@@ -127,7 +127,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
           :disabled="input.trim() === ''"
           @click="onMessageSend"
         >
-          <PhArrowFatUp
+          <PhCaretCircleUp
             class="text-xl"
             weight="fill"
           />
