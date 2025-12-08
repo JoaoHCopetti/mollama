@@ -23,7 +23,7 @@ const onCopyClick = () => {
 </script>
 
 <template>
-  <div class="bottom-actions transition-opacity group-hover:opacity-100 opacity-0">
+  <div class="bottom-actions transition-opacity group-hover:opacity-100 opacity-0 h-10">
     <button
       class="dui-btn bg-transparent border-0 hover:bg-white/10"
       @click="onCopyClick"

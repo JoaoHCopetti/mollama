@@ -43,7 +43,7 @@ watch(htmlContent, (newHTML) => {
 
     <div
       v-if="message.state.isLoading && !message.state.isStreaming"
-      class="dui-loading dui-loading-sm dui-loading-ring"
+      class="dui-loading dui-loading-ring h-12"
     />
 
     <ChatMessagesAssistantThinking
@@ -56,6 +56,11 @@ watch(htmlContent, (newHTML) => {
     <ChatMessagesAssistantActions
       v-if="message.response.done"
       :message="message"
+    />
+
+    <div
+      v-else
+      class="h-10"
     />
   </div>
 </template>

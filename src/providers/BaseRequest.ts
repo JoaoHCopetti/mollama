@@ -93,6 +93,7 @@ export default abstract class BaseRequest {
     return {
       model: this.model,
       content: '',
+      thinking: '',
       tokens: [],
       state: {
         isLoading: false,

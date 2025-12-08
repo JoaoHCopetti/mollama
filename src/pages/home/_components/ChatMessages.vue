@@ -2,9 +2,8 @@
 import { db } from '@/database/db'
 import type { AssistantMessage, MessageData } from '@/database/Message'
 import { liveQuery, type Subscription } from 'dexie'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
-import { useAutoScroll } from '@/composables/use-auto-scroll'
 import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
 import ChatMessagesUser from './ChatMessagesUser.vue'
 
@@ -15,9 +14,19 @@ const props = defineProps<{
   currentAssistMessage?: AssistantMessage
 }>()
 
-const autoScrollMessages = useAutoScroll()
 const messages = ref<MessageData[]>([])
 const subscription = ref<Subscription>()
+
+const computedMessages = computed(() => {
+  if (props.currentAssistMessage) {
+    return [
+      ...messages.value,
+      { id: 'current', assistant: props.currentAssistMessage, user: undefined },
+    ]
+  }
+
+  return [...messages.value]
+})
 
 onMounted(() => {
   setupLiveQuery()
@@ -46,15 +55,13 @@ const setupLiveQuery = () => {
 <template>
   <div
     ref="messagesContainer"
-    class="h-full overflow-auto"
+    class="h-full overflow-auto flex flex-col-reverse"
   >
     <div class="w-3/4 mt-10 mx-auto flex flex-col gap-10">
       <div
-        v-for="message in messages"
+        v-for="message in computedMessages"
         :key="message.id"
-        :class="{
-          'last:mb-10': !currentAssistMessage,
-        }"
+        class="last:mb-10"
       >
         <ChatMessagesAssistant
           v-if="message.assistant"
@@ -67,13 +74,6 @@ const setupLiveQuery = () => {
           :message="message.user!"
         />
       </div>
-
-      <ChatMessagesAssistant
-        v-if="currentAssistMessage"
-        class="mb-10"
-        :message="currentAssistMessage"
-        @vue:mounted="autoScrollMessages.stickAndScrollToBottom()"
-      />
     </div>
   </div>
 </template>

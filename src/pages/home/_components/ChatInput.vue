@@ -94,6 +94,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
       ref="textareaRef"
       v-model="input"
       name="message"
+      autofocus
       class="bg-transparent h-14 font-sans text-[0.95rem] placeholder-gray-500 leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
       placeholder="Type anything (ALT + F)"
       @keydown="onMessageSend"
