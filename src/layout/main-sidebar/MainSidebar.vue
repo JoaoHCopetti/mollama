@@ -3,6 +3,7 @@ import type { SessionData } from '@/database/Session'
 import { db } from '@/database/db'
 import { liveQuery } from 'dexie'
 import { ref } from 'vue'
+import SettingsModal from '../settings/SettingsModal.vue'
 import MainSidebarChats from './MainSidebarChats.vue'
 import MainSidebarFooter from './MainSidebarFooter.vue'
 import MainSidebarHeader from './MainSidebarHeader.vue'
@@ -27,5 +28,7 @@ sessionsObservable.subscribe({
     <MainSidebarChats :sessions="sessions" />
 
     <MainSidebarFooter />
+
+    <SettingsModal />
   </div>
 </template>

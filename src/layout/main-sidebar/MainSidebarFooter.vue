@@ -20,7 +20,7 @@ import MainSidebarFooterItem from './MainSidebarFooterItem.vue'
       <MainSidebarFooterItem
         label="Settings"
         :icon="PhGear"
-        @click.prevent
+        href="#settings"
       />
     </div>
   </div>
