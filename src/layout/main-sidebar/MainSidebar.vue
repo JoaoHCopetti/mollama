@@ -5,6 +5,7 @@ import { liveQuery } from 'dexie'
 import { ref } from 'vue'
 import MainSidebarChats from './MainSidebarChats.vue'
 import MainSidebarChatsTitle from './MainSidebarChatsTitle.vue'
+import MainSidebarFooter from './MainSidebarFooter.vue'
 import MainSidebarHeader from './MainSidebarHeader.vue'
 
 const sessions = ref<SessionData[]>([])
@@ -27,5 +28,7 @@ sessionsObservable.subscribe({
     <MainSidebarChatsTitle class="px-5 pb-3" />
 
     <MainSidebarChats :sessions="sessions" />
+
+    <MainSidebarFooter />
   </div>
 </template>
