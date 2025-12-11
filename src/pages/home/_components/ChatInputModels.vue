@@ -46,7 +46,7 @@ const onModelClick = (model: Model) => {
         @click="onModelClick(model)"
         @keypress.enter="onModelClick(model)"
       >
-        <a>
+        <a class="active:bg-base-200">
           <Component
             :is="model.isCloud ? PhCloud : PhDesktop"
             weight="fill"
