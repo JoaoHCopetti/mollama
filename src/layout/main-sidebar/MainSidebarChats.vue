@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SessionData } from '@/database/Session'
+import MainSidebarChatsTitle from './MainSidebarChatsTitle.vue'
 import MainSidebarItem from './MainSidebarItem.vue'
 
 defineProps<{
@@ -8,6 +9,8 @@ defineProps<{
 </script>
 
 <template>
+  <MainSidebarChatsTitle class="px-5 pb-3" />
+
   <div class="overflow-auto">
     <TransitionGroup
       tag="ul"

@@ -4,7 +4,6 @@ import { db } from '@/database/db'
 import { liveQuery } from 'dexie'
 import { ref } from 'vue'
 import MainSidebarChats from './MainSidebarChats.vue'
-import MainSidebarChatsTitle from './MainSidebarChatsTitle.vue'
 import MainSidebarFooter from './MainSidebarFooter.vue'
 import MainSidebarHeader from './MainSidebarHeader.vue'
 
@@ -24,8 +23,6 @@ sessionsObservable.subscribe({
 <template>
   <div class="bg-base-200 pt-5 flex flex-col">
     <MainSidebarHeader />
-
-    <MainSidebarChatsTitle class="px-5 pb-3" />
 
     <MainSidebarChats :sessions="sessions" />
 

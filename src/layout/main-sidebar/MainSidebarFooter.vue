@@ -11,6 +11,8 @@ import MainSidebarFooterItem from './MainSidebarFooterItem.vue'
       <MainSidebarFooterItem
         label="GitHub"
         :icon="PhGithubLogo"
+        href="https://www.duckduckgo.com"
+        target="_blank"
       />
     </div>
 
@@ -18,6 +20,7 @@ import MainSidebarFooterItem from './MainSidebarFooterItem.vue'
       <MainSidebarFooterItem
         label="Settings"
         :icon="PhGear"
+        @click.prevent
       />
     </div>
   </div>
