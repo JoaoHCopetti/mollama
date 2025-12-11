@@ -2,8 +2,9 @@
 import { db } from '@/database/db'
 import type { AssistantMessage, MessageData } from '@/database/Message'
 import { liveQuery, type Subscription } from 'dexie'
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 
+import { useChatScrollHandler } from '@/composables/use-chat-scroll-handler'
 import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
 import ChatMessagesUser from './ChatMessagesUser.vue'
 
@@ -16,6 +17,9 @@ const props = defineProps<{
 
 const messages = ref<MessageData[]>([])
 const subscription = ref<Subscription>()
+const smoothScroll = ref(false)
+
+const chatScrollHandler = useChatScrollHandler(useTemplateRef('messagesContainer'))
 
 const computedMessages = computed(() => {
   if (props.currentAssistMessage) {
@@ -30,13 +34,21 @@ const computedMessages = computed(() => {
 
 onMounted(() => {
   setupLiveQuery()
+  chatScrollHandler.stickToBottom.value = true
 })
 
 onBeforeUnmount(() => {
-  if (subscription.value) {
-    subscription.value.unsubscribe()
-  }
+  unsubscribeLiveQuery()
 })
+
+watch(
+  () => props.currentAssistMessage?.tokens.length,
+  () => {
+    if (chatScrollHandler.stickToBottom.value) {
+      nextTick(chatScrollHandler.scrollToBottom)
+    }
+  },
+)
 
 const setupLiveQuery = () => {
   const messagesObservable = liveQuery(() =>
@@ -46,22 +58,40 @@ const setupLiveQuery = () => {
   subscription.value = messagesObservable.subscribe({
     next: async (result) => {
       messages.value = result
+
+      if (chatScrollHandler.stickToBottom) {
+        await nextTick(chatScrollHandler.scrollToBottom)
+
+        if (!smoothScroll.value) {
+          smoothScroll.value = true
+        }
+      }
     },
     error: (error) => console.error(error),
   })
+}
+
+const unsubscribeLiveQuery = () => {
+  if (subscription.value) {
+    subscription.value.unsubscribe()
+  }
 }
 </script>
 
 <template>
   <div
     ref="messagesContainer"
-    class="h-full overflow-auto flex flex-col-reverse"
+    class="h-full overflow-auto flex"
+    :class="{
+      'scroll-smooth': smoothScroll,
+    }"
+    @scroll="chatScrollHandler.handleScroll"
   >
     <div class="w-3/4 mt-10 mx-auto flex flex-col gap-10">
       <div
         v-for="message in computedMessages"
         :key="message.id"
-        class="last:mb-10"
+        class="last:pb-10"
       >
         <ChatMessagesAssistant
           v-if="message.assistant"

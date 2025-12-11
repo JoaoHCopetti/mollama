@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
-import type BaseRequest from '@/providers/BaseRequest'
+import type { AssistantMessage } from '@/database/Message'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { LocalStorageEnum } from '@/utils/enums'
 import { PhCaretCircleUp, PhStop } from '@phosphor-icons/vue'
@@ -13,7 +13,7 @@ const MAX_TEXTAREA_HEIGHT = 150
 const emit = defineEmits(['send', 'stop'])
 
 const props = defineProps<{
-  request?: BaseRequest
+  currentAssistMessage?: AssistantMessage
 }>()
 
 const storage = useLocalStorage()
@@ -25,7 +25,7 @@ const think = defineModel<boolean>('think', { default: false })
 const textareaRef = useTemplateRef('textareaRef')
 const isTextareaFocused = ref<boolean>(false)
 
-const state = computed(() => props.request?.message?.state)
+const state = computed(() => props.currentAssistMessage?.state)
 
 onMounted(() => {
   adjustTextareaHeight()
@@ -63,21 +63,28 @@ const changeThink = (value: boolean) => {
   storage.setItem(LocalStorageEnum.Think, value)
 }
 
-const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
+const onSend = () => {
+  emit('send')
+}
+
+const onEnterKeydown = (event: KeyboardEvent) => {
+  if (event.key !== 'Enter') {
+    return
+  }
+
   setTimeout(adjustTextareaHeight, 100)
 
-  if (input.value.trim() === '') {
-    return
-  }
-
-  if (event instanceof PointerEvent) {
-    emit('send')
-    return
-  }
-
-  if (event.key === 'Enter' && !event.shiftKey) {
+  if (input.value.trim() === '' && !event.shiftKey) {
     event.preventDefault()
-    emit('send')
+    return
+  }
+
+  if (!event.shiftKey) {
+    event.preventDefault()
+
+    if (!state.value?.isLoading) {
+      onSend()
+    }
   }
 }
 </script>
@@ -97,7 +104,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
       autofocus
       class="bg-transparent h-14 font-sans text-[0.95rem] placeholder-gray-500 leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
       placeholder="Type anything (ALT + F)"
-      @keydown="onMessageSend"
+      @keydown.enter="onEnterKeydown"
       @focusin="isTextareaFocused = true"
       @focusout="isTextareaFocused = false"
       @update:model-value="adjustTextareaHeight"
@@ -126,7 +133,7 @@ const onMessageSend = (event: KeyboardEvent | PointerEvent) => {
           v-if="!state?.isLoading"
           class="dui-btn dui-btn-primary"
           :disabled="input.trim() === ''"
-          @click="onMessageSend"
+          @click="onSend"
         >
           <PhCaretCircleUp
             class="text-xl"

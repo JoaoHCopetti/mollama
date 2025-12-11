@@ -130,7 +130,7 @@ const stopStreaming = () => {
         v-model:input="input"
         v-model:think="think"
         class="w-3/4"
-        :request="request"
+        :current-assist-message="request?.message"
         @send="onSendMessage"
         @stop="stopStreaming"
       />

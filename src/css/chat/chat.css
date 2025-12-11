@@ -9,4 +9,8 @@
   .message-container code {
     @apply text-warning-content bg-warning py-0.5 px-1 mr-[2px] rounded-[0.2rem];
   }
+
+  .message-container a {
+    @apply no-underline;
+  }
 }
