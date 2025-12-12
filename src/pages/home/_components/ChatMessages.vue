@@ -59,7 +59,7 @@ const setupLiveQuery = () => {
     next: async (result) => {
       messages.value = result
 
-      if (chatScrollHandler.stickToBottom) {
+      if (chatScrollHandler.stickToBottom.value) {
         await nextTick(chatScrollHandler.scrollToBottom)
 
         if (!smoothScroll.value) {

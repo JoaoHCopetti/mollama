@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const isOpen = defineModel<boolean>('is-open')
+defineProps<{
+  icon?: any
+}>()
 </script>
 
 <template>

@@ -10,6 +10,7 @@ import MainSidebarHeader from './MainSidebarHeader.vue'
 
 const sessions = ref<SessionData[]>([])
 const sessionsObservable = liveQuery(() => db.sessions.orderBy('createdAt').reverse().toArray())
+const isSettingsOpen = ref<boolean>(false)
 
 sessionsObservable.subscribe({
   next: (result) => {
@@ -27,7 +28,7 @@ sessionsObservable.subscribe({
 
     <MainSidebarChats :sessions="sessions" />
 
-    <MainSidebarFooter />
+    <MainSidebarFooter @settings-click="isSettingsOpen = true" />
 
     <SettingsModal />
   </div>

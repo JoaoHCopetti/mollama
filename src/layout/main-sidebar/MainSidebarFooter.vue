@@ -2,7 +2,7 @@
 import { PhGear, PhGithubLogo } from '@phosphor-icons/vue'
 import MainSidebarFooterItem from './MainSidebarFooterItem.vue'
 
-//
+defineEmits(['settings-click'])
 </script>
 
 <template>
@@ -20,7 +20,7 @@ import MainSidebarFooterItem from './MainSidebarFooterItem.vue'
       <MainSidebarFooterItem
         label="Settings"
         :icon="PhGear"
-        href="#settings"
+        @click.prevent="$emit('settings-click')"
       />
     </div>
   </div>
