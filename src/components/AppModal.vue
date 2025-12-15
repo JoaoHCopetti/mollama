@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { FADE_TRANSITION, SCALE_TRANSITION } from './constants'
 
 withDefaults(
   defineProps<{
@@ -10,7 +11,7 @@ withDefaults(
   },
 )
 
-const isOpen = defineModel<boolean>('is-open')
+const isOpen = defineModel<boolean>('is-open', { default: false })
 
 const closeModal = () => {
   isOpen.value = false
@@ -30,12 +31,7 @@ const closeModal = () => {
     >
       <TransitionChild
         as="template"
-        enter="duration-300 ease-out"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
-        leave="duration-200 ease-in"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
+        v-bind="FADE_TRANSITION"
       >
         <div class="fixed inset-0 bg-black/50" />
       </TransitionChild>
@@ -44,12 +40,7 @@ const closeModal = () => {
         <div class="flex min-h-full items-center justify-center p-4 text-center">
           <TransitionChild
             as="template"
-            enter="duration-300 ease-out"
-            enter-from="opacity-0 scale-95"
-            enter-to="opacity-100 scale-100"
-            leave="duration-200 ease-in"
-            leave-from="opacity-100 scale-100"
-            leave-to="opacity-0 scale-95"
+            v-bind="SCALE_TRANSITION"
           >
             <DialogPanel
               class="w-full transform overflow-hidden rounded-2xl bg-base-100 p-6 text-left align-middle shadow-xl transition-all"
@@ -57,13 +48,18 @@ const closeModal = () => {
             >
               <DialogTitle
                 as="h3"
-                class="text-lg font-medium leading-6 text-base-content"
+                class="text-lg mt-0 font-semibold leading-6 text-base-content"
               >
                 <slot name="title" />
               </DialogTitle>
 
               <div>
-                <slot name="body" />
+                <slot
+                  name="body"
+                  v-bind="{
+                    closeModal,
+                  }"
+                />
               </div>
             </DialogPanel>
           </TransitionChild>

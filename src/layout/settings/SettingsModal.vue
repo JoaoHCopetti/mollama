@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import AppModal from '@/components/AppModal.vue'
-import { ref } from 'vue'
-
-const isOpen = ref(false)
+import { PhGear } from '@phosphor-icons/vue'
+import SettingsModalBody from './SettingsModalBody.vue'
 </script>
 
 <template>
-  <AppModal
-    :is-open="isOpen"
-    panel-class="max-w-2xl"
-  >
-    <template #title>Settings</template>
+  <AppModal panel-class="max-w-2xl">
+    <template #title>
+      <div class="flex gap-2 items-center">
+        <PhGear weight="fill" />
+        Settings
+      </div>
+    </template>
 
-    <template #body> Hi</template>
+    <template #body>
+      <SettingsModalBody />
+    </template>
   </AppModal>
 </template>

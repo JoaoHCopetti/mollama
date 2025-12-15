@@ -10,7 +10,7 @@ import MainSidebarHeader from './MainSidebarHeader.vue'
 
 const sessions = ref<SessionData[]>([])
 const sessionsObservable = liveQuery(() => db.sessions.orderBy('createdAt').reverse().toArray())
-const isSettingsOpen = ref<boolean>(false)
+const isSettingsOpen = ref<boolean>(true)
 
 sessionsObservable.subscribe({
   next: (result) => {
