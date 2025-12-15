@@ -1,9 +1,9 @@
 import type { Observable, Subscription } from 'dexie'
 import { onBeforeUnmount, ref } from 'vue'
 
-export const useDexieSubscription = () => {
+export const useDexieSubscription = <T>() => {
   const subscription = ref<Subscription>()
-  const result = ref<any[]>()
+  const result = ref<T[]>()
   const resultChangeCallback = ref()
 
   onBeforeUnmount(() => {
@@ -25,7 +25,7 @@ export const useDexieSubscription = () => {
     })
   }
 
-  const onResultChange = <T>(callback: (data: T[]) => void | Promise<void>) => {
+  const onResultChange = (callback: (data: T[]) => void | Promise<void>) => {
     resultChangeCallback.value = callback
   }
 

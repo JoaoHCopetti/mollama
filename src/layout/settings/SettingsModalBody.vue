@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { PhGear } from '@phosphor-icons/vue'
 import { markRaw, onMounted, ref, type Component } from 'vue'
-import SettingsSystemPrompts from './SettingsSystemPrompts.vue'
+import SystemPromptsSettings from './system-prompts/SystemPromptsSettings.vue'
 
 type SettingsMenuItem = {
   id: string
   label: string
   component: Component
 }
+
 const MENU_ITEMS: SettingsMenuItem[] = [
   {
     id: 'system-prompts',
-    label: 'System prompts',
-    component: markRaw(SettingsSystemPrompts),
+    label: 'System Prompts',
+    component: markRaw(SystemPromptsSettings),
   },
 ]
 
@@ -29,7 +30,7 @@ const selectItem = (item: SettingsMenuItem) => {
 
 <template>
   <div class="flex">
-    <div class="min-w-fit border-r pr-5 border-white/10">
+    <div class="min-w-fit pr-5">
       <h3 class="flex gap-2 items-center mt-0">
         <PhGear weight="fill" />
         Settings

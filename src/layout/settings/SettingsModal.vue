@@ -4,7 +4,7 @@ import SettingsModalBody from './SettingsModalBody.vue'
 </script>
 
 <template>
-  <AppModal panel-class="max-w-2xl">
+  <AppModal panel-class="max-w-4xl">
     <template #body>
       <SettingsModalBody />
     </template>

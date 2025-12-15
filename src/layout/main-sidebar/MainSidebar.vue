@@ -11,12 +11,12 @@ import MainSidebarHeader from './MainSidebarHeader.vue'
 
 const sessions = ref<SessionData[]>([])
 const isSettingsOpen = ref<boolean>(true)
-const subscription = useDexieSubscription()
+const subscription = useDexieSubscription<SessionData>()
 
 onMounted(() => {
   subscription.setupLiveQuery(liveQuery(() => db.sessions.orderBy('createdAt').reverse().toArray()))
 
-  subscription.onResultChange<SessionData>((result) => {
+  subscription.onResultChange((result) => {
     sessions.value = result
   })
 })
