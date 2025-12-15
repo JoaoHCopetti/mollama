@@ -47,6 +47,7 @@ const closeModal = () => {
               :class="panelClass"
             >
               <DialogTitle
+                v-if="$slots['title']"
                 as="h3"
                 class="text-lg mt-0 font-semibold leading-6 text-base-content"
               >
