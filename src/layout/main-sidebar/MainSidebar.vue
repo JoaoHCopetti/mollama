@@ -30,6 +30,6 @@ sessionsObservable.subscribe({
 
     <MainSidebarFooter @settings-click="isSettingsOpen = true" />
 
-    <SettingsModal />
+    <SettingsModal v-model:is-open="isSettingsOpen" />
   </div>
 </template>
