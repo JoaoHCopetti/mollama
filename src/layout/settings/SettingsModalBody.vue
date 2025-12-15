@@ -29,7 +29,7 @@ const selectItem = (item: SettingsMenuItem) => {
 
 <template>
   <div class="flex">
-    <div class="min-w-fit border-r pr-5 mr-5 border-white/10">
+    <div class="min-w-fit border-r pr-5 border-white/10">
       <h3 class="flex gap-2 items-center mt-0">
         <PhGear weight="fill" />
         Settings
@@ -54,7 +54,7 @@ const selectItem = (item: SettingsMenuItem) => {
       </ul>
     </div>
 
-    <div class="w-full">
+    <div class="w-full ml-5">
       <Component
         :is="selectedItem.component"
         v-if="selectedItem"
