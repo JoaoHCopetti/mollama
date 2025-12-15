@@ -2,13 +2,14 @@
 import { useForm } from '@/composables/use-form'
 import { createSystemPrompt } from '@/services/system-prompt-service'
 import { PhPlus } from '@phosphor-icons/vue'
-import { ref } from 'vue'
+import { nextTick, ref, useTemplateRef } from 'vue'
 import SystemPromptsSettingsForm from './SystemPromptsSettingsForm.vue'
 import SystemPromptsSettingsList from './SystemPromptsSettingsList.vue'
 
 export type SystemPromptForm = typeof form
 
 const showForm = ref<boolean>(false)
+const settingsFormEl = useTemplateRef('systemPromptsSettingsFormRef')
 
 const form = useForm({
   title: '',
@@ -26,6 +27,12 @@ const onSubmit = async () => {
 
 const onNewPromptClick = async () => {
   showForm.value = !showForm.value
+
+  nextTick(() => {
+    if (settingsFormEl.value) {
+      settingsFormEl.value.focusTitleInput()
+    }
+  })
 }
 </script>
 
@@ -43,6 +50,7 @@ const onNewPromptClick = async () => {
 
     <SystemPromptsSettingsForm
       v-if="showForm"
+      ref="systemPromptsSettingsFormRef"
       v-model:form="form"
       @submit="onSubmit"
       @cancel="showForm = false"

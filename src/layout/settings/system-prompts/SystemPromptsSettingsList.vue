@@ -2,6 +2,7 @@
 import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import { db } from '@/database/db'
 import type { SystemPromptData } from '@/database/SystemPrompt'
+import { PhTrash } from '@phosphor-icons/vue'
 import { liveQuery } from 'dexie'
 import { onMounted, ref } from 'vue'
 
@@ -17,13 +18,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <ul class="dui-list rounded-lg ml-0 pl-0 max-h-52 overflow-auto">
+  <ul class="dui-list ml-0 pl-0 max-h-52 overflow-auto">
     <li
       v-for="systemPrompt in systemPrompts"
       :key="systemPrompt.id"
-      class="p-3 odd:bg-base-200 even:bg-base-300 hover:bg-white/5 transition-colors rounded-0 flex items-center justify-between w-full cursor-pointer"
+      class="px-4 py-2 first:rounded-t-lg last:rounded-b-lg group bg-base-200 hover:bg-white/5 transition-colors rounded-0 flex items-center justify-between w-full cursor-pointer"
     >
       <div>{{ systemPrompt.title }}</div>
+
+      <button
+        class="dui-btn group-hover:opacity-100 opacity-0 transition-all dui-btn-sm dui-btn-ghost hover:bg-white/10 border-0"
+      >
+        <PhTrash
+          weight="fill"
+          size="1.4em"
+        />
+      </button>
     </li>
   </ul>
 </template>

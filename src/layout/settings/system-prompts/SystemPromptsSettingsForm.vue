@@ -1,13 +1,24 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
 import type { SystemPromptForm } from './SystemPromptsSettings.vue'
 
 const emit = defineEmits(['submit', 'cancel'])
 
 const form = defineModel<SystemPromptForm>('form', { required: true })
 
+const titleEl = useTemplateRef('titleRef')
+
 const onSubmit = () => {
   emit('submit', form.value)
 }
+
+const focusTitleInput = () => {
+  if (titleEl.value) {
+    titleEl.value.focus()
+  }
+}
+
+defineExpose({ focusTitleInput })
 </script>
 
 <template>
