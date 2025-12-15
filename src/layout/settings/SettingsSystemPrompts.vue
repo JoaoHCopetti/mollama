@@ -12,7 +12,7 @@ const onSubmit = () => {
   <div>
     <div>
       <button
-        class="dui-btn dui-btn-sm uppercase dui-btn-primary"
+        class="dui-btn dui-btn-xs uppercase dui-btn-success"
         @click="showForm = !showForm"
       >
         New system prompt

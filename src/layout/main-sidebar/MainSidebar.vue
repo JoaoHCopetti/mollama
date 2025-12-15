@@ -1,24 +1,24 @@
 <script setup lang="ts">
+import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import type { SessionData } from '@/database/Session'
 import { db } from '@/database/db'
 import { liveQuery } from 'dexie'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import SettingsModal from '../settings/SettingsModal.vue'
 import MainSidebarChats from './MainSidebarChats.vue'
 import MainSidebarFooter from './MainSidebarFooter.vue'
 import MainSidebarHeader from './MainSidebarHeader.vue'
 
 const sessions = ref<SessionData[]>([])
-const sessionsObservable = liveQuery(() => db.sessions.orderBy('createdAt').reverse().toArray())
 const isSettingsOpen = ref<boolean>(true)
+const subscription = useDexieSubscription()
 
-sessionsObservable.subscribe({
-  next: (result) => {
+onMounted(() => {
+  subscription.setupLiveQuery(liveQuery(() => db.sessions.orderBy('createdAt').reverse().toArray()))
+
+  subscription.onResultChange<SessionData>((result) => {
     sessions.value = result
-  },
-  error: (error) => {
-    console.error(error)
-  },
+  })
 })
 </script>
 

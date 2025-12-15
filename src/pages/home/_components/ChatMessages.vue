@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { db } from '@/database/db'
 import type { AssistantMessage, MessageData } from '@/database/Message'
-import { liveQuery, type Subscription } from 'dexie'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { liveQuery } from 'dexie'
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 
 import { useChatScrollHandler } from '@/composables/use-chat-scroll-handler'
+import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
 import ChatMessagesUser from './ChatMessagesUser.vue'
 
@@ -15,11 +16,11 @@ const props = defineProps<{
   currentAssistMessage?: AssistantMessage
 }>()
 
-const messages = ref<MessageData[]>([])
-const subscription = ref<Subscription>()
-const smoothScroll = ref(false)
-
+const subscription = useDexieSubscription()
 const chatScrollHandler = useChatScrollHandler(useTemplateRef('messagesContainer'))
+
+const messages = ref<MessageData[]>([])
+const smoothScroll = ref(false)
 
 const computedMessages = computed(() => {
   if (props.currentAssistMessage) {
@@ -33,13 +34,26 @@ const computedMessages = computed(() => {
 })
 
 onMounted(() => {
-  setupLiveQuery()
-  chatScrollHandler.stickToBottom.value = true
+  subscription.setupLiveQuery(
+    liveQuery(() => db.messages.where('sessionId').equals(props.sessionId).toArray()),
+  )
+
+  subscription.onResultChange<MessageData>(async (result) => {
+    messages.value = result
+
+    await handleScrollbar()
+  })
 })
 
-onBeforeUnmount(() => {
-  unsubscribeLiveQuery()
-})
+const handleScrollbar = async () => {
+  if (chatScrollHandler.stickToBottom.value) {
+    await nextTick(chatScrollHandler.scrollToBottom)
+
+    if (!smoothScroll.value) {
+      smoothScroll.value = true
+    }
+  }
+}
 
 watch(
   () => props.currentAssistMessage?.tokens.length,
@@ -49,33 +63,6 @@ watch(
     }
   },
 )
-
-const setupLiveQuery = () => {
-  const messagesObservable = liveQuery(() =>
-    db.messages.where('sessionId').equals(props.sessionId).toArray(),
-  )
-
-  subscription.value = messagesObservable.subscribe({
-    next: async (result) => {
-      messages.value = result
-
-      if (chatScrollHandler.stickToBottom.value) {
-        await nextTick(chatScrollHandler.scrollToBottom)
-
-        if (!smoothScroll.value) {
-          smoothScroll.value = true
-        }
-      }
-    },
-    error: (error) => console.error(error),
-  })
-}
-
-const unsubscribeLiveQuery = () => {
-  if (subscription.value) {
-    subscription.value.unsubscribe()
-  }
-}
 </script>
 
 <template>

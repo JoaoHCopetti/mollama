@@ -10,11 +10,8 @@
     @apply rounded-full shadow-none;
   }
 
-  .dui-textarea {
-    @apply p-3 rounded-lg bg-base-300 resize-none focus:outline-1 outline-white/40 shadow-none w-full border-none font-sans outline-0 placeholder-gray-500;
-  }
-
+  .dui-textarea,
   .dui-input {
-    @apply font-sans w-full bg-base-300 focus:outline-1 outline-white/40 rounded-lg shadow-none border-none placeholder-gray-500;
+    @apply rounded-lg bg-base-300 w-full font-sans border-none focus:outline-1 outline-white/40 shadow-none placeholder-gray-500;
   }
 }

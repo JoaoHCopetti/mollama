@@ -27,6 +27,13 @@ export default class AppDB extends Dexie {
         createdAt,
         updatedAt
       `,
+      systemPrompts: `
+        ++id,
+        title,
+        content,
+        createdAt,
+        updatedAt
+      `,
     })
 
     this.sessions.mapToClass(Session)
