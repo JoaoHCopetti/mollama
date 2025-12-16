@@ -22,6 +22,7 @@ const onSubmit = async () => {
     content: form.instruction.value,
   })
 
+  showForm.value = false
   form.resetForm()
 }
 
@@ -53,9 +54,9 @@ const onNewPromptClick = async () => {
       ref="systemPromptsSettingsFormRef"
       v-model:form="form"
       @submit="onSubmit"
-      @cancel="showForm = false"
+      @close="showForm = false"
     />
 
-    <SystemPromptsSettingsList class="max-h-56 overflow-auto" />
+    <SystemPromptsSettingsList />
   </div>
 </template>

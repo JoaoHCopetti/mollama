@@ -2,7 +2,7 @@
 import { useTemplateRef } from 'vue'
 import type { SystemPromptForm } from './SystemPromptsSettings.vue'
 
-const emit = defineEmits(['submit', 'cancel'])
+const emit = defineEmits(['submit', 'close'])
 
 const form = defineModel<SystemPromptForm>('form', { required: true })
 
@@ -48,9 +48,10 @@ defineExpose({ focusTitleInput })
       <div class="ml-auto">
         <button
           class="dui-btn dui-btn-ghost"
-          @click="$emit('cancel')"
+          type="button"
+          @click="$emit('close')"
         >
-          Cancel
+          Close
         </button>
 
         <button

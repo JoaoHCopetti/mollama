@@ -23,23 +23,35 @@ const onDeleteClick = (systemPrompt: SystemPromptData) => {
 </script>
 
 <template>
-  <ul class="dui-list ml-0 pl-0 max-h-52 overflow-auto">
-    <li
-      v-for="systemPrompt in systemPrompts"
-      :key="systemPrompt.id"
-      class="px-4 py-2 first:rounded-t-lg last:rounded-b-lg group bg-base-200 hover:bg-white/5 transition-colors rounded-0 flex items-center justify-between w-full cursor-pointer"
+  <div class="overflow-auto overflow-x-hidden">
+    <ul
+      v-if="systemPrompts.length"
+      class="dui-list ml-0 pl-0"
     >
-      <div>{{ systemPrompt.title }}</div>
-
-      <button
-        class="dui-btn group-hover:opacity-100 opacity-0 transition-all dui-btn-sm dui-btn-ghost hover:bg-white/10 border-0"
-        @click="onDeleteClick(systemPrompt)"
+      <li
+        v-for="systemPrompt in systemPrompts"
+        :key="systemPrompt.id"
+        class="px-4 py-2 first:rounded-t-lg last:rounded-b-lg group bg-base-200 hover:bg-white/5 transition-colors rounded-0 flex items-center justify-between w-full cursor-pointer"
       >
-        <PhTrash
-          weight="fill"
-          size="1.4em"
-        />
-      </button>
-    </li>
-  </ul>
+        <div>{{ systemPrompt.title }}</div>
+
+        <button
+          class="dui-btn group-hover:opacity-100 opacity-0 transition-all dui-btn-sm dui-btn-ghost hover:bg-white/10 border-0"
+          @click="onDeleteClick(systemPrompt)"
+        >
+          <PhTrash
+            weight="fill"
+            size="1.4em"
+          />
+        </button>
+      </li>
+    </ul>
+
+    <div
+      v-else
+      class="flex justify-center items-center text-white/50 mt-32 h-full"
+    >
+      No prompts registered
+    </div>
+  </div>
 </template>

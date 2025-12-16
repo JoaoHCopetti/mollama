@@ -26,7 +26,7 @@ const closeModal = () => {
   >
     <Dialog
       as="div"
-      class="relative z-10"
+      class="relative z-10 h-full"
       @close="closeModal"
     >
       <TransitionChild
