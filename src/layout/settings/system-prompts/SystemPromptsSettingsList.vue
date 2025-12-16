@@ -49,7 +49,7 @@ const onDeleteClick = (systemPrompt: SystemPromptData) => {
 
     <div
       v-else
-      class="flex justify-center items-center text-white/50 mt-32 h-full"
+      class="flex justify-center items-center text-white/50 mt-32"
     >
       No prompts registered
     </div>

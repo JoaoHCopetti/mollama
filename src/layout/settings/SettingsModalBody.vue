@@ -55,11 +55,11 @@ const selectItem = (item: SettingsMenuItem) => {
       </ul>
     </div>
 
-    <div class="w-full min-h-[70vh] max-h-[70vh] overflow-auto pr-5 pl-5">
+    <div class="w-full max-h-[70vh] h-[70vh] overflow-auto pr-5 pl-5 -mr-4">
       <Component
         :is="selectedItem.component"
         v-if="selectedItem"
-        class="min-h-full"
+        class="h-full"
       />
     </div>
   </div>
