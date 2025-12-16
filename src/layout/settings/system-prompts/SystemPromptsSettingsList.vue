@@ -2,6 +2,7 @@
 import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import { db } from '@/database/db'
 import type { SystemPromptData } from '@/database/SystemPrompt'
+import { deleteSystemPrompt } from '@/services/system-prompt-service'
 import { PhTrash } from '@phosphor-icons/vue'
 import { liveQuery } from 'dexie'
 import { onMounted, ref } from 'vue'
@@ -15,6 +16,10 @@ onMounted(() => {
     systemPrompts.value = result
   })
 })
+
+const onDeleteClick = (systemPrompt: SystemPromptData) => {
+  deleteSystemPrompt(systemPrompt.id)
+}
 </script>
 
 <template>
@@ -28,6 +33,7 @@ onMounted(() => {
 
       <button
         class="dui-btn group-hover:opacity-100 opacity-0 transition-all dui-btn-sm dui-btn-ghost hover:bg-white/10 border-0"
+        @click="onDeleteClick(systemPrompt)"
       >
         <PhTrash
           weight="fill"

@@ -12,3 +12,7 @@ export const createSystemPrompt = async (
     updatedAt: now,
   })
 }
+
+export const deleteSystemPrompt = async (id: number) => {
+  await db.systemPrompts.delete(id)
+}
