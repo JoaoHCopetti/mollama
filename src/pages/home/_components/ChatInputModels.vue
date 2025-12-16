@@ -54,7 +54,12 @@ const onModelClick = (model: Model) => {
 
           <div class="truncate">{{ model.name }}</div>
 
-          <span class="dui-badge dui-badge-sm opacity-50 border-0">{{ model.parameterSize }}</span>
+          <span
+            v-if="model.parameterSize"
+            class="dui-badge dui-badge-sm opacity-50 border-0"
+          >
+            {{ model.parameterSize }}
+          </span>
         </a>
       </li>
     </ul>
