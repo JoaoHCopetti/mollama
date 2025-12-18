@@ -1,7 +1,7 @@
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
-@import './daisyui-custom.css';
+@import './daisyui.css';
 @import './colors.css';
 @import './utilities.css';
 @import './chat/chat.css';

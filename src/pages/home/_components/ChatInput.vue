@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
 import type { AssistantMessage } from '@/database/Message'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { LocalStorageEnum } from '@/utils/enums'
-import { PhCaretCircleUp, PhStop } from '@phosphor-icons/vue'
-import { computed, onMounted, ref, useTemplateRef } from 'vue'
-import ChatInputModels from './ChatInputModels.vue'
-
-const MAX_TEXTAREA_HEIGHT = 150
+import { PhBrain } from '@phosphor-icons/vue'
+import { computed, onMounted, ref } from 'vue'
+import ChatInputModelsDropdown from './ChatInputModelsDropdown.vue'
+import ChatInputSendButton from './ChatInputSendButton.vue'
+import ChatInputTextarea from './ChatInputTextarea.vue'
+import ChatInputToggle from './ChatInputToggle.vue'
 
 const emit = defineEmits(['send', 'stop'])
 
@@ -22,37 +22,15 @@ const shortcutsStore = useShortcutsStore()
 const input = defineModel<string>('input', { default: '' })
 const think = defineModel<boolean>('think', { default: false })
 
-const textareaRef = useTemplateRef('textareaRef')
 const isTextareaFocused = ref<boolean>(false)
 
 const state = computed(() => props.currentAssistMessage?.state)
 
 onMounted(() => {
-  adjustTextareaHeight()
-
-  shortcutsStore.onPress('chat-focus', () => {
-    if (textareaRef.value) {
-      textareaRef.value.focus()
-    }
-  })
-
   shortcutsStore.onPress('toggle-think', () => {
     changeThink(!think.value)
   })
 })
-
-const adjustTextareaHeight = () => {
-  if (!textareaRef.value) {
-    return
-  }
-
-  const textarea = textareaRef.value
-
-  textarea.style.height = 'auto'
-  textarea.style.height =
-    (textarea.scrollHeight < MAX_TEXTAREA_HEIGHT ? textarea.scrollHeight : MAX_TEXTAREA_HEIGHT) +
-    'px'
-}
 
 const onThinkChange = (e: Event) => {
   changeThink((e.target as HTMLInputElement).checked)
@@ -67,25 +45,8 @@ const onSend = () => {
   emit('send')
 }
 
-const onEnterKeydown = (event: KeyboardEvent) => {
-  if (event.key !== 'Enter') {
-    return
-  }
-
-  setTimeout(adjustTextareaHeight, 100)
-
-  if (input.value.trim() === '' && !event.shiftKey) {
-    event.preventDefault()
-    return
-  }
-
-  if (!event.shiftKey) {
-    event.preventDefault()
-
-    if (!state.value?.isLoading) {
-      onSend()
-    }
-  }
+const onStop = () => {
+  emit('stop')
 }
 </script>
 
@@ -96,63 +57,31 @@ const onEnterKeydown = (event: KeyboardEvent) => {
       'outline-gray-400 outline-2': isTextareaFocused,
     }"
   >
-    <textarea
-      id="message"
-      ref="textareaRef"
-      v-model="input"
-      name="message"
-      autofocus
-      class="bg-transparent h-14 font-sans text-[0.95rem] placeholder-gray-500 leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
-      placeholder="Type anything (ALT + F)"
-      @keydown.enter="onEnterKeydown"
-      @focusin="isTextareaFocused = true"
-      @focusout="isTextareaFocused = false"
-      @update:model-value="adjustTextareaHeight"
+    <ChatInputTextarea
+      v-model:input="input"
+      :current-message-state="state"
+      @focus-change="isTextareaFocused = $event"
+      @send="onSend"
     />
 
     <div class="flex justify-between">
-      <div class="flex items-center gap-2">
-        <ChatInputModels />
+      <div class="flex items-end gap-2">
+        <ChatInputModelsDropdown />
 
-        <label class="dui-label bg-base-200 py-1 pl-2 pr-3 text-sm rounded-full">
-          <input
-            :checked="think"
-            type="checkbox"
-            class="dui-toggle bg-base-300 border-base-300 dui-toggle-primary"
-            @input="onThinkChange"
-          />
-          Think
-        </label>
+        <ChatInputToggle
+          v-model="think"
+          label="Think"
+          :icon="PhBrain"
+          @input="onThinkChange"
+        />
       </div>
 
-      <AppTransition
-        from-class="scale-95 opacity-0"
-        to-class="scale-100 opacity-100"
-      >
-        <button
-          v-if="!state?.isLoading"
-          class="dui-btn dui-btn-primary"
-          :disabled="input.trim() === ''"
-          @click="onSend"
-        >
-          <PhCaretCircleUp
-            class="text-xl"
-            weight="fill"
-          />
-        </button>
-
-        <button
-          v-else
-          class="dui-btn dui-btn-error"
-          :disabled="state.isLoading && !state.isStreaming"
-          @click="$emit('stop')"
-        >
-          <PhStop
-            weight="fill"
-            class="text-xl"
-          />
-        </button>
-      </AppTransition>
+      <ChatInputSendButton
+        :input="input"
+        :current-message-state="currentAssistMessage?.state"
+        @send="onSend"
+        @stop="onStop"
+      />
     </div>
   </div>
 </template>
