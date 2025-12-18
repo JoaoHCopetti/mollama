@@ -4,24 +4,28 @@ import { useLocalStorage } from '@/composables/use-local-storage'
 import BaseRequest from '@/providers/BaseRequest'
 import { createAssistMessage, createUserMessage, getOrCreateSession } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
+import type { InputConfig } from '@/types'
 import { LocalStorageEnum } from '@/utils/enums'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatEmpty from './_components/ChatEmpty.vue'
-import ChatInput from './_components/ChatInput.vue'
+import ChatInput, { type InputConfigPayload } from './_components/ChatInput.vue'
 import ChatMessages from './_components/ChatMessages.vue'
+import { inputConfigKey } from './injection-keys'
 
 const appStore = useAppStore()
 const storage = useLocalStorage()
 const route = useRoute()
 const router = useRouter()
 
-const input = defineModel<string>('input', { default: '' })
+const inputConfig = ref<InputConfig>({ message: '', think: false })
 
 const request = ref<BaseRequest>()
 const think = ref<boolean>(false)
 
 const currentAssistMessage = computed(() => request.value?.message)
+
+provide(inputConfigKey, inputConfig.value)
 
 onBeforeMount(async () => {
   const selectedModel = storage.getItem(LocalStorageEnum.SelectedModelId)
@@ -31,16 +35,22 @@ onBeforeMount(async () => {
   think.value = storage.getItem(LocalStorageEnum.Think) || false
 })
 
+const onInputConfigChange = ({ type, inputConfig }: InputConfigPayload) => {
+  if (type === 'model') {
+    appStore.selectModel(inputConfig.model?.id)
+  }
+}
+
 const onSendMessage = async () => {
   if (!appStore.selectedModel) {
     throw new Error('No model selected')
   }
 
-  const content = input.value
+  const content = inputConfig.value.message
 
   request.value = appStore.provider.createRequest(appStore.selectedModel)
 
-  input.value = ''
+  inputConfig.value.message = ''
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: content,
@@ -88,7 +98,7 @@ const handleRequest = async (sessionId: number) => {
     think: think.value,
     messages: [
       {
-        content: input.value,
+        content: inputConfig.value.message,
         role: 'user',
       },
     ],
@@ -127,10 +137,9 @@ const stopStreaming = () => {
 
     <div class="mb-5">
       <ChatInput
-        v-model:input="input"
-        v-model:think="think"
         class="w-3/4"
         :current-assist-message="request?.message"
+        @update:input-config="onInputConfigChange"
         @send="onSendMessage"
         @stop="stopStreaming"
       />

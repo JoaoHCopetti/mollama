@@ -1,3 +1,5 @@
+import type { SystemPromptData } from '@/database/SystemPrompt'
+
 type FetchResponseOptions = {
   sessionId: number
   model: string
@@ -33,8 +35,16 @@ interface ToastOptions {
   timeout?: number
 }
 
+interface InputConfig {
+  message: string
+  model?: Model
+  think: boolean
+  prompt?: SystemPromptData
+}
+
 export {
   FetchResponseOptions,
+  InputConfig,
   InputMessage,
   MessageState,
   Model,

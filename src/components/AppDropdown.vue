@@ -4,12 +4,20 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 
 defineEmits(['select'])
 
-const props = defineProps<{
-  idField: keyof T
-  items: T[]
-  triggerClass?: string
-  itemClass?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    idField: keyof T
+    items: T[]
+    itemClassExtend?: string
+    triggerClass?: string
+    triggerClassExtend?: string
+  }>(),
+  {
+    triggerClass: 'dui-btn focus-visible:ring-2 focus-visible:ring-white/75',
+    itemClassExtend: '',
+    triggerClassExtend: '',
+  },
+)
 
 const getItemKey = (item: T) => item[props.idField] as PropertyKey
 </script>
@@ -20,8 +28,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
     class="dui-dropdown"
   >
     <MenuButton
-      class="dui-btn focus-visible:ring-2 focus-visible:ring-white/75"
-      :class="triggerClass"
+      :class="[triggerClass, triggerClassExtend]"
       as="button"
     >
       <slot name="trigger" />
@@ -45,7 +52,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
         >
           <a
             class="p-2 block rounded-lg cursor-pointer active:scale-[0.98] transition-all"
-            :class="[{ 'bg-white/10': active }, itemClass]"
+            :class="[{ 'bg-white/10': active }, itemClassExtend]"
           >
             <slot
               name="item"

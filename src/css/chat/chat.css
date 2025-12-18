@@ -13,4 +13,8 @@
   .message-container a {
     @apply no-underline;
   }
+
+  .chat-pill {
+    @apply bg-base-100 outline-0 hover:bg-base-200 cursor-pointer text-gray-300 border-0 text-[0.82rem]  p-1 rounded-full px-3 flex items-center gap-2 transition-all active:scale-[0.98] will-change-transform;
+  }
 }

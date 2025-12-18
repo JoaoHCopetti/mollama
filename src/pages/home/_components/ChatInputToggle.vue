@@ -1,26 +1,37 @@
 <script setup lang="ts">
-import type { Component } from 'vue'
-defineEmits(['input'])
+import { useShortcutsStore } from '@/stores/shortcuts-store'
+import { onMounted, ref, type Component } from 'vue'
+
+const emit = defineEmits(['change'])
+
+const shortcuts = useShortcutsStore()
 
 defineProps<{
   label?: string
   icon: Component
 }>()
 
-const checked = defineModel<boolean>({ default: false })
+const checked = ref<boolean>(false)
 
-const onToggle = () => {
+onMounted(() => {
+  shortcuts.onPress('toggle-think', () => {
+    toggleValue()
+  })
+})
+
+const toggleValue = () => {
   checked.value = !checked.value
+  emit('change', checked.value)
 }
 </script>
 
 <template>
   <label
-    class="dui-label font-medium cursor-pointer bg-base-100 transition-all select-none hover:bg-base-100/80 py-1 pl-2 pr-3 text-sm rounded-full"
+    class="chat-pill"
     :class="{
       'bg-primary/90 hover:bg-primary/80': checked,
     }"
-    @click="onToggle"
+    @click="toggleValue"
   >
     <Component
       :is="icon"
