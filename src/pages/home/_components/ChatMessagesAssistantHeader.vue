@@ -11,7 +11,7 @@ defineProps<{
   <div>
     <div
       v-if="message.model"
-      class="uppercase font-bold text-sm mb-3"
+      class="uppercase font-bold text-sm mb-3 w-fit"
     >
       <AppModelInfo :model="message.model" />
     </div>

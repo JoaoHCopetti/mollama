@@ -8,8 +8,8 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex justify-between gap-2 w-52">
-    <div class="flex items-center gap-2">
+  <div class="flex justify-between gap-2 truncate">
+    <div class="flex items-center gap-2 truncate">
       <Component
         :is="model.isCloud ? PhCloud : PhDesktop"
         weight="fill"

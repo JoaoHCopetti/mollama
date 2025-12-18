@@ -10,7 +10,7 @@ import MainSidebarFooter from './MainSidebarFooter.vue'
 import MainSidebarHeader from './MainSidebarHeader.vue'
 
 const sessions = ref<SessionData[]>([])
-const isSettingsOpen = ref<boolean>(true)
+const isSettingsOpen = ref<boolean>(false)
 const subscription = useDexieSubscription<SessionData>()
 
 onMounted(() => {
