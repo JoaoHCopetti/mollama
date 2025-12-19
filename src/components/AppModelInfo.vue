@@ -13,6 +13,7 @@ defineProps<{
       <Component
         :is="model.isCloud ? PhCloud : PhDesktop"
         weight="fill"
+        class="min-w-fit"
       />
 
       <span class="truncate">{{ model.prettyName }}</span>

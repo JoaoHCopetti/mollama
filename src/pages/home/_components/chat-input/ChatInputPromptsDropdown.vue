@@ -3,11 +3,15 @@ import AppDropdown from '@/components/AppDropdown.vue'
 import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import { db } from '@/database/db'
 import type { SystemPromptData } from '@/database/SystemPrompt'
-import { PhBookBookmark } from '@phosphor-icons/vue'
+import { PhArticle, PhBookBookmark } from '@phosphor-icons/vue'
 import { liveQuery } from 'dexie'
 import { onMounted, ref } from 'vue'
 
 defineEmits(['change'])
+defineProps<{
+  prompt?: SystemPromptData
+}>()
+
 const subscription = useDexieSubscription<SystemPromptData>()
 
 const systemPrompts = ref<SystemPromptData[]>([])
@@ -25,7 +29,14 @@ onMounted(() => {
   <AppDropdown
     id-field="id"
     :items="systemPrompts"
-    trigger-class="chat-pill"
+    :active-item="prompt"
+    :trigger-class="[
+      'chat-pill',
+      {
+        'bg-primary/90 hover:bg-primary/80': !!prompt,
+      },
+    ]"
+    item-class-extend="text-sm p-1"
     @select="$emit('change', $event)"
   >
     <template #trigger>
@@ -34,7 +45,13 @@ onMounted(() => {
     </template>
 
     <template #item="{ item }">
-      {{ item.title }}
+      <div class="flex items-center gap-2">
+        <PhArticle
+          weight="fill"
+          size="1.1rem"
+        />
+        {{ item.title }}
+      </div>
     </template>
   </AppDropdown>
 </template>

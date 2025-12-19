@@ -8,11 +8,13 @@ const props = withDefaults(
   defineProps<{
     idField: keyof T
     items: T[]
+    activeItem?: T
     itemClassExtend?: string
-    triggerClass?: string
+    triggerClass?: string | any[]
     triggerClassExtend?: string
   }>(),
   {
+    activeItem: undefined,
     triggerClass: 'dui-btn focus-visible:ring-2 focus-visible:ring-white/75',
     itemClassExtend: '',
     triggerClassExtend: '',
@@ -52,7 +54,13 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
         >
           <a
             class="p-2 block rounded-lg cursor-pointer active:scale-[0.98] transition-all"
-            :class="[{ 'bg-white/10': active }, itemClassExtend]"
+            :class="[
+              itemClassExtend,
+              {
+                'bg-white/10':
+                  active || (activeItem && activeItem[props.idField] === item[props.idField]),
+              },
+            ]"
           >
             <slot
               name="item"

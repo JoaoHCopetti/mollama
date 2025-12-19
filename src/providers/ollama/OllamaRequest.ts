@@ -43,7 +43,9 @@ export default class OllamaRequest extends BaseRequest {
       const { content, thinking, system } = { ...message.assistant, ...message.user }
 
       if (!content) {
-        throw Error(`Error while retrieving context, provided content is:` + content)
+        throw Error(
+          `Error while retrieving context, provided content is:` + JSON.stringify(content),
+        )
       }
 
       return {

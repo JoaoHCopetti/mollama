@@ -13,7 +13,7 @@ const props = defineProps<{
 const textareaRef = useTemplateRef('textareaRef')
 const shortcutsStore = useShortcutsStore()
 
-const input = defineModel<string>('input', { default: '' })
+const message = defineModel<string>('message', { default: '' })
 
 onMounted(() => {
   adjustTextareaHeight()
@@ -45,7 +45,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
 
   setTimeout(adjustTextareaHeight, 100)
 
-  if (input.value.trim() === '' && !event.shiftKey) {
+  if (message.value.trim() === '' && !event.shiftKey) {
     event.preventDefault()
     return
   }
@@ -64,7 +64,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
   <textarea
     id="message"
     ref="textareaRef"
-    v-model="input"
+    v-model="message"
     name="message"
     autofocus
     class="bg-transparent h-14 font-sans text-[0.95rem] placeholder-gray-500 leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"

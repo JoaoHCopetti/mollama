@@ -8,8 +8,11 @@ import { computed } from 'vue'
 const emit = defineEmits(['change'])
 const appStore = useAppStore()
 
+defineProps<{
+  selectedModel?: Model
+}>()
+
 const models = computed(() => appStore.availableModels)
-const selectedModel = computed(() => appStore.selectedModel)
 
 const onModelClick = (model: Model) => {
   emit('change', model)

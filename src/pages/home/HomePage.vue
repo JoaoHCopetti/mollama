@@ -28,11 +28,12 @@ const currentAssistMessage = computed(() => request.value?.message)
 provide(inputConfigKey, inputConfig.value)
 
 onBeforeMount(async () => {
-  const selectedModel = storage.getItem(LocalStorageEnum.SelectedModelId)
+  const selectedModelId = storage.getItem(LocalStorageEnum.SelectedModelId)
 
-  appStore.selectModel(selectedModel)
+  appStore.selectModel(selectedModelId)
 
-  think.value = storage.getItem(LocalStorageEnum.Think) || false
+  inputConfig.value.model = appStore.selectedModel
+  inputConfig.value.think = storage.getItem(LocalStorageEnum.Think) || false
 })
 
 const onInputConfigChange = ({ type, inputConfig }: InputConfigPayload) => {

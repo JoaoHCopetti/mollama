@@ -5,8 +5,8 @@ import { PhCaretCircleUp, PhStop } from '@phosphor-icons/vue'
 
 defineEmits(['send', 'stop'])
 defineProps<{
-  currentMessageState?: MessageState
-  input: string
+  assistMessageState?: MessageState
+  message: string
 }>()
 </script>
 
@@ -16,9 +16,9 @@ defineProps<{
     to-class="scale-100 opacity-100"
   >
     <button
-      v-if="!currentMessageState?.isLoading"
+      v-if="!assistMessageState?.isLoading"
       class="dui-btn dui-btn-primary"
-      :disabled="input.trim() === ''"
+      :disabled="message.trim() === ''"
       @click="$emit('send')"
     >
       <PhCaretCircleUp
@@ -30,7 +30,7 @@ defineProps<{
     <button
       v-else
       class="dui-btn dui-btn-error"
-      :disabled="currentMessageState.isLoading && !currentMessageState.isStreaming"
+      :disabled="assistMessageState.isLoading && !assistMessageState.isStreaming"
       @click="$emit('stop')"
     >
       <PhStop

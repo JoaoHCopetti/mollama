@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { useLocalStorage } from '@/composables/use-local-storage'
 import type { AssistantMessage } from '@/database/Message'
 import type { SystemPromptData } from '@/database/SystemPrompt'
 import type { InputConfig, Model } from '@/types'
+import { LocalStorageEnum } from '@/utils/enums'
 import { PhBrain } from '@phosphor-icons/vue'
-import { computed, inject, ref } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { inputConfigKey } from '../../injection-keys'
 import ChatInputModelsDropdown from './ChatInputModelsDropdown.vue'
 import ChatInputPromptsDropdown from './ChatInputPromptsDropdown.vue'
@@ -12,6 +14,9 @@ import ChatInputTextarea from './ChatInputTextarea.vue'
 import ChatInputToggle from './ChatInputToggle.vue'
 
 export type InputConfigPayload = { type: keyof InputConfig; inputConfig: InputConfig }
+
+const storage = useLocalStorage()
+
 const emit = defineEmits<{
   send: [args: void]
   stop: [args: void]
@@ -24,20 +29,23 @@ const props = defineProps<{
 
 const inputConfig = inject(inputConfigKey, { message: '', think: false })
 
+const callbacks = ref<{ [P in keyof InputConfig]: CallableFunction }>()
 const isTextareaFocused = ref<boolean>(false)
 
 const state = computed(() => props.currentAssistMessage?.state)
 
-const onInputConfigChange = (prop: keyof InputConfig, payload: any) => {
-  const callbacks: { [P in keyof InputConfig]: CallableFunction } = {
+onMounted(() => {
+  callbacks.value = {
     message: onMessageChange,
     think: onThinkChange,
     model: onModelChange,
     prompt: onPromptChange,
   }
+})
 
-  if (callbacks[prop]) {
-    callbacks[prop](payload)
+const onInputConfigChange = (prop: keyof InputConfig, payload: any) => {
+  if (callbacks.value && callbacks.value[prop]) {
+    callbacks.value[prop](payload)
     emit('update:input-config', { type: prop, inputConfig })
     return
   }
@@ -57,6 +65,8 @@ const onPromptChange = (newVal: SystemPromptData) => {
 
 const onThinkChange = (newVal: boolean) => {
   inputConfig.think = newVal
+
+  storage.setItem(LocalStorageEnum.Think, newVal)
 }
 
 const onModelChange = (newVal: Model) => {
@@ -76,7 +86,7 @@ const onSend = () => {
     }"
   >
     <ChatInputTextarea
-      :input="inputConfig.message"
+      :message="inputConfig.message"
       :current-message-state="state"
       @input="onInputConfigChange('message', $event)"
       @focus-change="isTextareaFocused = $event"
@@ -85,20 +95,27 @@ const onSend = () => {
 
     <div class="flex justify-between">
       <div class="flex items-end gap-2">
-        <ChatInputModelsDropdown @change="onInputConfigChange('model', $event)" />
+        <ChatInputModelsDropdown
+          :selected-model="inputConfig.model"
+          @change="onInputConfigChange('model', $event)"
+        />
 
         <ChatInputToggle
+          :value="inputConfig.think"
           label="Think"
           :icon="PhBrain"
           @change="onInputConfigChange('think', $event)"
         />
 
-        <ChatInputPromptsDropdown @change="onInputConfigChange('prompt', $event)" />
+        <ChatInputPromptsDropdown
+          :prompt="inputConfig.prompt"
+          @change="onInputConfigChange('prompt', $event)"
+        />
       </div>
 
       <ChatInputSendButton
-        :input="inputConfig.message"
-        :current-message-state="currentAssistMessage?.state"
+        :message="inputConfig.message"
+        :assist-message-state="currentAssistMessage?.state"
         @send="onSend"
         @stop="$emit('stop')"
       />

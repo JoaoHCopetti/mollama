@@ -6,12 +6,13 @@ const emit = defineEmits(['change'])
 
 const shortcuts = useShortcutsStore()
 
-defineProps<{
+const props = defineProps<{
   label?: string
   icon: Component
+  value: boolean
 }>()
 
-const checked = ref<boolean>(false)
+const checked = ref<boolean>(props.value)
 
 onMounted(() => {
   shortcuts.onPress('toggle-think', () => {
