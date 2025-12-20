@@ -9,21 +9,19 @@ defineProps<{
 </script>
 
 <template>
-  <div class="h-full">
+  <div class="h-full overflow-auto">
     <MainSidebarChatsTitle class="px-5 pb-3" />
 
-    <div class="overflow-auto">
-      <TransitionGroup
-        tag="ul"
-        name="list"
-        class="flex flex-col pl-0 overflow-auto ml-3 pr-2 mt-0"
-      >
-        <MainSidebarItem
-          v-for="session in sessions"
-          :key="session.id"
-          :session="session"
-        />
-      </TransitionGroup>
-    </div>
+    <TransitionGroup
+      tag="ul"
+      name="list"
+      class="flex flex-col pl-0 overflow-auto ml-3 pr-2 mt-0"
+    >
+      <MainSidebarItem
+        v-for="session in sessions"
+        :key="session.id"
+        :session="session"
+      />
+    </TransitionGroup>
   </div>
 </template>
