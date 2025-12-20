@@ -22,12 +22,9 @@ const chatScrollHandler = useChatScrollHandler(useTemplateRef('messagesContainer
 const messages = ref<MessageData[]>([])
 const smoothScroll = ref(false)
 
-const computedMessages = computed(() => {
+const computedMessages = computed<MessageData[]>(() => {
   if (props.currentAssistMessage) {
-    return [
-      ...messages.value,
-      { id: 'current', assistant: props.currentAssistMessage, user: undefined },
-    ]
+    return [...messages.value, getTempAssistMessage()]
   }
 
   return [...messages.value]
@@ -44,6 +41,19 @@ onMounted(() => {
     await handleScrollbar()
   })
 })
+
+const getTempAssistMessage = (): MessageData => {
+  const now = new Date().toISOString()
+
+  return {
+    id: 0,
+    sessionId: 0,
+    role: 'assistant',
+    assistant: props.currentAssistMessage,
+    createdAt: now,
+    updatedAt: now,
+  }
+}
 
 const handleScrollbar = async () => {
   if (chatScrollHandler.stickToBottom.value) {
@@ -83,12 +93,13 @@ watch(
         <ChatMessagesAssistant
           v-if="message.assistant"
           :message="message.assistant"
+          :system="message.system"
         />
 
         <ChatMessagesUser
           v-else-if="message.user"
           class="-mt-5"
-          :message="message.user!"
+          :message="message.user"
         />
       </div>
     </div>

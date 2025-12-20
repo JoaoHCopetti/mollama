@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { AssistantMessage } from '@/database/Message'
+import type { AssistantMessage, SystemMessage } from '@/database/Message'
 import { createElement, markdown } from '@/utils'
 import { DiffDOM } from 'diff-dom'
 import { computed, onMounted, useTemplateRef, watch } from 'vue'
-import ChatMessagesAssistantActions from './ChatMessagesAssistantActions.vue'
+import ChatMessagesAssistantFooter from './ChatMessagesAssistantFooter.vue'
 import ChatMessagesAssistantHeader from './ChatMessagesAssistantHeader.vue'
 import ChatMessagesAssistantThinking from './ChatMessagesAssistantThinking.vue'
 
@@ -11,6 +11,7 @@ const diffDOM = new DiffDOM()
 
 const props = defineProps<{
   message: AssistantMessage
+  system?: SystemMessage
 }>()
 
 const htmlContent = computed(() => markdown.render(props.message.content))
@@ -53,9 +54,10 @@ watch(htmlContent, (newHTML) => {
 
     <div ref="markdownRef" />
 
-    <ChatMessagesAssistantActions
+    <ChatMessagesAssistantFooter
       v-if="message.response.done"
       :message="message"
+      :system="system"
     />
 
     <div

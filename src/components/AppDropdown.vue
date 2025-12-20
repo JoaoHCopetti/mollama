@@ -10,14 +10,16 @@ const props = withDefaults(
     items: T[]
     activeItem?: T
     itemClassExtend?: string
-    triggerClass?: string | any[]
+    triggerClass?: any
     triggerClassExtend?: string
+    containerClassExtend?: any
   }>(),
   {
     activeItem: undefined,
     triggerClass: 'dui-btn focus-visible:ring-2 focus-visible:ring-white/75',
     itemClassExtend: '',
     triggerClassExtend: '',
+    containerClassExtend: '',
   },
 )
 
@@ -37,11 +39,13 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
     </MenuButton>
 
     <AppTransition
+      v-if="items.length"
       from-class="scale-95 opacity-0"
       to-class="scale-100 opacity-100"
     >
       <MenuItems
         class="top-auto bottom-full absolute w-72 p-2 rounded-lg bg-base-200"
+        :class="containerClassExtend"
         as="ul"
         style="list-style: none"
       >
@@ -50,10 +54,11 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
           :key="getItemKey(item)"
           v-slot="{ active }"
           as="li"
+          class="group"
           @click="$emit('select', item)"
         >
           <a
-            class="p-2 block rounded-lg cursor-pointer active:scale-[0.98] transition-all"
+            class="p-2 block rounded cursor-pointer active:scale-[0.98] transition-all"
             :class="[
               itemClassExtend,
               {

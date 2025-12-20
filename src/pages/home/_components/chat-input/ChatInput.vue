@@ -60,7 +60,7 @@ const onMessageChange = (e: Event) => {
 }
 
 const onPromptChange = (newVal: SystemPromptData) => {
-  inputConfig.prompt = newVal
+  inputConfig.prompt = newVal.id !== inputConfig.prompt?.id ? newVal : undefined
 }
 
 const onThinkChange = (newVal: boolean) => {

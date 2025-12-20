@@ -27,6 +27,7 @@ interface AssistantMessage {
 }
 
 interface SystemMessage {
+  title: string
   content: string
 }
 

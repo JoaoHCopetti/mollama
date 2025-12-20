@@ -4,6 +4,7 @@ type FetchResponseOptions = {
   sessionId: number
   model: Model
   think?: 'low' | 'medium' | 'high' | boolean
+  prompt?: SystemPromptData
 }
 
 type Model = {

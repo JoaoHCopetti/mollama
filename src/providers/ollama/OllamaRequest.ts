@@ -15,7 +15,10 @@ export default class OllamaRequest extends BaseRequest {
     const response = await ollama.chat({
       model: options.model.fullName,
       think: options.think,
-      messages: this.getFormattedMessages(messages),
+      messages: [
+        ...(options.prompt ? [{ role: 'system', content: options.prompt.content || '' }] : []),
+        ...this.getFormattedMessages(messages),
+      ],
       stream: true,
     })
 

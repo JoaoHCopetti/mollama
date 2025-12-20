@@ -3,12 +3,17 @@ import type { AssistantMessage, SystemMessage, UserMessage } from '@/database/Me
 import type { SessionInput } from '@/database/Session'
 import { toRaw } from 'vue'
 
-export const createAssistMessage = async (sessionId: number, message: AssistantMessage) => {
+export const createAssistMessage = async (
+  sessionId: number,
+  message: AssistantMessage,
+  system?: SystemMessage,
+) => {
   const now = new Date().toISOString()
 
   return await db.messages.add({
     sessionId,
     assistant: toRaw(message),
+    system: toRaw(system),
     role: 'assistant',
     createdAt: now,
     updatedAt: now,
@@ -22,18 +27,6 @@ export const createUserMessage = async (sessionId: number, message: UserMessage)
     sessionId,
     user: toRaw(message),
     role: 'user',
-    createdAt: now,
-    updatedAt: now,
-  })
-}
-
-export const createSystemMessage = async (sessionId: number, message: SystemMessage) => {
-  const now = new Date().toISOString()
-
-  return await db.messages.add({
-    sessionId,
-    system: toRaw(message),
-    role: 'system',
     createdAt: now,
     updatedAt: now,
   })
