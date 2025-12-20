@@ -14,4 +14,8 @@
   .dui-input {
     @apply rounded-lg bg-base-300 w-full font-sans border-none focus:outline-1 outline-white/40 shadow-none placeholder-gray-500;
   }
+
+  .dui-tooltip::before {
+    @apply rounded-full duration-100;
+  }
 }
