@@ -11,12 +11,11 @@ import BaseRequest from '../BaseRequest'
 const ollama = new Ollama()
 
 export default class OllamaRequest extends BaseRequest {
-  public async performHandleResponse(options: FetchResponseOptions, context: MessageData[]) {
-    const formattedContext = this.getContext(context)
-
+  public async performHandleResponse(options: FetchResponseOptions, messages: MessageData[]) {
     const response = await ollama.chat({
-      ...options,
-      messages: [...formattedContext, ...options.messages],
+      model: options.model.fullName,
+      think: options.think,
+      messages: this.getFormattedMessages(messages),
       stream: true,
     })
 
@@ -34,32 +33,32 @@ export default class OllamaRequest extends BaseRequest {
         return
       }
 
-      await this.setMessage(this.getFormattedMessage(chunk))
+      await this.setMessage(this.getFormattedChunk(chunk))
     }
   }
 
-  private getContext = (context: MessageData[]) => {
-    return context.map<OllamaMessage>((message) => {
-      const { content, thinking, system } = { ...message.assistant, ...message.user }
+  private getFormattedMessages = (messages: MessageData[]) => {
+    return messages.map<OllamaMessage>((message) => {
+      const entityMessage = message[message.role]
 
-      if (!content) {
-        throw Error(
-          `Error while retrieving context, provided content is:` + JSON.stringify(content),
-        )
+      if (!entityMessage) {
+        throw new Error(`There's no message content on "${message.role}"`)
       }
 
-      return {
-        content,
-        thinking,
-        system,
-        role: !!message.assistant ? 'assistant' : 'user',
-      }
+      return message.user || message.system
+        ? {
+            role: message.role,
+            content: entityMessage.content,
+          }
+        : {
+            role: message.role,
+            content: entityMessage.content,
+            thinking: message.assistant?.thinking,
+          }
     })
   }
 
-  protected getFormattedMessage = (
-    response: OllamaChatResponse,
-  ): Omit<AssistantMessage, 'state'> => {
+  protected getFormattedChunk = (response: OllamaChatResponse): Omit<AssistantMessage, 'state'> => {
     return {
       content: response.message.content,
       thinking: response.message.thinking,

@@ -34,6 +34,10 @@ export default abstract class BaseRequest {
     }
 
     if (thinking) {
+      if (this.message.thinking === undefined) {
+        this.message.thinking = ''
+      }
+
       this.message.thinking += thinking
       this.message.tokens.push({ value: thinking, isThinking: true })
     }
@@ -93,7 +97,7 @@ export default abstract class BaseRequest {
     return {
       model: this.model,
       content: '',
-      thinking: '',
+      thinking: undefined,
       tokens: [],
       state: {
         isLoading: false,

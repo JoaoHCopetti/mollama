@@ -7,8 +7,14 @@ export default class Message extends Entity<AppDB> {
   sessionId!: number
   user?: UserMessage
   assistant?: AssistantMessage
+  system?: SystemMessage
+  role!: 'user' | 'assistant' | 'system'
   createdAt!: string
   updatedAt!: string
+}
+
+interface UserMessage {
+  content: string
 }
 
 interface AssistantMessage {
@@ -18,9 +24,10 @@ interface AssistantMessage {
   tokens: { value: string; isThinking: boolean }[]
   state: MessageState
   response: ResponseDetails
-  system?: {
-    content: string
-  }
+}
+
+interface SystemMessage {
+  content: string
 }
 
 interface MessageState {
@@ -38,10 +45,6 @@ interface ResponseDetails {
   responseDuration?: number
 }
 
-interface UserMessage {
-  content: string
-}
-
 type MessageData = Omit<Message, 'table' | 'db'>
 
-export type { AssistantMessage, MessageData, MessageState, UserMessage }
+export type { AssistantMessage, MessageData, MessageState, SystemMessage, UserMessage }

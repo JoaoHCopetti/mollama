@@ -23,13 +23,22 @@ const DEFAULT_SHORTCUTS: Shortcuts = {
 export const useShortcutsStore = defineStore('shortcuts', () => {
   const shortcuts = ref(DEFAULT_SHORTCUTS)
   const callbacks: Ref<Partial<ShortcutCallbacks>> = ref({})
+  const isShortcutsRegistered = ref<boolean>(false)
 
   const init = () => {
+    if (isShortcutsRegistered.value) {
+      console.warn(`Trying to init shortcuts, but it's already registered`)
+      return
+    }
+
     document.addEventListener('keydown', handleKeydownEvent)
+    isShortcutsRegistered.value = true
   }
 
   const destroy = () => {
+    callbacks.value = {}
     document.removeEventListener('keydown', handleKeydownEvent)
+    isShortcutsRegistered.value = false
   }
 
   const handleKeydownEvent = (e: KeyboardEvent) => {
@@ -66,7 +75,7 @@ export const useShortcutsStore = defineStore('shortcuts', () => {
 
   const onPress = (shortcut: ShortcutActions, callback: (e: KeyboardEvent) => void) => {
     if (callbacks.value[shortcut]) {
-      console.error(`Shortcut '${shortcut}' is already registered`)
+      console.warn(`Shortcut '${shortcut}' is already registered`)
       return
     }
 

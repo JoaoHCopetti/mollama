@@ -86,7 +86,7 @@ watch(
         />
 
         <ChatMessagesUser
-          v-else
+          v-else-if="message.user"
           class="-mt-5"
           :message="message.user!"
         />

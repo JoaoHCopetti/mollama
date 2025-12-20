@@ -26,6 +26,8 @@ export default class AppDB extends Dexie {
         sessionId,
         user,
         assistant,
+        system,
+        role,
         createdAt,
         updatedAt
       `,

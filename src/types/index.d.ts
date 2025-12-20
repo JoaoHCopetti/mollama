@@ -2,14 +2,7 @@ import type { SystemPromptData } from '@/database/SystemPrompt'
 
 type FetchResponseOptions = {
   sessionId: number
-  model: string
-  messages: {
-    content: string
-    thinking?: string
-    system?: string
-    role: 'assistant' | 'user'
-  }[]
-
+  model: Model
   think?: 'low' | 'medium' | 'high' | boolean
 }
 

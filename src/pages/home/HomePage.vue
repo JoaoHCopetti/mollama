@@ -2,7 +2,12 @@
 import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
 import BaseRequest from '@/providers/BaseRequest'
-import { createAssistMessage, createUserMessage, getOrCreateSession } from '@/services/chat-service'
+import {
+  createAssistMessage,
+  createSystemMessage,
+  createUserMessage,
+  getOrCreateSession,
+} from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
 import type { InputConfig } from '@/types'
 import { LocalStorageEnum } from '@/utils/enums'
@@ -21,7 +26,6 @@ const router = useRouter()
 const inputConfig = ref<InputConfig>({ message: '', think: false })
 
 const request = ref<BaseRequest>()
-const think = ref<boolean>(false)
 
 const currentAssistMessage = computed(() => request.value?.message)
 
@@ -42,39 +46,46 @@ const onInputConfigChange = ({ type, inputConfig }: InputConfigPayload) => {
   }
 }
 
-const onSendMessage = async () => {
+const onMessageSend = async () => {
   if (!appStore.selectedModel) {
     throw new Error('No model selected')
   }
 
   const content = inputConfig.value.message
+  inputConfig.value.message = ''
 
   request.value = appStore.provider.createRequest(appStore.selectedModel)
-
-  inputConfig.value.message = ''
 
   appStore.activeSession = await getOrCreateSession(+(route.params.id || 0), {
     title: content,
     lastModel: appStore.selectedModel,
   })
 
-  await createUserMessage({
-    sessionId: appStore.activeSession.id,
-    user: { content },
-  })
+  await registerRequestListener()
 
-  registerRequestListener(appStore.activeSession.id)
+  if (inputConfig.value.prompt) {
+    await createSystemMessage(appStore.activeSession.id, inputConfig.value.prompt)
+  }
 
+  await createUserMessage(appStore.activeSession.id, { content })
   await handleRequest(appStore.activeSession.id)
 }
 
-const registerRequestListener = (sessionId: number) => {
+const registerRequestListener = async () => {
+  const sessionId = appStore.activeSession?.id
+
+  if (!sessionId) {
+    throw new Error(
+      `No active session is set (active session is: ${JSON.stringify(appStore.activeSession)})`,
+    )
+  }
+
   if (!request.value) {
-    return
+    throw new Error(`No request is set (request is: ${JSON.stringify(request.value)})`)
   }
 
   request.value.onMessageChange(async (message) => {
-    if (message.response?.done) {
+    if (message.response.done) {
       await createAssistMessage(sessionId, message)
 
       if (!route.params.id) {
@@ -95,14 +106,8 @@ const handleRequest = async (sessionId: number) => {
 
   await request.value.handleRequest({
     sessionId,
-    model: appStore.selectedModel.fullName,
-    think: think.value,
-    messages: [
-      {
-        content: inputConfig.value.message,
-        role: 'user',
-      },
-    ],
+    model: appStore.selectedModel,
+    think: inputConfig.value.think,
   })
 }
 
@@ -141,7 +146,7 @@ const stopStreaming = () => {
         class="w-3/4"
         :current-assist-message="request?.message"
         @update:input-config="onInputConfigChange"
-        @send="onSendMessage"
+        @send="onMessageSend"
         @stop="stopStreaming"
       />
     </div>
