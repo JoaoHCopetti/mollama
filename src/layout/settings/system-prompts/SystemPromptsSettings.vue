@@ -39,7 +39,7 @@ const onNewPromptClick = async () => {
 
 <template>
   <div>
-    <div>
+    <div class="mb-5">
       <button
         class="dui-btn dui-btn-xs uppercase dui-btn-success"
         @click="onNewPromptClick"
@@ -49,14 +49,19 @@ const onNewPromptClick = async () => {
       </button>
     </div>
 
-    <SystemPromptsSettingsForm
-      v-if="showForm"
-      ref="systemPromptsSettingsFormRef"
-      v-model:form="form"
-      @submit="onSubmit"
-      @close="showForm = false"
-    />
+    <div
+      v-auto-animate
+      class="relative"
+    >
+      <SystemPromptsSettingsForm
+        v-if="showForm"
+        ref="systemPromptsSettingsFormRef"
+        v-model:form="form"
+        @submit="onSubmit"
+        @close="showForm = false"
+      />
 
-    <SystemPromptsSettingsList />
+      <SystemPromptsSettingsList />
+    </div>
   </div>
 </template>

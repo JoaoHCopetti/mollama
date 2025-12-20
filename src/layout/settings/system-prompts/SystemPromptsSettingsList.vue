@@ -49,7 +49,7 @@ const onDeleteClick = (systemPrompt: SystemPromptData) => {
 
     <div
       v-else
-      class="flex justify-center flex-1 items-center text-white/50 mt-32"
+      class="min-h-full text-center text-white/50 mt-32"
     >
       Nothing here
     </div>

@@ -23,7 +23,7 @@ defineExpose({ focusTitleInput })
 
 <template>
   <form
-    class="mt-5"
+    class="m-0 p-0"
     @submit.prevent="onSubmit"
   >
     <div class="flex flex-col gap-5">
@@ -39,10 +39,16 @@ defineExpose({ focusTitleInput })
       <textarea
         id="system-prompt"
         v-model="form.instruction.value"
-        class="dui-textarea resize-none"
+        class="dui-textarea resize-none whitespace-pre"
         name="system-prompt"
         placeholder="Instructions"
         required
+        @keypress.enter="
+          (e) => {
+            e.preventDefault()
+            form.instruction.value += '\n'
+          }
+        "
       />
 
       <div class="ml-auto">
