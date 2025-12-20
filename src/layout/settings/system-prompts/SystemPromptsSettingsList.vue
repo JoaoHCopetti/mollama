@@ -26,7 +26,8 @@ const onDeleteClick = (systemPrompt: SystemPromptData) => {
   <div class="overflow-auto overflow-x-hidden">
     <ul
       v-if="systemPrompts.length"
-      class="dui-list ml-0 pl-0"
+      v-auto-animate
+      class="dui-list overflow-hidden ml-0 pl-0"
     >
       <li
         v-for="systemPrompt in systemPrompts"

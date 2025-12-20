@@ -59,7 +59,7 @@ const selectItem = (item: SettingsMenuItem) => {
       <Component
         :is="selectedItem.component"
         v-if="selectedItem"
-        class="h-full"
+        class="h-full py-3"
       />
     </div>
   </div>

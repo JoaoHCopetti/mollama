@@ -34,6 +34,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
     <MenuButton
       :class="[triggerClass, triggerClassExtend]"
       as="button"
+      :disabled="!items.length"
     >
       <slot name="trigger" />
     </MenuButton>
