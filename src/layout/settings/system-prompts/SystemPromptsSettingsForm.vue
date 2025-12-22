@@ -1,15 +1,42 @@
 <script setup lang="ts">
-import { useTemplateRef } from 'vue'
-import type { SystemPromptForm } from './SystemPromptsSettings.vue'
+import { useForm } from '@/composables/use-form'
+import type { SystemPromptData } from '@/database/SystemPrompt'
+import { createSystemPrompt } from '@/services/system-prompt-service'
+import { onMounted, useTemplateRef } from 'vue'
+export type SystemPromptForm = typeof form
 
-const emit = defineEmits(['submit', 'close'])
+const emit = defineEmits<{
+  submit: [args: { action: 'created' | 'updated' }]
+  close: [args: void]
+}>()
 
-const form = defineModel<SystemPromptForm>('form', { required: true })
+const props = defineProps<{
+  systemPrompt?: SystemPromptData
+}>()
+
+onMounted(() => {
+  const systemPrompt = props.systemPrompt
+
+  if (systemPrompt) {
+    form.title.value = systemPrompt?.title || ''
+    form.instruction.value = systemPrompt?.content || ''
+  }
+})
+
+const form = useForm({
+  title: '',
+  instruction: '',
+})
 
 const titleEl = useTemplateRef('titleRef')
 
-const onSubmit = () => {
-  emit('submit', form.value)
+const onSubmit = async () => {
+  await createSystemPrompt({
+    title: form.title.value,
+    content: form.instruction.value,
+  })
+
+  emit('submit', { action: 'created' })
 }
 
 const focusTitleInput = () => {

@@ -17,7 +17,6 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@formkit/auto-animate": "^0.9.0",
     "@headlessui/vue": "^1.7.23",
     "@phosphor-icons/vue": "^2.2.1",
     "@tailwindcss/vite": "^4.1.17",

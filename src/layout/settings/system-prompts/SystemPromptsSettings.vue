@@ -1,29 +1,17 @@
 <script setup lang="ts">
-import { useForm } from '@/composables/use-form'
-import { createSystemPrompt } from '@/services/system-prompt-service'
+import type { SystemPromptData } from '@/database/SystemPrompt'
 import { PhPlus } from '@phosphor-icons/vue'
 import { nextTick, ref, useTemplateRef } from 'vue'
 import SystemPromptsSettingsForm from './SystemPromptsSettingsForm.vue'
 import SystemPromptsSettingsList from './SystemPromptsSettingsList.vue'
 
-export type SystemPromptForm = typeof form
-
 const showForm = ref<boolean>(false)
 const settingsFormEl = useTemplateRef('systemPromptsSettingsFormRef')
 
-const form = useForm({
-  title: '',
-  instruction: '',
-})
+const systemPromptEdit = ref<SystemPromptData>()
 
 const onSubmit = async () => {
-  await createSystemPrompt({
-    title: form.title.value,
-    content: form.instruction.value,
-  })
-
   showForm.value = false
-  form.resetForm()
 }
 
 const onNewPromptClick = async () => {
@@ -34,6 +22,11 @@ const onNewPromptClick = async () => {
       settingsFormEl.value.focusTitleInput()
     }
   })
+}
+
+const onSystemPromptEdit = ({ systemPrompt }: { systemPrompt: SystemPromptData }) => {
+  showForm.value = true
+  systemPromptEdit.value = systemPrompt
 }
 </script>
 
@@ -49,19 +42,16 @@ const onNewPromptClick = async () => {
       </button>
     </div>
 
-    <div
-      v-auto-animate
-      class="relative"
-    >
+    <div class="relative">
       <SystemPromptsSettingsForm
         v-if="showForm"
         ref="systemPromptsSettingsFormRef"
-        v-model:form="form"
+        :system-prompt="systemPromptEdit"
         @submit="onSubmit"
         @close="showForm = false"
       />
 
-      <SystemPromptsSettingsList />
+      <SystemPromptsSettingsList @edit="onSystemPromptEdit" />
     </div>
   </div>
 </template>
