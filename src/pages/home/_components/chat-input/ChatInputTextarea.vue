@@ -5,10 +5,10 @@ import { onMounted, useTemplateRef } from 'vue'
 
 const MAX_TEXTAREA_HEIGHT = 150
 
-const emit = defineEmits(['send', 'focus-change'])
 const props = defineProps<{
   currentMessageState?: MessageState
 }>()
+const emit = defineEmits(['send', 'focus-change'])
 
 const textareaRef = useTemplateRef('textareaRef')
 const shortcutsStore = useShortcutsStore()

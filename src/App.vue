@@ -5,10 +5,10 @@ import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
 import { ProvidersEnum, useAppStore } from './stores/app-store'
 import { useShortcutsStore } from './stores/shortcuts-store'
 
+const isBooted = ref(false)
+
 const appStore = useAppStore()
 const shortcutsStore = useShortcutsStore()
-
-const isBooted = ref(false)
 
 onBeforeMount(async () => {
   await appStore.init(ProvidersEnum.Ollama)

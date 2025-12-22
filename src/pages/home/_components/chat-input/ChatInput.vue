@@ -17,14 +17,14 @@ export type InputConfigPayload = { type: keyof InputConfig; inputConfig: InputCo
 
 const storage = useLocalStorage()
 
+const props = defineProps<{
+  currentAssistMessage?: AssistantMessage
+}>()
+
 const emit = defineEmits<{
   send: [args: void]
   stop: [args: void]
   'update:input-config': [args: InputConfigPayload]
-}>()
-
-const props = defineProps<{
-  currentAssistMessage?: AssistantMessage
 }>()
 
 const inputConfig = inject(inputConfigKey, { message: '', think: false })

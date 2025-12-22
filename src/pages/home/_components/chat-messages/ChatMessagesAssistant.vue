@@ -14,8 +14,9 @@ const props = defineProps<{
   system?: SystemMessage
 }>()
 
-const htmlContent = computed(() => markdown.render(props.message.content))
 const markdownRef = useTemplateRef('markdownRef')
+
+const htmlContent = computed(() => markdown.render(props.message.content))
 
 onMounted(() => {
   if (markdownRef.value) {

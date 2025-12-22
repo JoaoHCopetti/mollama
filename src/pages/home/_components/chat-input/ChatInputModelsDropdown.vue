@@ -5,12 +5,12 @@ import { useAppStore } from '@/stores/app-store'
 import type { Model } from '@/types'
 import { computed } from 'vue'
 
-const emit = defineEmits(['change'])
-const appStore = useAppStore()
-
 defineProps<{
   selectedModel?: Model
 }>()
+const emit = defineEmits(['change'])
+
+const appStore = useAppStore()
 
 const models = computed(() => appStore.availableModels)
 

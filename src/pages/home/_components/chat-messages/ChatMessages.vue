@@ -9,12 +9,12 @@ import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
 import ChatMessagesUser from './ChatMessagesUser.vue'
 
-defineEmits(['messages-mounted'])
-
 const props = defineProps<{
   sessionId: number
   currentAssistMessage?: AssistantMessage
 }>()
+
+defineEmits(['messages-mounted'])
 
 const subscription = useDexieSubscription<MessageData>()
 const chatScrollHandler = useChatScrollHandler(useTemplateRef('messagesContainer'))

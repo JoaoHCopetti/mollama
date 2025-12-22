@@ -7,10 +7,10 @@ import { PhBookBookmark } from '@phosphor-icons/vue'
 import { liveQuery } from 'dexie'
 import { onMounted, ref } from 'vue'
 
-defineEmits(['change'])
 defineProps<{
   prompt?: SystemPromptData
 }>()
+defineEmits(['change'])
 
 const subscription = useDexieSubscription<SystemPromptData>()
 

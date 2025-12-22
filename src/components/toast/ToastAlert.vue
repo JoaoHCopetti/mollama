@@ -3,6 +3,11 @@ import type { ToastType } from '@/types'
 import { PhCheckCircle, PhInfo, PhWarningCircle } from '@phosphor-icons/vue'
 import { computed, type Component } from 'vue'
 
+type ToastAlertTypes = {
+  type: ToastType
+  message: string
+}
+
 const TOAST_TYPES_MAP: Record<ToastType, { icon: Component; classNames: string }> = {
   success: {
     icon: PhCheckCircle,
@@ -18,12 +23,8 @@ const TOAST_TYPES_MAP: Record<ToastType, { icon: Component; classNames: string }
   },
 }
 
-type ToastAlertTypes = {
-  type: ToastType
-  message: string
-}
-
 const props = defineProps<ToastAlertTypes>()
+
 const toastProps = computed(() => TOAST_TYPES_MAP[props.type])
 </script>
 

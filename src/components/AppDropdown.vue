@@ -2,8 +2,6 @@
 import AppTransition from '@/components/AppTransition.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 
-defineEmits(['select'])
-
 const props = withDefaults(
   defineProps<{
     idField: keyof T
@@ -22,6 +20,8 @@ const props = withDefaults(
     containerClassExtend: '',
   },
 )
+
+defineEmits(['select'])
 
 const getItemKey = (item: T) => item[props.idField] as PropertyKey
 </script>

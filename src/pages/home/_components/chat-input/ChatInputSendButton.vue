@@ -3,11 +3,11 @@ import AppTransition from '@/components/AppTransition.vue'
 import type { MessageState } from '@/database/Message'
 import { PhCaretCircleUp, PhStop } from '@phosphor-icons/vue'
 
-defineEmits(['send', 'stop'])
 defineProps<{
   assistMessageState?: MessageState
   message: string
 }>()
+defineEmits(['send', 'stop'])
 </script>
 
 <template>

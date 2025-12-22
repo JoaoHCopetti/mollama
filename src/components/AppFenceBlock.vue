@@ -10,9 +10,10 @@ const props = defineProps<{
   originalRender: string
 }>()
 
+const copyButtonId = `fence-copy-${props.idx}`
+
 const toastStore = useToastStore()
 
-const copyButtonId = `fence-copy-${props.idx}`
 const buttonEl = ref<HTMLButtonElement | null>()
 
 onMounted(async () => {

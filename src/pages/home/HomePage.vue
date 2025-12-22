@@ -19,7 +19,6 @@ const route = useRoute()
 const router = useRouter()
 
 const inputConfig = ref<InputConfig>({ message: '', think: false })
-
 const request = ref<BaseRequest>()
 
 const currentAssistMessage = computed(() => request.value?.message)

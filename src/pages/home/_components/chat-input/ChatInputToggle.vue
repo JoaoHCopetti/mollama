@@ -2,15 +2,15 @@
 import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { onMounted, ref, type Component } from 'vue'
 
-const emit = defineEmits(['change'])
-
-const shortcuts = useShortcutsStore()
-
 const props = defineProps<{
   label?: string
   icon: Component
   value: boolean
 }>()
+
+const emit = defineEmits(['change'])
+
+const shortcuts = useShortcutsStore()
 
 const checked = ref<boolean>(props.value)
 
