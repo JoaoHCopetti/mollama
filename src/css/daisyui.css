@@ -2,20 +2,20 @@
   themes:
     dark --default,
     light --preferslight;
-  prefix: 'dui-';
+  prefix: 'd-';
 }
 
 @layer utilities {
-  .dui-btn {
+  .d-btn {
     @apply rounded-full shadow-none;
   }
 
-  .dui-textarea,
-  .dui-input {
+  .d-textarea,
+  .d-input {
     @apply rounded-lg bg-base-300 w-full font-sans border-none focus:outline-1 outline-white/40 shadow-none placeholder-gray-500;
   }
 
-  .dui-tooltip::before {
+  .d-tooltip::before {
     @apply rounded-full duration-100;
   }
 }

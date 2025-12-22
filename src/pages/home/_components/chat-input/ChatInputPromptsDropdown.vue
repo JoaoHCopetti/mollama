@@ -44,7 +44,7 @@ onMounted(() => {
     <template #trigger>
       <div
         class="w-30"
-        :class="{ 'dui-tooltip dui-tooltip-top': !systemPrompts.length }"
+        :class="{ 'd-tooltip d-tooltip-top': !systemPrompts.length }"
         v-bind="{
           ...(!systemPrompts.length ? { 'data-tip': 'No prompts registered' } : {}),
         }"

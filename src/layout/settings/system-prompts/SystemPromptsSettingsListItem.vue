@@ -38,7 +38,7 @@ const onDeleteClick = () => {
 
       <div class="group-hover:opacity-100 opacity-0 transition-all">
         <button
-          class="dui-btn dui-btn-sm dui-btn-ghost hover:bg-white/10 border-0"
+          class="d-btn d-btn-sm d-btn-ghost d-btn-circle hover:bg-white/10 border-0"
           data-tip="Edit"
           @click.stop="onEditClick"
         >
@@ -46,7 +46,7 @@ const onDeleteClick = () => {
         </button>
 
         <button
-          class="dui-btn dui-btn-sm dui-btn-ghost hover:bg-white/10 border-0"
+          class="d-btn d-btn-sm d-btn-ghost d-btn-circle hover:bg-white/10 border-0"
           @click.stop="onDeleteClick"
         >
           <PhTrash size="1.4em" />

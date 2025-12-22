@@ -17,7 +17,7 @@ defineEmits(['send', 'stop'])
   >
     <button
       v-if="!assistMessageState?.isLoading"
-      class="dui-btn dui-btn-primary"
+      class="d-btn d-btn-primary d-btn-circle"
       :disabled="message.trim() === ''"
       @click="$emit('send')"
     >
@@ -29,7 +29,7 @@ defineEmits(['send', 'stop'])
 
     <button
       v-else
-      class="dui-btn dui-btn-error"
+      class="d-btn d-btn-error d-btn-circle"
       :disabled="assistMessageState.isLoading && !assistMessageState.isStreaming"
       @click="$emit('stop')"
     >

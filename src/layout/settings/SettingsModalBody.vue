@@ -36,7 +36,7 @@ const selectItem = (item: SettingsMenuItem) => {
         Settings
       </h3>
 
-      <ul class="dui-menu p-0 m-0">
+      <ul class="d-menu p-0 m-0">
         <li
           v-for="item in MENU_ITEMS"
           :key="item.id"

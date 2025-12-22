@@ -61,7 +61,7 @@ const handleButtonClick = () => {
 
       <button
         :id="copyButtonId"
-        class="dui-btn dui-btn-xs dui-btn-ghost group-hover:opacity-100 opacity-0 transition-all"
+        class="d-btn d-btn-xs d-btn-ghost group-hover:opacity-100 opacity-0 transition-all"
       >
         <PhClipboard size="1rem" />
       </button>

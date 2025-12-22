@@ -35,7 +35,7 @@ const onSystemPromptClick = (systemPrompt: SystemPromptData) => {
   <div class="overflow-auto overflow-x-hidden">
     <ul
       v-if="systemPrompts.length"
-      class="dui-list overflow-hidden ml-0 pl-0"
+      class="d-list overflow-hidden ml-0 pl-0"
     >
       <SystemPromptsSettingsListItem
         v-for="systemPrompt in systemPrompts"

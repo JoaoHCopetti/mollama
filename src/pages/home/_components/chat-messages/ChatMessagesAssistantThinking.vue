@@ -20,7 +20,7 @@ const htmlThinking = computed(
       class="text-sm text-gray-400 mb-2"
     >
       <div v-if="message.state.isThinking">
-        <span class="dui-loading dui-loading-ring dui-loading-xs mr-1" />
+        <span class="d-loading d-loading-ring d-loading-xs mr-1" />
 
         <span
           class="animated-text bg-linear-to-br from-gray-500 via-gray-300 to-gray-500"

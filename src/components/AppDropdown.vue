@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
-import AppTransition from '@/components/AppTransition.vue'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Menu, MenuButton, MenuItem, MenuItems, TransitionRoot } from '@headlessui/vue'
+import { FADE_TRANSITION } from './constants'
 
 const props = withDefaults(
   defineProps<{
@@ -14,7 +14,7 @@ const props = withDefaults(
   }>(),
   {
     activeItem: undefined,
-    triggerClass: 'dui-btn focus-visible:ring-2 focus-visible:ring-white/75',
+    triggerClass: 'd-btn focus-visible:ring-2 focus-visible:ring-white/75',
     itemClassExtend: '',
     triggerClassExtend: '',
     containerClassExtend: '',
@@ -28,8 +28,9 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
 
 <template>
   <Menu
+    v-slot="{ open }"
     as="div"
-    class="dui-dropdown"
+    class="d-dropdown"
   >
     <MenuButton
       :class="[triggerClass, triggerClassExtend]"
@@ -39,10 +40,9 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
       <slot name="trigger" />
     </MenuButton>
 
-    <AppTransition
-      v-if="items.length"
-      from-class="scale-95 opacity-0"
-      to-class="scale-100 opacity-100"
+    <TransitionRoot
+      :show="open"
+      v-bind="FADE_TRANSITION"
     >
       <MenuItems
         class="top-auto bottom-full absolute w-72 p-2 rounded-lg bg-base-200"
@@ -75,6 +75,6 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
           </a>
         </MenuItem>
       </MenuItems>
-    </AppTransition>
+    </TransitionRoot>
   </Menu>
 </template>

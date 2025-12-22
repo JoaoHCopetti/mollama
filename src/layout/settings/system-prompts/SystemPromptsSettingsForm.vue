@@ -58,7 +58,7 @@ defineExpose({ focusTitleInput })
         ref="titleRef"
         v-model="form.title.value"
         type="text"
-        class="dui-input"
+        class="d-input"
         placeholder="Title"
         required
       />
@@ -66,7 +66,7 @@ defineExpose({ focusTitleInput })
       <textarea
         id="system-prompt"
         v-model="form.instruction.value"
-        class="dui-textarea resize-none whitespace-pre"
+        class="d-textarea resize-none whitespace-pre"
         name="system-prompt"
         placeholder="Instructions"
         required
@@ -80,7 +80,7 @@ defineExpose({ focusTitleInput })
 
       <div class="ml-auto">
         <button
-          class="dui-btn dui-btn-ghost"
+          class="d-btn d-btn-ghost"
           type="button"
           @click="$emit('close')"
         >
@@ -88,7 +88,7 @@ defineExpose({ focusTitleInput })
         </button>
 
         <button
-          class="dui-btn dui-btn-ghost w-fit"
+          class="d-btn d-btn-ghost w-fit"
           type="submit"
         >
           Save
