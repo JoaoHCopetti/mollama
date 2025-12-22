@@ -16,6 +16,6 @@
   }
 
   .d-tooltip::before {
-    @apply rounded-full duration-100;
+    @apply rounded-full duration-150 ease-out;
   }
 }

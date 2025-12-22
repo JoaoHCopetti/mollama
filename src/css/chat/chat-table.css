@@ -1,29 +1,33 @@
 @layer components {
-  .message-container .md-table-wrapper {
-    @apply rounded-lg overflow-auto my-5;
-  }
+  .message-container {
+    & .md-table-wrapper {
+      @apply rounded-lg overflow-auto my-5;
+    }
 
-  .message-container table {
-    @apply border-collapse w-full;
-  }
+    & table {
+      @apply border-collapse w-full;
 
-  .message-container table tbody tr:nth-child(odd) td {
-    @apply bg-base-300;
-  }
+      & th {
+        @apply bg-base-200 text-white/90 text-[0.75rem] py-3 px-5 leading-5 uppercase font-normal;
+      }
 
-  .message-container table tbody tr:nth-child(even) td {
-    @apply bg-base-300;
-  }
+      & td {
+        @apply bg-base-200 py-2 px-5 border-none text-[0.9rem] leading-6;
+      }
 
-  .message-container table th {
-    @apply bg-base-200 text-white/90 text-[0.75rem] py-3 px-5 leading-5 uppercase font-normal;
-  }
+      & tr:not(:last-child) td {
+        @apply border-b;
+      }
+    }
 
-  .message-container table td {
-    @apply bg-base-200 py-2 px-5 border-none text-[0.9rem] leading-6;
-  }
+    & table tbody {
+      & tr:nth-child(odd) td {
+        @apply bg-base-300;
+      }
 
-  .message-container table tr:not(:last-child) td {
-    @apply border-b;
+      & tr:nth-child(even) td {
+        @apply bg-base-300;
+      }
+    }
   }
 }

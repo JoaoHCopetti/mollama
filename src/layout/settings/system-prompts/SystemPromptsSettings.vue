@@ -34,7 +34,7 @@ const onSystemPromptEdit = ({ systemPrompt }: { systemPrompt: SystemPromptData }
   <div>
     <div class="mb-5">
       <button
-        class="d-btn d-btn-xs uppercase d-btn-success"
+        class="d-btn d-btn-xs d-btn-soft uppercase d-btn-success"
         @click="onNewPromptClick"
       >
         <PhPlus weight="bold" />

@@ -28,7 +28,7 @@ const toggleValue = () => {
 
 <template>
   <label
-    class="chat-pill"
+    class="input-chat-pill"
     :class="{
       'bg-primary/90 hover:bg-primary/80': checked,
     }"

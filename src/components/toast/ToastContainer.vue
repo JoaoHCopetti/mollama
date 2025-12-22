@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import { useToastStore } from '@/stores/toast-store'
-import ToastAlert from './ToastAlert.vue'
+import ToastContainerAlert from './ToastContainerAlert.vue'
 
 const toastStore = useToastStore()
 
@@ -15,7 +15,7 @@ const toasts = computed(() => toastStore.toasts)
     class="fixed right-0 top-0 z-50 mt-5 mr-5"
     name="list"
   >
-    <ToastAlert
+    <ToastContainerAlert
       v-for="toast in toasts"
       :key="toast.id"
       :type="toast.type"

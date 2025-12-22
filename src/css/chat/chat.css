@@ -2,27 +2,29 @@
 @import './chat-fence.css';
 
 @layer components {
-  .message-container hr {
-    @apply border-base-100;
+  .message-container {
+    & hr {
+      @apply border-base-100;
+    }
+
+    & code {
+      @apply text-warning-content bg-warning py-0.5 px-1 mr-[2px] rounded-[0.2rem];
+    }
+
+    & a {
+      @apply no-underline;
+    }
   }
 
-  .message-container code {
-    @apply text-warning-content bg-warning py-0.5 px-1 mr-[2px] rounded-[0.2rem];
-  }
+  .input-chat-pill {
+    @apply bg-base-100 outline-0 select-none cursor-pointer text-gray-300 border-0 text-[0.82rem]  p-1 rounded-full px-3 flex items-center gap-2 transition-all;
 
-  .message-container a {
-    @apply no-underline;
-  }
+    &:not(.input-chat-pill-disabled) {
+      @apply hover:bg-base-200;
+    }
 
-  .chat-pill {
-    @apply bg-base-100 outline-0 cursor-pointer text-gray-300 border-0 text-[0.82rem]  p-1 rounded-full px-3 flex items-center gap-2 transition-all;
-  }
-
-  .chat-pill:not(.chat-pill-disabled) {
-    @apply hover:bg-base-200 active:scale-[0.98] will-change-transform;
-  }
-
-  .chat-pill.chat-pill-disabled {
-    @apply cursor-default bg-white/10 text-white/50;
+    &.input-chat-pill-disabled {
+      @apply cursor-default bg-white/10 text-white/50;
+    }
   }
 }

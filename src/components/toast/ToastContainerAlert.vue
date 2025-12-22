@@ -11,15 +11,15 @@ type ToastAlertTypes = {
 const TOAST_TYPES_MAP: Record<ToastType, { icon: Component; classNames: string }> = {
   success: {
     icon: PhCheckCircle,
-    classNames: 'bg-success text-success-content',
+    classNames: 'bg-success-content text-success',
   },
   error: {
     icon: PhWarningCircle,
-    classNames: 'bg-error text-error-content',
+    classNames: 'bg-error-content text-error',
   },
   info: {
     icon: PhInfo,
-    classNames: 'bg-primary text-primary-content',
+    classNames: 'bg-primary-content text-primary',
   },
 }
 

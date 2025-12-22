@@ -32,10 +32,10 @@ onMounted(() => {
     container-class-extend="max-w-52"
     :active-item="prompt"
     :trigger-class="[
-      'chat-pill',
+      'input-chat-pill',
       {
         'bg-primary/90 hover:bg-primary/80': !!prompt,
-        'chat-pill-disabled': !systemPrompts.length,
+        'input-chat-pill-disabled': !systemPrompts.length,
       },
     ]"
     item-class-extend="text-xs py-1"

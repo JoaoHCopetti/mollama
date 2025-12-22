@@ -117,7 +117,7 @@ const stopStreaming = () => {
     <AppTransition
       from-class="opacity-0"
       to-class="opacity-100"
-      active-class="animate-all duration-100"
+      active-class="animate-all duration-150 ease-in"
     >
       <ChatMessages
         v-if="appStore.activeSession"
