@@ -14,8 +14,6 @@ const props = defineProps<{
   currentAssistMessage?: AssistantMessage
 }>()
 
-defineEmits(['messages-mounted'])
-
 const subscription = useDexieSubscription<MessageData>()
 const chatScrollHandler = useChatScrollHandler(useTemplateRef('messagesContainer'))
 
@@ -31,13 +29,15 @@ const computedMessages = computed<MessageData[]>(() => {
 })
 
 onMounted(() => {
+  chatScrollHandler.stickToBottom.value = true
+
   subscription.setupLiveQuery(
     liveQuery(() => db.messages.where('sessionId').equals(props.sessionId).toArray()),
   )
 
   subscription.onResultChange(async (result) => {
     messages.value = result
-
+    chatScrollHandler.stickToBottom.value = true
     await handleScrollbar()
   })
 })
