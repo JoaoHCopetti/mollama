@@ -56,7 +56,7 @@ const onDeleteClick = () => {
 
     <div
       v-if="isActive"
-      class="text-white/70"
+      class="text-white/70 whitespace-pre-line"
     >
       <div v-html="systemPrompt.content" />
     </div>

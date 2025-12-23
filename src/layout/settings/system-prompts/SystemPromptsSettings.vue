@@ -2,7 +2,9 @@
 import type { SystemPromptData } from '@/database/SystemPrompt'
 import { PhPlus } from '@phosphor-icons/vue'
 import { nextTick, ref, useTemplateRef } from 'vue'
-import SystemPromptsSettingsForm from './SystemPromptsSettingsForm.vue'
+import SystemPromptsSettingsForm, {
+  type SystemPromptSubmitPayload,
+} from './SystemPromptsSettingsForm.vue'
 import SystemPromptsSettingsList from './SystemPromptsSettingsList.vue'
 
 const showForm = ref<boolean>(false)
@@ -10,8 +12,12 @@ const settingsFormEl = useTemplateRef('systemPromptsSettingsFormRef')
 
 const systemPromptEdit = ref<SystemPromptData>()
 
-const onSubmit = async () => {
+const onSubmit = async ({ action }: SystemPromptSubmitPayload) => {
   showForm.value = false
+
+  if (action === 'updated') {
+    systemPromptEdit.value = undefined
+  }
 }
 
 const onNewPromptClick = async () => {
@@ -27,6 +33,14 @@ const onNewPromptClick = async () => {
 const onSystemPromptEdit = ({ systemPrompt }: { systemPrompt: SystemPromptData }) => {
   showForm.value = true
   systemPromptEdit.value = systemPrompt
+}
+
+const onCloseClick = () => {
+  showForm.value = false
+
+  if (systemPromptEdit.value) {
+    systemPromptEdit.value = undefined
+  }
 }
 </script>
 
@@ -48,7 +62,7 @@ const onSystemPromptEdit = ({ systemPrompt }: { systemPrompt: SystemPromptData }
         ref="systemPromptsSettingsFormRef"
         :system-prompt="systemPromptEdit"
         @submit="onSubmit"
-        @close="showForm = false"
+        @close="onCloseClick"
       />
 
       <SystemPromptsSettingsList @edit="onSystemPromptEdit" />

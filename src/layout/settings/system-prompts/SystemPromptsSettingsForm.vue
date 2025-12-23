@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { useForm } from '@/composables/use-form'
+import { db } from '@/database/db'
 import type { SystemPromptData } from '@/database/SystemPrompt'
 import { createSystemPrompt } from '@/services/system-prompt-service'
-import { onMounted, useTemplateRef } from 'vue'
+import { computed, onMounted, useTemplateRef } from 'vue'
+
 export type SystemPromptForm = typeof form
+export type SystemPromptSubmitPayload = { action: 'created' | 'updated' }
 
 const emit = defineEmits<{
-  submit: [args: { action: 'created' | 'updated' }]
+  submit: [args: SystemPromptSubmitPayload]
   close: [args: void]
 }>()
 
@@ -30,13 +33,41 @@ const form = useForm({
 
 const titleEl = useTemplateRef('titleRef')
 
+const isEdit = computed(() => props.systemPrompt)
+
 const onSubmit = async () => {
+  if (!isEdit.value) {
+    await create()
+  } else {
+    await update()
+  }
+}
+
+const create = async () => {
   await createSystemPrompt({
     title: form.title.value,
     content: form.instruction.value,
   })
 
   emit('submit', { action: 'created' })
+}
+
+const update = async () => {
+  if (!props.systemPrompt) {
+    throw new Error(`No system prompt is selected for update`)
+  }
+
+  await db.systemPrompts.update(props.systemPrompt?.id, {
+    title: form.title.value,
+    content: form.instruction.value,
+  })
+
+  emit('submit', { action: 'updated' })
+}
+
+const onCloseClick = () => {
+  form.resetForm()
+  emit('close')
 }
 
 const focusTitleInput = () => {
@@ -82,7 +113,7 @@ defineExpose({ focusTitleInput })
         <button
           class="d-btn d-btn-ghost"
           type="button"
-          @click="$emit('close')"
+          @click="onCloseClick"
         >
           Close
         </button>
