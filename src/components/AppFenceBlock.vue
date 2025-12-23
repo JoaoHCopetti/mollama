@@ -2,15 +2,15 @@
 import { useToastStore } from '@/stores/toast-store'
 import { copyToClipboard } from '@/utils'
 import { PhClipboard } from '@phosphor-icons/vue'
+import { uniqueId } from 'lodash-es'
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = defineProps<{
-  idx?: number
   language: string
   originalRender: string
 }>()
 
-const copyButtonId = `fence-copy-${props.idx}`
+const copyButtonId = `fence-copy-${uniqueId()}`
 
 const toastStore = useToastStore()
 
@@ -38,6 +38,7 @@ onBeforeUnmount(() => {
 
 const handleButtonClick = () => {
   const element = document.createElement('div')
+
   element.innerHTML = props.originalRender
 
   copyToClipboard(element.innerText.trim())

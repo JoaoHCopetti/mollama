@@ -4,6 +4,7 @@ import { PhCloud, PhDesktop } from '@phosphor-icons/vue'
 
 defineProps<{
   model: Model
+  parameterExtendClass?: string
 }>()
 </script>
 
@@ -22,6 +23,7 @@ defineProps<{
     <span
       v-if="model.parameterSize"
       class="d-badge d-badge-sm bg-primary/10 border-0 font-bold opacity-50"
+      :class="parameterExtendClass"
     >
       {{ model.parameterSize }}
     </span>

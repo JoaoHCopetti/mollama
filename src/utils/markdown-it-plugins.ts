@@ -45,7 +45,6 @@ export const fenceWrapperPlugin = (md: MarkdownIt) => {
     return renderVNode(AppFenceBlock, {
       language,
       originalRender,
-      idx,
     }).outerHTML
   }
 }

@@ -7,17 +7,17 @@ const props = withDefaults(
     idField: keyof T
     items: T[]
     activeItem?: T
-    itemClassExtend?: string
+    itemExtendClass?: string
     triggerClass?: any
-    triggerClassExtend?: string
-    containerClassExtend?: any
+    triggerExtendClass?: string
+    containerExtendClass?: any
   }>(),
   {
     activeItem: undefined,
     triggerClass: 'd-btn focus-visible:ring-2 focus-visible:ring-white/75',
-    itemClassExtend: '',
-    triggerClassExtend: '',
-    containerClassExtend: '',
+    itemExtendClass: '',
+    triggerExtendClass: '',
+    containerExtendClass: '',
   },
 )
 
@@ -33,7 +33,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
     class="d-dropdown"
   >
     <MenuButton
-      :class="[triggerClass, triggerClassExtend]"
+      :class="[triggerClass, triggerExtendClass]"
       as="button"
       :disabled="!items.length"
     >
@@ -46,7 +46,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
     >
       <MenuItems
         class="top-auto bottom-full absolute w-72 p-2 rounded-lg bg-base-200"
-        :class="containerClassExtend"
+        :class="containerExtendClass"
         as="ul"
         style="list-style: none"
       >
@@ -61,7 +61,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
           <a
             class="p-2 block rounded cursor-pointer active:scale-[0.98] transition-all"
             :class="[
-              itemClassExtend,
+              itemExtendClass,
               {
                 'bg-white/10':
                   active || (activeItem && activeItem[props.idField] === item[props.idField]),

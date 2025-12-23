@@ -24,8 +24,8 @@ const onModelClick = (model: Model) => {
   <AppDropdown
     :items="models"
     id-field="id"
-    item-class-extend="text-xs font-medium"
-    trigger-class-extend="w-52"
+    item-extend-class="text-xs font-medium"
+    trigger-extend-class="w-64"
     @select="onModelClick"
   >
     <template #trigger>
@@ -39,7 +39,10 @@ const onModelClick = (model: Model) => {
     </template>
 
     <template #item="{ item }">
-      <AppModelInfo :model="item" />
+      <AppModelInfo
+        :model="item"
+        parameter-extend-class="text-[.65rem]"
+      />
     </template>
   </AppDropdown>
 </template>

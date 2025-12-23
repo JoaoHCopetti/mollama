@@ -29,7 +29,7 @@ onMounted(() => {
   <AppDropdown
     id-field="id"
     :items="systemPrompts"
-    container-class-extend="max-w-52"
+    container-extend-class="max-w-52"
     :active-item="prompt"
     :trigger-class="[
       'input-chat-pill',
@@ -38,7 +38,7 @@ onMounted(() => {
         'input-chat-pill-disabled': !systemPrompts.length,
       },
     ]"
-    item-class-extend="text-xs py-1"
+    item-extend-class="text-xs py-1"
     @select="$emit('change', $event)"
   >
     <template #trigger>
