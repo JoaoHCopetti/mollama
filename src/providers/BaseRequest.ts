@@ -1,4 +1,4 @@
-import type { AssistantMessage, MessageData } from '@/database/Message'
+import type { AssistantMessage, ErrorMessage, MessageData } from '@/database/Message'
 import { retrieveContext } from '@/services/chat-service'
 import type { FetchResponseOptions, Model } from '@/types'
 import { omit } from 'lodash-es'
@@ -7,7 +7,8 @@ export default abstract class BaseRequest {
   public message?: AssistantMessage
 
   protected abortController: AbortController
-  protected messageChangeCallback?: CallableFunction
+  protected messageChangeCallback?: (message: AssistantMessage) => void | Promise<void>
+  protected errorCallback?: (error: ErrorMessage) => void | Promise<void>
   protected model!: Model
 
   constructor(model: Model) {
@@ -55,17 +56,33 @@ export default abstract class BaseRequest {
   public async handleRequest(options: FetchResponseOptions) {
     const context = await retrieveContext(options.sessionId)
 
+    console.log(context)
     this.message = this.getInitMessage()
 
     this.message.state.isLoading = true
 
-    await this.performHandleResponse(options, context)
+    try {
+      await this.performHandleResponse(options, context)
+    } catch (e) {
+      this.message = undefined
 
-    await this.finish()
+      if (this.errorCallback) {
+        this.errorCallback({
+          title: `Something went wrong`,
+          content: JSON.stringify(e),
+        })
+      }
+    } finally {
+      await this.finish()
+    }
   }
 
-  public onMessageChange(callback: (message: AssistantMessage) => void) {
+  public onMessageChange(callback: (message: AssistantMessage) => Promise<void>) {
     this.messageChangeCallback = callback
+  }
+
+  public onError(callback: (message: ErrorMessage) => Promise<void>) {
+    this.errorCallback = callback
   }
 
   public abort() {

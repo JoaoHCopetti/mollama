@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppModelInfo from '@/components/AppModelInfo.vue'
 import type { AssistantMessage, SystemMessage } from '@/database/Message'
 import { createElement, markdown } from '@/utils'
 import { DiffDOM } from 'diff-dom'
@@ -40,8 +41,10 @@ watch(htmlContent, (newHTML) => {
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="message-container group rounded-2xl w-4/5 wrap-break-word leading-7">
-    <ChatMessagesAssistantHeader :message="message" />
+  <div class="message-container group">
+    <ChatMessagesAssistantHeader>
+      <AppModelInfo :model="message.model" />
+    </ChatMessagesAssistantHeader>
 
     <div
       v-if="message.state.isLoading && !message.state.isStreaming"
@@ -57,6 +60,7 @@ watch(htmlContent, (newHTML) => {
 
     <ChatMessagesAssistantFooter
       v-if="message.response.done"
+      class="group-hover:opacity-100"
       :message="message"
       :system="system"
     />

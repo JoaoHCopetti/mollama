@@ -1,5 +1,5 @@
 import { db } from '@/database/db'
-import type { AssistantMessage, SystemMessage, UserMessage } from '@/database/Message'
+import type { AssistantMessage, ErrorMessage, SystemMessage, UserMessage } from '@/database/Message'
 import type { SessionInput } from '@/database/Session'
 import { toRaw } from 'vue'
 
@@ -32,8 +32,23 @@ export const createUserMessage = async (sessionId: number, message: UserMessage)
   })
 }
 
+export const createErrorMessage = async (sessionId: number, message: ErrorMessage) => {
+  const now = new Date().toISOString()
+
+  return await db.messages.add({
+    sessionId,
+    error: toRaw(message),
+    role: 'error',
+    createdAt: now,
+    updatedAt: now,
+  })
+}
+
 export const retrieveContext = async (sessionId: number) => {
-  return await db.messages.where('sessionId').equals(sessionId).toArray()
+  return await db.messages
+    .where({ sessionId })
+    .filter((message) => ['user', 'assistant'].includes(message.role))
+    .toArray()
 }
 
 export const getOrCreateSession = async (

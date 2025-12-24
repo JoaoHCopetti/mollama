@@ -8,7 +8,8 @@ export default class Message extends Entity<AppDB> {
   user?: UserMessage
   assistant?: AssistantMessage
   system?: SystemMessage
-  role!: 'user' | 'assistant' | 'system'
+  error?: ErrorMessage
+  role!: 'user' | 'assistant' | 'system' | 'error'
   createdAt!: string
   updatedAt!: string
 }
@@ -31,6 +32,11 @@ interface SystemMessage {
   content: string
 }
 
+interface ErrorMessage {
+  title: string
+  content: string
+}
+
 interface MessageState {
   isLoading: boolean
   isThinking: boolean
@@ -48,4 +54,11 @@ interface ResponseDetails {
 
 type MessageData = Omit<Message, 'table' | 'db'>
 
-export type { AssistantMessage, MessageData, MessageState, SystemMessage, UserMessage }
+export type {
+  AssistantMessage,
+  ErrorMessage,
+  MessageData,
+  MessageState,
+  SystemMessage,
+  UserMessage,
+}

@@ -3,6 +3,7 @@
 
 @layer components {
   .message-container {
+    @apply rounded-2xl w-4/5 wrap-break-word leading-7;
     & hr {
       @apply border-base-100;
     }

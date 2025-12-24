@@ -7,6 +7,7 @@ import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useChatScrollHandler } from '@/composables/use-chat-scroll-handler'
 import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import ChatMessagesAssistant from './ChatMessagesAssistant.vue'
+import ChatMessagesError from './ChatMessagesError.vue'
 import ChatMessagesUser from './ChatMessagesUser.vue'
 
 const props = defineProps<{
@@ -100,6 +101,11 @@ watch(
           v-else-if="message.user"
           class="-mt-5"
           :message="message.user"
+        />
+
+        <ChatMessagesError
+          v-else-if="message.error"
+          :error="message.error"
         />
       </div>
     </div>

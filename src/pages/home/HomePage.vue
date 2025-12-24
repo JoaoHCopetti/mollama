@@ -2,7 +2,12 @@
 import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
 import BaseRequest from '@/providers/BaseRequest'
-import { createAssistMessage, createUserMessage, getOrCreateSession } from '@/services/chat-service'
+import {
+  createAssistMessage,
+  createErrorMessage,
+  createUserMessage,
+  getOrCreateSession,
+} from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
 import type { InputConfig } from '@/types'
 import { LocalStorageEnum } from '@/utils/enums'
@@ -75,6 +80,7 @@ const registerRequestListener = async () => {
   }
 
   request.value.onMessageChange(async (message) => {
+    console.log(message)
     if (message.response.done) {
       await createAssistMessage(sessionId, message, inputConfig.value.prompt)
 
@@ -82,6 +88,10 @@ const registerRequestListener = async () => {
         router.push(`/sessions/${sessionId}`)
       }
     }
+  })
+
+  request.value.onError(async (message) => {
+    await createErrorMessage(sessionId, message)
   })
 }
 
