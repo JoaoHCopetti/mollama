@@ -26,11 +26,10 @@ const onModelClick = (model: Model) => {
     class="d-dropdown-top"
     id-field="id"
     item-extend-class="text-xs font-medium"
-    trigger-extend-class="w-64"
     @select="onModelClick"
   >
     <template #trigger>
-      <button class="d-btn focus:ring-2 ring-white/20">
+      <button class="d-btn focus:ring-2 w-64 ring-white/20">
         <AppModelInfo
           v-if="selectedModel"
           :model="selectedModel"
