@@ -104,6 +104,7 @@ const onSend = () => {
           :value="inputConfig.think"
           label="Think"
           :icon="PhBrain"
+          tabindex="0"
           @change="onInputConfigChange('think', $event)"
         />
 

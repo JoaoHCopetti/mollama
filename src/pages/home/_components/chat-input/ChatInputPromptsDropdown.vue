@@ -32,32 +32,35 @@ onMounted(() => {
     :items="systemPrompts"
     container-extend-class="max-w-52"
     :active-item="prompt"
-    :trigger-class="[
-      'input-chat-pill',
-      {
-        'bg-primary/90 hover:bg-primary/80': !!prompt,
-        'input-chat-pill-disabled': !systemPrompts.length,
-      },
-    ]"
     item-extend-class="text-xs py-1"
     @select="$emit('change', $event)"
   >
     <template #trigger>
-      <div
-        class="w-30"
-        :class="{ 'd-tooltip d-tooltip-top': !systemPrompts.length }"
-        v-bind="{
-          ...(!systemPrompts.length ? { 'data-tip': 'No prompts registered' } : {}),
-        }"
+      <button
+        class="input-chat-pill focus:ring-2"
+        :class="[
+          {
+            'bg-primary/90 hover:bg-primary/80': !!prompt,
+            'input-chat-pill-disabled': !systemPrompts.length,
+          },
+        ]"
       >
-        <div class="truncate flex items-center gap-2">
-          <PhBookBookmark
-            class="min-w-fit"
-            :weight="prompt ? 'fill' : 'regular'"
-          />
-          {{ prompt?.title || 'Select a prompt' }}
+        <div
+          class="w-30"
+          :class="{ 'd-tooltip d-tooltip-top': !systemPrompts.length }"
+          v-bind="{
+            ...(!systemPrompts.length ? { 'data-tip': 'No prompts registered' } : {}),
+          }"
+        >
+          <div class="truncate flex items-center gap-2">
+            <PhBookBookmark
+              class="min-w-fit"
+              :weight="prompt ? 'fill' : 'regular'"
+            />
+            {{ prompt?.title || 'Select a prompt' }}
+          </div>
         </div>
-      </div>
+      </button>
     </template>
 
     <template #item="{ item }">

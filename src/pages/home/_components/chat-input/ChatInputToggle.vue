@@ -28,11 +28,13 @@ const toggleValue = () => {
 
 <template>
   <label
-    class="input-chat-pill"
+    class="input-chat-pill focus:ring-2"
     :class="{
       'bg-primary/90 hover:bg-primary/80': checked,
     }"
     @click="toggleValue"
+    @keypress.space="toggleValue"
+    @keypress.enter="toggleValue"
   >
     <Component
       :is="icon"

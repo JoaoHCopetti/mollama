@@ -30,13 +30,15 @@ const onModelClick = (model: Model) => {
     @select="onModelClick"
   >
     <template #trigger>
-      <AppModelInfo
-        v-if="selectedModel"
-        :model="selectedModel"
-        class="uppercase text-xs tracking-wider"
-      />
+      <button class="d-btn focus:ring-2">
+        <AppModelInfo
+          v-if="selectedModel"
+          :model="selectedModel"
+          class="uppercase text-xs tracking-wider"
+        />
 
-      <div v-else>Select a model</div>
+        <div v-else>Select a model</div>
+      </button>
     </template>
 
     <template #item="{ item }">
