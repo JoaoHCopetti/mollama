@@ -28,6 +28,7 @@ onMounted(() => {
 <template>
   <AppDropdown
     id-field="id"
+    class="d-dropdown-top"
     :items="systemPrompts"
     container-extend-class="max-w-52"
     :active-item="prompt"

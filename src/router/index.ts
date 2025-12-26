@@ -1,11 +1,13 @@
 import { db } from '@/database/db'
 import HomePage from '@/pages/home/HomePage.vue'
+import TestPage from '@/pages/TestPage.vue'
 import { useAppStore } from '@/stores/app-store'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', component: HomePage, name: 'home' },
   { path: '/sessions/:id', component: HomePage, name: 'sessions.show' },
+  { path: '/test', component: TestPage, name: 'test.page' },
 ]
 
 const router = createRouter({

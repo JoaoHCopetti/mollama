@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { SessionData } from '@/database/Session'
 
+type MainSidebarItemOption = {
+  id: string
+  text: string
+}
+
 defineProps<{
   session: SessionData
 }>()
@@ -11,7 +16,7 @@ defineProps<{
     is="li"
     v-slot="{ isActive }"
     :to="`/sessions/${session.id}`"
-    class="group bg-white/2 no-underline flex flex-col p-4 m-1 rounded-xl transition-all ease-out hover:bg-white/5 active:scale-[0.98]"
+    class="group relative bg-white/2 no-underline flex flex-col p-4 m-1 rounded-xl transition-all ease-out hover:bg-white/5 active:scale-[0.98]"
     active-class="bg-white/10 hover:bg-white/15"
   >
     <div

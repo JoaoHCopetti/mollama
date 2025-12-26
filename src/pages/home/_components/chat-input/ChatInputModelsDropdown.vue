@@ -23,6 +23,7 @@ const onModelClick = (model: Model) => {
   <!-- @vue-generic {Model} -->
   <AppDropdown
     :items="models"
+    class="d-dropdown-top"
     id-field="id"
     item-extend-class="text-xs font-medium"
     trigger-extend-class="w-64"
