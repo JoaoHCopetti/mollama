@@ -37,7 +37,7 @@ onMounted(() => {
   >
     <template #trigger>
       <button
-        class="input-chat-pill focus:ring-2"
+        class="input-chat-pill focus:ring-2 ring-white/20"
         :class="[
           {
             'bg-primary/90 hover:bg-primary/80': !!prompt,

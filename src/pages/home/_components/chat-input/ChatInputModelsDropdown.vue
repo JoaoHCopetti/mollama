@@ -30,7 +30,7 @@ const onModelClick = (model: Model) => {
     @select="onModelClick"
   >
     <template #trigger>
-      <button class="d-btn focus:ring-2">
+      <button class="d-btn focus:ring-2 ring-white/20">
         <AppModelInfo
           v-if="selectedModel"
           :model="selectedModel"
