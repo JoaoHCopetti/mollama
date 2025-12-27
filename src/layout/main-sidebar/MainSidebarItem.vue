@@ -28,7 +28,7 @@ defineProps<{
 
       <MenuItems
         as="ul"
-        class="w-46 p-2 bg-base-200 z-10 rounded-lg absolute right-12 h-fit top-2 drop-shadow-md"
+        class="w-46 p-2 bg-base-300 z-10 rounded-lg absolute right-12 h-fit top-2 drop-shadow-md"
         style="list-style: none"
       >
         <MenuItem
