@@ -3,9 +3,19 @@ import type { SessionData } from '@/database/Session'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { PhDotsThreeVertical, PhTrash } from '@phosphor-icons/vue'
 
-defineProps<{
+export type DeleteEventArgs = { session: SessionData }
+
+const emit = defineEmits<{
+  delete: [args: { session: SessionData }]
+}>()
+
+const props = defineProps<{
   session: SessionData
 }>()
+
+const onDeleteClick = () => {
+  emit('delete', { session: props.session })
+}
 </script>
 
 <template>
@@ -38,6 +48,7 @@ defineProps<{
           <a
             class="dropdown-item flex items-center gap-2 text-sm py-1"
             :class="{ 'bg-white/10': active }"
+            @click="onDeleteClick"
           >
             <PhTrash />
 
@@ -55,7 +66,7 @@ defineProps<{
       active-class="bg-white/10 hover:bg-white/15"
     >
       <div
-        class="text-sm font-medium tracking-wide truncate"
+        class="text-sm font-medium tracking-wide truncate pr-8"
         :class="{
           'text-white drop-shadow-md': isActive,
           'text-white/80 group-hover:text-white': !isActive,

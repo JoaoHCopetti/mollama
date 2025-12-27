@@ -80,7 +80,6 @@ const registerRequestListener = async () => {
   }
 
   request.value.onMessageChange(async (message) => {
-    console.log(message)
     if (message.response.done) {
       await createAssistMessage(sessionId, message, inputConfig.value.prompt)
 

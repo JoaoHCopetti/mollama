@@ -56,7 +56,6 @@ export default abstract class BaseRequest {
   public async handleRequest(options: FetchResponseOptions) {
     const context = await retrieveContext(options.sessionId)
 
-    console.log(context)
     this.message = this.getInitMessage()
 
     this.message.state.isLoading = true
