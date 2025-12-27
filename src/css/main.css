@@ -16,3 +16,9 @@ body,
 * {
   box-sizing: border-box;
 }
+
+@layer components {
+  .dropdown-item {
+    @apply p-2 block rounded cursor-pointer  transition-all;
+  }
+}

@@ -23,7 +23,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
 <template>
   <Menu
     as="div"
-    class="d-dropdown"
+    class="d-dropdown transition-none!"
   >
     <MenuButton
       as="template"
@@ -36,18 +36,17 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
       class="d-dropdown-content w-72 p-2 rounded-lg bg-base-200"
       :class="containerExtendClass"
       as="ul"
-      style="list-style: none"
+      style="list-style: none; animation: none"
     >
       <MenuItem
         v-for="item in items"
         :key="getItemKey(item)"
         v-slot="{ active }"
         as="li"
-        class="group"
         @click="$emit('select', item)"
       >
         <a
-          class="p-2 block rounded cursor-pointer active:scale-[0.98] transition-all"
+          class="dropdown-item"
           :class="[
             itemExtendClass,
             {

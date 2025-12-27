@@ -32,7 +32,7 @@ onMounted(() => {
     :items="systemPrompts"
     container-extend-class="max-w-52"
     :active-item="prompt"
-    item-extend-class="text-xs py-1"
+    item-extend-class="text-sm py-1"
     @select="$emit('change', $event)"
   >
     <template #trigger>
