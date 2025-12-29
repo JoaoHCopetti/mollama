@@ -1,0 +1,21 @@
+@plugin "daisyui" {
+  themes:
+    dark --default,
+    light --preferslight;
+  prefix: 'd-';
+}
+
+@layer utilities {
+  .d-btn {
+    @apply rounded-full shadow-none;
+  }
+
+  .d-textarea,
+  .d-input {
+    @apply rounded-lg bg-base-300 w-full font-sans border-none focus:outline-1 outline-white/40 shadow-none placeholder-gray-500;
+  }
+
+  .d-tooltip::before {
+    @apply rounded-full duration-150 ease-out;
+  }
+}
