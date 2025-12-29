@@ -39,7 +39,6 @@ onMounted(() => {
   subscription.onResultChange(async (result) => {
     messages.value = result
     chatScrollHandler.stickToBottom.value = true
-    await handleScrollbar()
   })
 })
 
@@ -56,19 +55,16 @@ const getTempAssistMessage = (): MessageData => {
   }
 }
 
-const handleScrollbar = async () => {
-  if (chatScrollHandler.stickToBottom.value) {
-    await nextTick(chatScrollHandler.scrollToBottom)
-
-    if (!smoothScroll.value) {
-      smoothScroll.value = true
-    }
-  }
-}
-
 watch(
-  () => props.currentAssistMessage?.tokens.length,
+  [
+    () => props.currentAssistMessage?.tokens.length,
+    () => props.currentAssistMessage?.response.done,
+  ],
   () => {
+    if (props.currentAssistMessage?.response?.done || props.currentAssistMessage === undefined) {
+      return
+    }
+
     if (chatScrollHandler.stickToBottom.value) {
       nextTick(chatScrollHandler.scrollToBottom)
     }
