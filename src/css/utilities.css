@@ -1,0 +1,36 @@
+@layer utilities {
+  .animated-text {
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: bg-position-animate linear infinite;
+  }
+
+  @keyframes bg-position-animate {
+    0% {
+      background-position: 200% 0%;
+    }
+
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+  .list-move,
+  .list-enter-active,
+  .list-leave-active {
+    @apply opacity-100 transition-all;
+  }
+
+  .list-enter-from,
+  .list-leave-to {
+    @apply opacity-0;
+  }
+
+  .fade-truncate {
+    @apply overflow-hidden whitespace-nowrap;
+    mask-image: linear-gradient(90deg, #000 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent 100%);
+  }
+}

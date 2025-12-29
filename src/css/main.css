@@ -1,0 +1,21 @@
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme' layer(theme);
+@import './preflight.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import './utilities.css';
+@import './daisyui.css';
+@import './colors.css';
+@import './chat/chat.css';
+
+:root,
+html,
+body,
+#app {
+  @apply m-0 p-0 h-full font-sans;
+}
+
+@layer components {
+  .dropdown-item {
+    @apply p-2 block rounded cursor-pointer  transition-all;
+  }
+}

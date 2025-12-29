@@ -1,0 +1,35 @@
+<script setup lang="ts">
+import { useShortcutsStore } from '@/stores/shortcuts-store'
+import { PhNotePencil } from '@phosphor-icons/vue'
+import { onMounted } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+
+const shortcutStore = useShortcutsStore()
+const router = useRouter()
+
+onMounted(() => {
+  shortcutStore.onPress('new-chat', () => {
+    router.push({ name: 'home' }).then(() => {
+      shortcutStore.trigger('chat-focus')
+    })
+  })
+})
+</script>
+
+<template>
+  <div class="mx-4 mb-10">
+    <RouterLink
+      is="button"
+      to="/"
+      class="d-btn d-btn-primary d-btn-soft d-btn-block px-0 no-underline uppercase"
+      @click="shortcutStore.trigger('chat-focus')"
+    >
+      <PhNotePencil
+        class="text-lg"
+        weight="fill"
+      />
+
+      <span class="text-xs">New chat</span>
+    </RouterLink>
+  </div>
+</template>
