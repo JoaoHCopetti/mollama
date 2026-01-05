@@ -54,7 +54,7 @@ const handleButtonClick = () => {
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="md-fence-wrapper bg-base-300 rounded-lg my-5">
+  <div class="markdown-fence bg-base-300 rounded-lg my-5">
     <div
       class="flex justify-between items-center bg-base-200 px-3 py-5 min-h-5 max-h-5 text-sm rounded-t-lg uppercase font-bold"
     >

@@ -75,7 +75,7 @@ watch(
 <template>
   <div
     ref="messagesContainer"
-    class="h-full overflow-auto flex chat"
+    class="h-full overflow-auto flex"
     :class="{
       'scroll-smooth': smoothScroll,
     }"

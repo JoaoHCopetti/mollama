@@ -1,0 +1,64 @@
+@layer components {
+  .assistant-message {
+    @apply rounded-2xl w-4/5 wrap-break-word leading-7;
+
+    /** General **/
+    & hr {
+      @apply border-white/20 my-5;
+    }
+
+    & code {
+      @apply text-[0.9rem] text-warning bg-warning-content py-0.5 px-1 mr-[2px] rounded-[0.2rem] whitespace-pre-wrap;
+    }
+
+    & a {
+      @apply no-underline;
+    }
+
+    & blockquote {
+      @apply border-l-2 border-white/40 ml-8 pl-4 text-white/50;
+    }
+
+    /** Table **/
+    & .markdown-table {
+      @apply rounded-lg overflow-auto my-5;
+    }
+
+    & table {
+      @apply border-collapse w-full;
+
+      & th {
+        @apply bg-base-200 text-white/90 text-[0.75rem] py-3 px-5 leading-5 uppercase font-normal;
+      }
+
+      & td {
+        @apply bg-base-200 py-2 px-5 border-none text-[0.9rem] leading-6;
+      }
+
+      & tr:not(:last-child) td {
+        @apply border-b;
+      }
+    }
+
+    & table tbody {
+      & tr:nth-child(odd) td {
+        @apply bg-base-300;
+      }
+
+      & tr:nth-child(even) td {
+        @apply bg-base-300;
+      }
+    }
+
+    /** Fence (the thing that wraps the code block inside the response message) **/
+    & .markdown-fence {
+      & code {
+        @apply p-0 m-0 bg-transparent text-inherit wrap-break-word;
+      }
+
+      & pre {
+        @apply p-0 m-0 px-3 py-3 leading-5 overflow-auto;
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="message-container">
+  <div class="assistant-message">
     <div class="text-error font-bold text-sm mb-3 uppercase flex items-center gap-2">
       <PhWarningCircle weight="fill" />
 
