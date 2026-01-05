@@ -41,7 +41,7 @@ watch(htmlContent, (newHTML) => {
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="message-container group">
+  <div class="assistant-message group">
     <ChatMessagesAssistantHeader>
       <AppModelInfo :model="message.model" />
     </ChatMessagesAssistantHeader>

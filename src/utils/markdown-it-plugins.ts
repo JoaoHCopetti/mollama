@@ -4,8 +4,8 @@ import MarkdownIt from 'markdown-it'
 import { renderVNode } from '.'
 
 const CUSTOM_WRAPPER_CLASSES = {
-  table: 'md-table-wrapper',
-  fence: 'md-fence-wrapper',
+  table: 'markdown-table',
+  fence: 'markdown-fence',
 }
 
 export const tableWrapperPlugin = (md: MarkdownIt) => {
