@@ -37,7 +37,7 @@ const htmlThinking = computed(
 
     <div
       v-if="htmlThinking"
-      class="text-sm text-gray-500 mb-3 assistant-thought"
+      class="assistant-message-thought"
       v-html="htmlThinking"
     />
   </div>
