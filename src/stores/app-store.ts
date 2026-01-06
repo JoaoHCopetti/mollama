@@ -3,13 +3,9 @@ import type { SessionData } from '@/database/Session'
 import type { BaseProvider } from '@/providers/BaseProvider'
 import OllamaProvider from '@/providers/ollama/OllamaProvider'
 import type { Model } from '@/types'
-import { LocalStorageEnum } from '@/utils/enums'
+import { LocalStorageEnum, ProvidersEnum } from '@/utils/enums'
 import { defineStore } from 'pinia'
 import { ref, shallowRef, type ShallowRef } from 'vue'
-
-export enum ProvidersEnum {
-  Ollama,
-}
 
 export const useAppStore = defineStore('app', () => {
   const storage = useLocalStorage()

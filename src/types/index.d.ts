@@ -17,18 +17,6 @@ type Model = {
   isCloud?: boolean
 }
 
-type ToastType = 'success' | 'info' | 'error'
-
-type Toast = {
-  id: string
-  type: ToastType
-  message: string
-}
-
-interface ToastOptions {
-  timeout?: number
-}
-
 interface InputConfig {
   message: string
   model?: Model
@@ -43,7 +31,5 @@ export {
   MessageState,
   Model,
   ResponseDetails,
-  Toast,
-  ToastOptions,
-  ToastType,
+  ToastTypes,
 }
