@@ -26,7 +26,7 @@ const onDeleteClick = () => {
     >
       <MenuButton
         as="button"
-        class="absolute group-active:scale-[0.9] transition-all cursor-pointer bg-transparent group-hover:opacity-100 opacity-0 right-0 top-0 h-full z-50 border-0"
+        class="absolute z-10 group-active:scale-[0.9] ease-out transition-all cursor-pointer bg-transparent group-hover:opacity-100 opacity-0 right-0 top-0 h-full border-0"
       >
         <div class="w-full text-white/80 right-0 top-0 flex items-center px-4 h-full">
           <PhDotsThreeVertical
@@ -38,7 +38,7 @@ const onDeleteClick = () => {
 
       <MenuItems
         as="ul"
-        class="w-46 p-2 bg-base-300 z-10 rounded-lg absolute right-12 h-fit top-2 drop-shadow-md"
+        class="w-46 p-2 bg-base-300 z-30 rounded-lg absolute right-2 h-fit top-10 drop-shadow-md"
         style="list-style: none"
       >
         <MenuItem

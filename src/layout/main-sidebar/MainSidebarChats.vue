@@ -21,11 +21,9 @@ const deleteSession = async ({ session }: DeleteEventArgs) => {
   <div class="h-full overflow-auto">
     <MainSidebarChatsTitle class="px-5 pb-3" />
 
-    <TransitionGroup
+    <div
       v-if="sessions.length"
-      tag="ul"
-      name="list"
-      class="flex flex-col pl-0 overflow-auto ml-3 pr-2 mt-0"
+      class="flex flex-col pl-0 ml-3 pr-2 mt-0"
     >
       <MainSidebarItem
         v-for="session in sessions"
@@ -33,7 +31,7 @@ const deleteSession = async ({ session }: DeleteEventArgs) => {
         :session="session"
         @delete="deleteSession"
       />
-    </TransitionGroup>
+    </div>
 
     <div
       v-else
