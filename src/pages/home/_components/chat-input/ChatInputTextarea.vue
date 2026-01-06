@@ -30,7 +30,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
     return
   }
 
-  dynamicTextarea.adjustTextareaHeight()
+  setTimeout(dynamicTextarea.adjustTextareaHeight, 100)
 
   if (message.value.trim() === '' && !event.shiftKey) {
     event.preventDefault()
