@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { useDynamicTextarea } from '@/composables/use-dynamic-textarea'
 import type { MessageState } from '@/database/Message'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { onMounted, useTemplateRef } from 'vue'
-
-const MAX_TEXTAREA_HEIGHT = 150
 
 const props = defineProps<{
   currentMessageState?: MessageState
@@ -11,12 +10,13 @@ const props = defineProps<{
 const emit = defineEmits(['send', 'focus-change'])
 
 const textareaRef = useTemplateRef('textareaRef')
+const dynamicTextarea = useDynamicTextarea(textareaRef)
 const shortcutsStore = useShortcutsStore()
 
 const message = defineModel<string>('message', { default: '' })
 
 onMounted(() => {
-  adjustTextareaHeight()
+  dynamicTextarea.adjustTextareaHeight()
 
   shortcutsStore.onPress('chat-focus', () => {
     if (textareaRef.value) {
@@ -25,25 +25,12 @@ onMounted(() => {
   })
 })
 
-const adjustTextareaHeight = () => {
-  if (!textareaRef.value) {
-    return
-  }
-
-  const textarea = textareaRef.value
-
-  textarea.style.height = 'auto'
-  textarea.style.height =
-    (textarea.scrollHeight < MAX_TEXTAREA_HEIGHT ? textarea.scrollHeight : MAX_TEXTAREA_HEIGHT) +
-    'px'
-}
-
 const onEnterKeydown = (event: KeyboardEvent) => {
   if (event.key !== 'Enter') {
     return
   }
 
-  setTimeout(adjustTextareaHeight, 100)
+  dynamicTextarea.adjustTextareaHeight()
 
   if (message.value.trim() === '' && !event.shiftKey) {
     event.preventDefault()
@@ -72,6 +59,6 @@ const onEnterKeydown = (event: KeyboardEvent) => {
     @keydown.enter="onEnterKeydown"
     @focusin="$emit('focus-change', true)"
     @focusout="$emit('focus-change', false)"
-    @update:model-value="adjustTextareaHeight"
+    @update:model-value="dynamicTextarea.adjustTextareaHeight"
   />
 </template>
