@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { useDynamicTextarea } from '@/composables/use-dynamic-textarea'
 import { useForm } from '@/composables/use-form'
 import { db } from '@/database/db'
 import type { SystemPromptData } from '@/database/SystemPrompt'
 import { createSystemPrompt } from '@/services/system-prompt-service'
-import { computed, onMounted, useTemplateRef } from 'vue'
+import { computed, nextTick, onMounted, useTemplateRef } from 'vue'
 
 export type SystemPromptForm = typeof form
 export type SystemPromptSubmitPayload = { action: 'created' | 'updated' }
@@ -17,14 +18,7 @@ const props = defineProps<{
   systemPrompt?: SystemPromptData
 }>()
 
-onMounted(() => {
-  const systemPrompt = props.systemPrompt
-
-  if (systemPrompt) {
-    form.title.value = systemPrompt?.title || ''
-    form.instruction.value = systemPrompt?.content || ''
-  }
-})
+const dynamicTextarea = useDynamicTextarea(useTemplateRef('textareaRef'), 160)
 
 const form = useForm({
   title: '',
@@ -32,6 +26,17 @@ const form = useForm({
 })
 
 const titleEl = useTemplateRef('titleRef')
+
+onMounted(() => {
+  const systemPrompt = props.systemPrompt
+
+  if (systemPrompt) {
+    form.title.value = systemPrompt?.title || ''
+    form.instruction.value = systemPrompt?.content || ''
+  }
+
+  dynamicTextarea.adjustTextareaHeight()
+})
 
 const isEdit = computed(() => props.systemPrompt)
 
@@ -76,6 +81,15 @@ const focusTitleInput = () => {
   }
 }
 
+const onEnterKeydown = (e: Event) => {
+  e.preventDefault()
+  form.instruction.value += '\n'
+
+  nextTick(() => {
+    dynamicTextarea.adjustTextareaHeight()
+  })
+}
+
 defineExpose({ focusTitleInput })
 </script>
 
@@ -96,17 +110,14 @@ defineExpose({ focusTitleInput })
 
       <textarea
         id="system-prompt"
+        ref="textareaRef"
         v-model="form.instruction.value"
         class="d-textarea resize-none whitespace-pre"
         name="system-prompt"
         placeholder="Instructions"
         required
-        @keypress.enter="
-          (e) => {
-            e.preventDefault()
-            form.instruction.value += '\n'
-          }
-        "
+        @update:model-value="dynamicTextarea.adjustTextareaHeight"
+        @keypress.enter="onEnterKeydown"
       />
 
       <div class="ml-auto">
