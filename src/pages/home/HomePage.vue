@@ -2,6 +2,7 @@
 import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
 import { db } from '@/database/db'
+import ValidationError from '@/errors/ValidationError'
 import BaseRequest from '@/providers/BaseRequest'
 import {
   createAssistMessage,
@@ -66,7 +67,7 @@ const onInputConfigChange = ({ type, inputConfig }: InputConfigPayload) => {
 
 const onMessageSend = async () => {
   if (!appStore.selectedModel) {
-    throw new Error('No model selected')
+    throw new ValidationError('No model is selected')
   }
 
   const content = inputConfig.value.message
@@ -88,14 +89,8 @@ const onMessageSend = async () => {
 const registerRequestListener = async () => {
   const sessionId = appStore.activeSession?.id
 
-  if (!sessionId) {
-    throw new Error(
-      `No active session is set (active session is: ${JSON.stringify(appStore.activeSession)})`,
-    )
-  }
-
-  if (!request.value) {
-    throw new Error(`No request is set (request is: ${JSON.stringify(request.value)})`)
+  if (!request.value || !sessionId) {
+    throw new ValidationError(`No session is active`)
   }
 
   request.value.onMessageChange(async (message) => {
@@ -115,11 +110,11 @@ const registerRequestListener = async () => {
 
 const handleRequest = async (sessionId: number) => {
   if (!appStore.selectedModel) {
-    throw new Error('No model selected')
+    throw new ValidationError('No model is selected')
   }
 
   if (!request.value) {
-    throw new Error('No session active')
+    throw new ValidationError('No session is active')
   }
 
   await request.value.handleRequest({
