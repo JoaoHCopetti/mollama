@@ -2,8 +2,9 @@
 import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import ToastContainer from './components/toast/ToastContainer.vue'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
-import { ProvidersEnum, useAppStore } from './stores/app-store'
+import { useAppStore } from './stores/app-store'
 import { useShortcutsStore } from './stores/shortcuts-store'
+import { ProvidersEnum } from './utils/enums'
 
 const isBooted = ref(false)
 
