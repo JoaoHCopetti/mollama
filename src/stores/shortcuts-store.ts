@@ -1,12 +1,6 @@
+import type { ShortcutActions, ShortcutCallbacks, Shortcuts } from '@/types/shortcuts-store'
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
-
-type ShortcutActions = 'chat-focus' | 'new-chat' | 'toggle-think'
-type ShortcutCallbacks = Record<ShortcutActions, (e: KeyboardEvent) => void>
-type Shortcuts = Record<
-  ShortcutActions,
-  { keys: Pick<KeyboardEvent, 'altKey' | 'shiftKey' | 'ctrlKey' | 'code'> }
->
 
 const DEFAULT_SHORTCUTS: Shortcuts = {
   'chat-focus': {

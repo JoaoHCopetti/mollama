@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ToastType } from '@/types'
+import type { ToastType } from '@/types/toast-store'
 import { PhCheckCircle, PhInfo, PhWarningCircle } from '@phosphor-icons/vue'
 import { computed, type Component } from 'vue'
 
