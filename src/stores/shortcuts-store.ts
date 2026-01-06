@@ -10,13 +10,13 @@ type Shortcuts = Record<
 
 const DEFAULT_SHORTCUTS: Shortcuts = {
   'chat-focus': {
-    keys: { altKey: true, shiftKey: false, ctrlKey: false, code: 'KeyF' },
+    keys: { altKey: true, shiftKey: false, ctrlKey: true, code: 'KeyF' },
   },
   'new-chat': {
-    keys: { altKey: true, shiftKey: false, ctrlKey: false, code: 'KeyN' },
+    keys: { altKey: true, shiftKey: false, ctrlKey: true, code: 'KeyN' },
   },
   'toggle-think': {
-    keys: { altKey: true, shiftKey: false, ctrlKey: false, code: 'KeyT' },
+    keys: { altKey: true, shiftKey: false, ctrlKey: true, code: 'KeyT' },
   },
 }
 
