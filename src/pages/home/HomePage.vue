@@ -141,9 +141,13 @@ const stopStreaming = () => {
       />
     </AppTransition>
 
-    <div class="mb-5">
+    <div class="mb-5 w-full relative">
+      <div
+        class="-translate-x-1/2 left-1/2 h-14 bg-linear-0 absolute -top-14 z-0 w-full from-base-100/80 to-transparent"
+      />
+
       <ChatInput
-        class="w-3/4"
+        class="w-3/4 z-20 relative"
         :current-assist-message="request?.message"
         @update:input-config="onInputConfigChange"
         @send="onMessageSend"
