@@ -18,5 +18,7 @@ defineProps<{
     <div>{{ error.title }}</div>
 
     <div class="text-xs text-white/50">{{ error.content }}</div>
+
+    <div class="h-10" />
   </div>
 </template>
