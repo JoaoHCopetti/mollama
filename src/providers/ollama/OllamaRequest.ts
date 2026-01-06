@@ -8,7 +8,7 @@ import {
 
 import BaseRequest from '../BaseRequest'
 
-const ollama = new Ollama()
+const ollama = new Ollama({ host: import.meta.env.VITE_OLLAMA_ENDPOINT })
 
 export default class OllamaRequest extends BaseRequest {
   public async performHandleResponse(options: FetchResponseOptions, messages: MessageData[]) {
