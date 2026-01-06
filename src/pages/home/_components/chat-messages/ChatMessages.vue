@@ -23,7 +23,19 @@ const smoothScroll = ref(false)
 
 const computedMessages = computed<MessageData[]>(() => {
   if (props.currentAssistMessage) {
-    return [...messages.value, getTempAssistMessage()]
+    const now = new Date().toISOString()
+
+    return [
+      ...messages.value,
+      {
+        id: 0,
+        sessionId: 0,
+        role: 'assistant',
+        assistant: props.currentAssistMessage,
+        createdAt: now,
+        updatedAt: now,
+      },
+    ]
   }
 
   return [...messages.value]
@@ -41,19 +53,6 @@ onMounted(() => {
     chatScrollHandler.stickToBottom.value = true
   })
 })
-
-const getTempAssistMessage = (): MessageData => {
-  const now = new Date().toISOString()
-
-  return {
-    id: 0,
-    sessionId: 0,
-    role: 'assistant',
-    assistant: props.currentAssistMessage,
-    createdAt: now,
-    updatedAt: now,
-  }
-}
 
 watch(
   [
