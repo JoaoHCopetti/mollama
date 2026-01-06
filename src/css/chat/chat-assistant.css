@@ -7,6 +7,14 @@
       @apply border-white/20 my-5;
     }
 
+    & .assistant-message-thought {
+      @apply text-sm text-gray-500 mb-3 leading-5;
+
+      & code {
+        @apply bg-warning/10 text-warning/80 text-[0.9rem] leading-6;
+      }
+    }
+
     & code {
       @apply text-[0.9rem] text-warning bg-warning-content py-0.5 px-1 mr-[2px] rounded-[0.2rem] whitespace-pre-wrap;
     }
