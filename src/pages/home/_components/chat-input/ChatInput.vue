@@ -61,6 +61,8 @@ const onMessageChange = (e: Event) => {
 
 const onPromptChange = (newVal: SystemPromptData) => {
   inputConfig.prompt = newVal.id !== inputConfig.prompt?.id ? newVal : undefined
+
+  storage.setItem(LocalStorageEnum.SelectedPromptId, inputConfig.prompt?.id)
 }
 
 const onThinkChange = (newVal: boolean) => {
