@@ -105,6 +105,10 @@ const registerRequestListener = async () => {
 
   request.value.onError(async (message) => {
     await createErrorMessage(sessionId, message)
+
+    if (!route.params.id) {
+      router.push(`/sessions/${sessionId}`)
+    }
   })
 }
 
