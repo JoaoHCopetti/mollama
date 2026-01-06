@@ -2,6 +2,11 @@ import type { LocalStorageEnum } from '@/utils/enums'
 
 export const useLocalStorage = () => {
   const setItem = (key: LocalStorageEnum, value: any) => {
+    if (!value) {
+      localStorage.setItem(key, 'null')
+      return
+    }
+
     localStorage.setItem(key, JSON.stringify(value))
   }
 
