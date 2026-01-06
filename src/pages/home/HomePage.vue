@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppTransition from '@/components/AppTransition.vue'
 import { useLocalStorage } from '@/composables/use-local-storage'
+import { db } from '@/database/db'
 import BaseRequest from '@/providers/BaseRequest'
 import {
   createAssistMessage,
@@ -31,13 +32,31 @@ const currentAssistMessage = computed(() => request.value?.message)
 provide(inputConfigKey, inputConfig.value)
 
 onBeforeMount(async () => {
+  restoreSelectedModel()
+  restoreThinkMode()
+  restoreSelectedPrompt()
+})
+
+const restoreSelectedModel = () => {
   const selectedModelId = storage.getItem(LocalStorageEnum.SelectedModelId)
 
   appStore.selectModel(selectedModelId)
-
   inputConfig.value.model = appStore.selectedModel
+}
+
+const restoreThinkMode = () => {
   inputConfig.value.think = storage.getItem(LocalStorageEnum.Think) || false
-})
+}
+
+const restoreSelectedPrompt = async () => {
+  const lastPromptId = storage.getItem(LocalStorageEnum.SelectedPromptId)
+
+  if (lastPromptId) {
+    const lastPrompt = await db.systemPrompts.get(lastPromptId)
+
+    inputConfig.value.prompt = lastPrompt
+  }
+}
 
 const onInputConfigChange = ({ type, inputConfig }: InputConfigPayload) => {
   if (type === 'model') {
