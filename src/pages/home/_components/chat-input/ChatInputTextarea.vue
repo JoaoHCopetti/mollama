@@ -68,7 +68,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
     name="message"
     autofocus
     class="bg-transparent h-14 font-sans text-[0.95rem] placeholder-gray-500 leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
-    placeholder="Type anything (ALT + F)"
+    placeholder="Type anything (CTRL + ALT + F)"
     @keydown.enter="onEnterKeydown"
     @focusin="$emit('focus-change', true)"
     @focusout="$emit('focus-change', false)"
