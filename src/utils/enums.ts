@@ -3,3 +3,7 @@ export enum LocalStorageEnum {
   SelectedModelId = 'selected-model-id',
   Think = 'think',
 }
+
+export enum ProvidersEnum {
+  Ollama,
+}

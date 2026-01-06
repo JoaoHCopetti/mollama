@@ -1,4 +1,4 @@
-import type { Toast, ToastOptions, ToastType } from '@/types'
+import type { Toast, ToastOptions, ToastType } from '@/types/toast-store'
 import { uniqueId } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
