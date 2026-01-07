@@ -74,13 +74,13 @@ watch(
 <template>
   <div
     ref="messagesContainer"
-    class="flex h-full overflow-auto"
+    class="flex h-full overflow-auto px-5 sm:px-0"
     :class="{
       'scroll-smooth': smoothScroll,
     }"
     @scroll="chatScrollHandler.handleScroll"
   >
-    <div class="mx-auto mt-10 flex w-3/4 flex-col gap-10">
+    <div class="mx-auto mt-10 flex w-full flex-col gap-10 sm:w-3/4">
       <div
         v-for="message in computedMessages"
         :key="message.id"

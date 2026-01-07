@@ -1,22 +1,22 @@
 @layer components {
   .assistant-message {
-    @apply rounded-2xl w-4/5 wrap-break-word leading-7;
+    @apply w-full rounded-2xl leading-7 wrap-break-word sm:w-4/5;
 
     /** General **/
     & hr {
-      @apply border-white/20 my-5;
+      @apply my-5 border-white/20;
     }
 
     & .assistant-message-thought {
-      @apply text-sm text-gray-500 mb-3 leading-5;
+      @apply mb-3 text-sm leading-5 text-gray-500;
 
       & code {
-        @apply bg-warning/10 text-warning/80 text-[0.9rem] leading-6;
+        @apply bg-warning/10 text-[0.9rem] leading-6 text-warning/80;
       }
     }
 
     & code {
-      @apply text-[0.9rem] text-warning bg-warning-content py-0.5 px-1 mr-[2px] rounded-[0.2rem] whitespace-pre-wrap;
+      @apply mr-[2px] rounded-[0.2rem] bg-warning-content px-1 py-0.5 text-[0.9rem] whitespace-pre-wrap text-warning;
     }
 
     & a {
@@ -24,23 +24,23 @@
     }
 
     & blockquote {
-      @apply border-l-2 border-white/40 ml-8 pl-4 text-white/50;
+      @apply ml-8 border-l-2 border-white/40 pl-4 text-white/50;
     }
 
     /** Table **/
     & .markdown-table {
-      @apply rounded-lg overflow-auto my-5;
+      @apply my-5 overflow-auto rounded-lg;
     }
 
     & table {
-      @apply border-collapse w-full;
+      @apply w-full border-collapse;
 
       & th {
-        @apply bg-base-200 text-white/90 text-[0.75rem] py-3 px-5 leading-5 uppercase font-normal;
+        @apply bg-base-200 px-5 py-3 text-[0.75rem] leading-5 font-normal text-white/90 uppercase;
       }
 
       & td {
-        @apply bg-base-200 py-2 px-5 border-none text-[0.9rem] leading-6;
+        @apply border-none bg-base-200 px-5 py-2 text-[0.9rem] leading-6;
       }
 
       & tr:not(:last-child) td {
@@ -61,11 +61,11 @@
     /** Fence (the thing that wraps the code block inside the response message) **/
     & .markdown-fence {
       & code {
-        @apply p-0 m-0 bg-transparent text-inherit wrap-break-word;
+        @apply m-0 bg-transparent p-0 wrap-break-word text-inherit;
       }
 
       & pre {
-        @apply p-0 m-0 px-3 py-3 leading-5 overflow-auto;
+        @apply m-0 overflow-auto p-0 px-3 py-3 leading-5;
       }
     }
   }
