@@ -36,7 +36,7 @@ const selectItem = (item: SettingsMenuItem) => {
         Settings
       </h3>
 
-      <ul class="d-menu p-0 m-0">
+      <ul class="d-menu p-0 m-0 gap-2">
         <li
           v-for="item in MENU_ITEMS"
           :key="item.id"
@@ -55,10 +55,14 @@ const selectItem = (item: SettingsMenuItem) => {
       </ul>
     </div>
 
-    <div class="w-full max-h-[70vh] h-[70vh] overflow-auto pr-5 pl-5 -mr-4">
+    <div
+      v-if="selectedItem"
+      class="w-full h-full pr-5 pl-5 -mr-4"
+    >
+      <h2>{{ selectedItem?.label }}</h2>
+
       <Component
         :is="selectedItem.component"
-        v-if="selectedItem"
         class="h-full py-3"
       />
     </div>
