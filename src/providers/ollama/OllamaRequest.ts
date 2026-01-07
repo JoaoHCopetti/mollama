@@ -1,5 +1,5 @@
 import type { AssistantMessage, MessageData } from '@/database/Message'
-import type { FetchResponseOptions } from '@/types'
+import type { FetchResponseOptions, Model } from '@/types'
 import {
   Ollama,
   type ChatResponse as OllamaChatResponse,
@@ -7,12 +7,18 @@ import {
 } from 'ollama/browser'
 
 import BaseRequest from '../BaseRequest'
-
-const ollama = new Ollama({ host: import.meta.env.VITE_OLLAMA_ENDPOINT })
+import OllamaProvider from './OllamaProvider'
 
 export default class OllamaRequest extends BaseRequest {
+  providerInstance!: Ollama
+
+  constructor(model: Model) {
+    super(model)
+    this.providerInstance = OllamaProvider.getProvider()
+  }
+
   public async performHandleResponse(options: FetchResponseOptions, messages: MessageData[]) {
-    const response = await ollama.chat({
+    const response = await this.providerInstance.chat({
       model: options.model.fullName,
       think: options.think,
       messages: [
