@@ -25,7 +25,7 @@ onBeforeUnmount(() => {
 
 <template>
   <main class="relative flex h-full">
-    <MainSidebar class="max-w-[400px] min-w-[400px]" />
+    <MainSidebar class="-ml-[100%] w-full sm:ml-0 sm:w-[300px] md:w-[400px]" />
 
     <div class="relative w-full">
       <ToastContainer />

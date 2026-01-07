@@ -24,7 +24,6 @@ const appStore = useAppStore()
 const storage = useLocalStorage()
 const route = useRoute()
 const router = useRouter()
-
 const inputConfig = ref<InputConfig>({ message: '', think: false })
 const request = ref<BaseRequest>()
 
@@ -159,13 +158,13 @@ const stopStreaming = () => {
       />
     </AppTransition>
 
-    <div class="relative mb-5 w-full">
+    <div class="relative mb-5 w-full px-5 sm:px-0">
       <div
         class="absolute -top-14 left-1/2 z-0 h-14 w-full -translate-x-1/2 bg-linear-0 from-base-100/80 to-transparent"
       />
 
       <ChatInput
-        class="relative z-20 w-3/4"
+        class="relative z-20 w-full sm:w-3/4"
         :current-assist-message="request?.message"
         @update:input-config="onInputConfigChange"
         @send="onMessageSend"

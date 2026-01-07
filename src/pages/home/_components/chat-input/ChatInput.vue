@@ -82,7 +82,7 @@ const onSend = () => {
 
 <template>
   <div
-    class="mx-auto rounded-3xl bg-base-300 p-4 shadow-2xl"
+    class="mx-auto rounded-3xl bg-base-300 p-4 pb-2 shadow-2xl sm:pb-4"
     :class="{
       'outline-2 outline-gray-400': isTextareaFocused,
     }"
@@ -96,7 +96,7 @@ const onSend = () => {
     />
 
     <div class="flex justify-between">
-      <div class="flex items-end gap-2">
+      <div class="flex items-end gap-2 pb-2 sm:overflow-visible sm:pb-0">
         <ChatInputModelsDropdown
           :selected-model="inputConfig.model"
           @change="onInputConfigChange('model', $event)"
