@@ -24,9 +24,9 @@ const onCopyClick = () => {
 </script>
 
 <template>
-  <div class="transition-opacity opacity-0 h-10">
+  <div class="h-10 opacity-0 transition-opacity">
     <button
-      class="d-btn d-btn-circle bg-transparent border-0 hover:bg-white/10"
+      class="d-btn d-btn-circle border-0 bg-transparent hover:bg-white/10"
       @click="onCopyClick"
     >
       <PhClipboard weight="bold" />

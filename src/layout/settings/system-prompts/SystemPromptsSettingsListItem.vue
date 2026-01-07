@@ -24,7 +24,7 @@ const onDeleteClick = () => {
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <li
-    class="px-3 py-2 first:rounded-t-lg last:rounded-b-lg group bg-base-200 hover:bg-white/5 transition-all rounded-0 w-full cursor-pointer active:bg-white/10 [&:active:has(button:active)]:bg-white/5"
+    class="group rounded-0 w-full cursor-pointer bg-base-200 px-3 py-2 transition-all first:rounded-t-lg last:rounded-b-lg hover:bg-white/5 active:bg-white/10 [&:active:has(button:active)]:bg-white/5"
     :class="{
       'bg-white/10': isActive,
     }"
@@ -37,9 +37,9 @@ const onDeleteClick = () => {
         <span>{{ systemPrompt.title }}</span>
       </div>
 
-      <div class="group-hover:opacity-100 opacity- transition-all">
+      <div class="opacity- transition-all group-hover:opacity-100">
         <button
-          class="d-btn d-btn-sm d-btn-ghost d-btn-circle hover:bg-white/10 border-0"
+          class="d-btn d-btn-circle border-0 d-btn-ghost d-btn-sm hover:bg-white/10"
           data-tip="Edit"
           @click.stop="onEditClick"
         >
@@ -47,7 +47,7 @@ const onDeleteClick = () => {
         </button>
 
         <button
-          class="d-btn d-btn-sm d-btn-ghost d-btn-circle hover:bg-white/10 border-0"
+          class="d-btn d-btn-circle border-0 d-btn-ghost d-btn-sm hover:bg-white/10"
           @click.stop="onDeleteClick"
         >
           <PhTrash size="1.4em" />
@@ -57,7 +57,7 @@ const onDeleteClick = () => {
 
     <div
       v-if="isActive"
-      class="text-white/70 whitespace-pre-line"
+      class="whitespace-pre-line text-white/70"
     >
       <div v-html="systemPrompt.content" />
     </div>

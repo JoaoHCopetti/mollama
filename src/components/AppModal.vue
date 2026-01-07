@@ -49,7 +49,7 @@ const closeModal = () => {
               <DialogTitle
                 v-if="$slots['title']"
                 as="h3"
-                class="text-lg mt-0 font-semibold leading-6 text-base-content"
+                class="mt-0 text-lg leading-6 font-semibold text-base-content"
               >
                 <slot name="title" />
               </DialogTitle>

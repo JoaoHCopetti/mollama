@@ -82,9 +82,9 @@ const onSend = () => {
 
 <template>
   <div
-    class="bg-base-300 p-4 rounded-3xl mx-auto shadow-2xl"
+    class="mx-auto rounded-3xl bg-base-300 p-4 shadow-2xl"
     :class="{
-      'outline-gray-400 outline-2': isTextareaFocused,
+      'outline-2 outline-gray-400': isTextareaFocused,
     }"
   >
     <ChatInputTextarea

@@ -21,7 +21,7 @@ onMounted(() => {
     <RouterLink
       is="button"
       to="/"
-      class="d-btn d-btn-primary d-btn-soft d-btn-block px-0 no-underline uppercase"
+      class="d-btn d-btn-block px-0 uppercase no-underline d-btn-soft d-btn-primary"
       @click="shortcutStore.trigger('chat-focus')"
     >
       <PhNotePencil

@@ -30,7 +30,7 @@ const toastProps = computed(() => TOAST_TYPES_MAP[props.type])
 
 <template>
   <div
-    class="bg-base-300 shadow-xl rounded-md mb-2 px-2 py-3 flex items-center gap-2 flex-nowrap w-80 max-w-80"
+    class="mb-2 flex w-80 max-w-80 flex-nowrap items-center gap-2 rounded-md bg-base-300 px-2 py-3 shadow-xl"
     :class="toastProps.classNames"
   >
     <Component
