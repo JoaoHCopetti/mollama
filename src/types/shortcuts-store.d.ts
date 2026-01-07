@@ -1,4 +1,9 @@
-export type ShortcutActions = 'chat-focus' | 'new-chat' | 'toggle-think'
+export type ShortcutActions =
+  | 'chat-focus'
+  | 'new-chat'
+  | 'toggle-think'
+  | 'models-dropdown-focus'
+  | 'prompts-dropdown-focus'
 
 export type ShortcutCallbacks = Record<ShortcutActions, (e: KeyboardEvent) => void>
 
