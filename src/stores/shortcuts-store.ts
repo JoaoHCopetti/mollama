@@ -12,6 +12,12 @@ const DEFAULT_SHORTCUTS: Shortcuts = {
   'toggle-think': {
     keys: { altKey: true, shiftKey: false, ctrlKey: true, code: 'KeyT' },
   },
+  'models-dropdown-focus': {
+    keys: { altKey: true, shiftKey: false, ctrlKey: true, code: 'KeyM' },
+  },
+  'prompts-dropdown-focus': {
+    keys: { altKey: true, shiftKey: false, ctrlKey: true, code: 'KeyP' },
+  },
 }
 
 export const useShortcutsStore = defineStore('shortcuts', () => {
