@@ -54,7 +54,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
     v-model="message"
     name="message"
     autofocus
-    class="bg-transparent h-14 font-sans text-[0.95rem] placeholder-gray-500 leading-7 min-h-14 px-0 w-full focus-within:outline-0 resize-none mb-4 border-none"
+    class="mb-4 h-14 min-h-14 w-full resize-none border-none bg-transparent px-0 font-sans text-[0.95rem] leading-7 placeholder-gray-500 focus-within:outline-0"
     placeholder="Type anything (CTRL + ALT + F)"
     @keydown.enter="onEnterKeydown"
     @focusin="$emit('focus-change', true)"

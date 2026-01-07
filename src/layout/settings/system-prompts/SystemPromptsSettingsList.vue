@@ -35,7 +35,7 @@ const onSystemPromptClick = (systemPrompt: SystemPromptData) => {
   <div class="overflow-auto overflow-x-hidden">
     <ul
       v-if="systemPrompts.length"
-      class="d-list overflow-hidden ml-0 pr-6 pl-0"
+      class="d-list ml-0 overflow-hidden pr-6 pl-0"
     >
       <SystemPromptsSettingsListItem
         v-for="systemPrompt in systemPrompts"
@@ -49,7 +49,7 @@ const onSystemPromptClick = (systemPrompt: SystemPromptData) => {
 
     <div
       v-else
-      class="min-h-full text-center text-white/50 mt-32"
+      class="mt-32 min-h-full text-center text-white/50"
     >
       Nothing here
     </div>

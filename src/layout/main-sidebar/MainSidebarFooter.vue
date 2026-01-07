@@ -6,7 +6,7 @@ defineEmits(['settings-click'])
 </script>
 
 <template>
-  <div class="px-5 py-3 flex justify-between gap-3 bg-base-200">
+  <div class="flex justify-between gap-3 bg-base-200 px-5 py-3">
     <div>
       <MainSidebarFooterItem
         label="GitHub"

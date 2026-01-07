@@ -54,15 +54,15 @@ const handleButtonClick = () => {
 
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="markdown-fence bg-base-300 rounded-lg my-5">
+  <div class="markdown-fence my-5 rounded-lg bg-base-300">
     <div
-      class="flex justify-between items-center bg-base-200 px-3 py-5 min-h-5 max-h-5 text-sm rounded-t-lg uppercase font-bold"
+      class="flex max-h-5 min-h-5 items-center justify-between rounded-t-lg bg-base-200 px-3 py-5 text-sm font-bold uppercase"
     >
       <span class="text-xs uppercase">{{ language || 'text' }}</span>
 
       <button
         :id="copyButtonId"
-        class="d-btn d-btn-xs d-btn-ghost d-btn-circle transition-all"
+        class="d-btn d-btn-circle d-btn-ghost transition-all d-btn-xs"
       >
         <PhClipboard size="1rem" />
       </button>

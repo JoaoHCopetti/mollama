@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <div
-    class="assistant-message px-4 py-3 rounded-2xl w-4/5 wrap-break-word leading-7 bg-base-200 ml-auto whitespace-pre-line"
+    class="assistant-message ml-auto w-4/5 rounded-2xl bg-base-200 px-4 py-3 leading-7 wrap-break-word whitespace-pre-line"
   >
     {{ message.content }}
   </div>

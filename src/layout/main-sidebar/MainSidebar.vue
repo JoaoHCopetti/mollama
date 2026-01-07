@@ -23,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-base-200 pt-5 flex flex-col">
+  <div class="flex flex-col bg-base-200 pt-5">
     <MainSidebarHeader />
 
     <MainSidebarChats :sessions="sessions" />

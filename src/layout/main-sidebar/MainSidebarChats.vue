@@ -23,7 +23,7 @@ const deleteSession = async ({ session }: DeleteEventArgs) => {
 
     <div
       v-if="sessions.length"
-      class="flex flex-col pl-0 ml-3 pr-2 mt-0"
+      class="mt-0 ml-3 flex flex-col pr-2 pl-0"
     >
       <MainSidebarItem
         v-for="session in sessions"

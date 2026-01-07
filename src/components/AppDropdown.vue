@@ -33,7 +33,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
     </MenuButton>
 
     <MenuItems
-      class="d-dropdown-content w-72 p-2 rounded-lg bg-base-200"
+      class="d-dropdown-content w-72 rounded-lg bg-base-200 p-2"
       :class="containerExtendClass"
       as="ul"
       style="list-style: none; animation: none"

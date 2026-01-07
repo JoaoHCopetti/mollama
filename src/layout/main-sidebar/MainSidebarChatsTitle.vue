@@ -3,7 +3,7 @@ import { PhChats } from '@phosphor-icons/vue'
 </script>
 
 <template>
-  <div class="font-bold flex items-center gap-2 text-lg">
+  <div class="flex items-center gap-2 text-lg font-bold">
     <PhChats weight="fill" />
 
     <span>Chats</span>

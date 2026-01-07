@@ -12,7 +12,7 @@ const toasts = computed(() => toastStore.toasts)
 <template>
   <TransitionGroup
     tag="div"
-    class="fixed right-0 top-0 z-50 mt-5 mr-5"
+    class="fixed top-0 right-0 z-50 mt-5 mr-5"
     name="list"
   >
     <ToastContainerAlert
