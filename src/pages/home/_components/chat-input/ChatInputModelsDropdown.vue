@@ -43,12 +43,12 @@ const onModelClick = (model: Model) => {
     <template #trigger>
       <button
         ref="dropdownTriggerRef"
-        class="d-btn focus:ring-2 w-64 ring-white/20"
+        class="d-btn w-64 ring-white/20 focus:ring-2"
       >
         <AppModelInfo
           v-if="selectedModel"
           :model="selectedModel"
-          class="uppercase text-xs tracking-wider"
+          class="text-xs tracking-wider uppercase"
         />
 
         <div v-else>Select a model</div>

@@ -17,10 +17,10 @@ const htmlThinking = computed(
   <div>
     <div
       v-if="message.response && message.thinking"
-      class="text-sm text-gray-400 mb-2"
+      class="mb-2 text-sm text-gray-400"
     >
       <div v-if="message.state.isThinking">
-        <span class="d-loading d-loading-ring d-loading-xs mr-1" />
+        <span class="d-loading mr-1 d-loading-xs d-loading-ring" />
 
         <span
           class="animated-text bg-linear-to-br from-gray-500 via-gray-300 to-gray-500"

@@ -140,7 +140,7 @@ const stopStreaming = () => {
 </script>
 
 <template>
-  <div class="h-full flex flex-col">
+  <div class="flex h-full flex-col">
     <AppTransition
       from-class="opacity-0"
       to-class="opacity-100"
@@ -155,17 +155,17 @@ const stopStreaming = () => {
 
       <ChatEmpty
         v-else-if="appStore.activeSession === null"
-        class="h-full w-full flex items-center justify-center"
+        class="flex h-full w-full items-center justify-center"
       />
     </AppTransition>
 
-    <div class="mb-5 w-full relative">
+    <div class="relative mb-5 w-full">
       <div
-        class="-translate-x-1/2 left-1/2 h-14 bg-linear-0 absolute -top-14 z-0 w-full from-base-100/80 to-transparent"
+        class="absolute -top-14 left-1/2 z-0 h-14 w-full -translate-x-1/2 bg-linear-0 from-base-100/80 to-transparent"
       />
 
       <ChatInput
-        class="w-3/4 z-20 relative"
+        class="relative z-20 w-3/4"
         :current-assist-message="request?.message"
         @update:input-config="onInputConfigChange"
         @send="onMessageSend"

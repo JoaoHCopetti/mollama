@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <div class="assistant-message">
-    <div class="text-error font-bold text-sm mb-3 uppercase flex items-center gap-2">
+    <div class="mb-3 flex items-center gap-2 text-sm font-bold text-error uppercase">
       <PhWarningCircle weight="fill" />
 
       <span>ERROR</span>

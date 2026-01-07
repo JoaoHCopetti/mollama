@@ -48,7 +48,7 @@ watch(htmlContent, (newHTML) => {
 
     <div
       v-if="message.state.isLoading && !message.state.isStreaming"
-      class="d-loading d-loading-ring h-12"
+      class="d-loading h-12 d-loading-ring"
     />
 
     <ChatMessagesAssistantThinking

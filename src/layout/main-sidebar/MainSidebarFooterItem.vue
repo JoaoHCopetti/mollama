@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
   <a
-    class="text-center flex flex-col text-gray-400 hover:text-gray-300 active:text-white transition-colors cursor-pointer"
+    class="flex cursor-pointer flex-col text-center text-gray-400 transition-colors hover:text-gray-300 active:text-white"
   >
     <div
       class="d-tooltip"

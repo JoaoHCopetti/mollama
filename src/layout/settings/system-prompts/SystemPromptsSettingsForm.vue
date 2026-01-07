@@ -130,7 +130,7 @@ defineExpose({ focusTitleInput })
         </button>
 
         <button
-          class="d-btn d-btn-ghost w-fit"
+          class="d-btn w-fit d-btn-ghost"
           type="submit"
         >
           Save

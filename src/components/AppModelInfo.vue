@@ -22,7 +22,7 @@ defineProps<{
 
     <span
       v-if="model.parameterSize"
-      class="d-badge d-badge-sm bg-primary/10 border-0 font-bold opacity-50"
+      class="d-badge border-0 bg-primary/10 d-badge-sm font-bold opacity-50"
       :class="parameterExtendClass"
     >
       {{ model.parameterSize }}

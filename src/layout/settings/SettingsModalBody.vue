@@ -31,19 +31,19 @@ const selectItem = (item: SettingsMenuItem) => {
 <template>
   <div class="flex min-h-[70vh]">
     <div class="min-w-fit pr-5">
-      <h3 class="flex gap-2 items-center mt-0 mb-4">
+      <h3 class="mt-0 mb-4 flex items-center gap-2">
         <PhGear weight="fill" />
         Settings
       </h3>
 
-      <ul class="d-menu p-0 m-0 gap-2">
+      <ul class="d-menu m-0 gap-2 p-0">
         <li
           v-for="item in MENU_ITEMS"
           :key="item.id"
         >
           <a
             tabindex="0"
-            class="font-medium active:bg-base-200 rounded-lg"
+            class="rounded-lg font-medium active:bg-base-200"
             :class="{
               'bg-white/10': selectedItem?.id === item.id,
             }"
@@ -57,7 +57,7 @@ const selectItem = (item: SettingsMenuItem) => {
 
     <div
       v-if="selectedItem"
-      class="w-full h-full pr-5 pl-5 -mr-4"
+      class="-mr-4 h-full w-full pr-5 pl-5"
     >
       <h2>{{ selectedItem?.label }}</h2>
 

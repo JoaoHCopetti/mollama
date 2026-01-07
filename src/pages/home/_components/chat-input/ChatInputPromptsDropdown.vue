@@ -47,7 +47,7 @@ onMounted(() => {
     <template #trigger>
       <button
         ref="dropdownTriggerRef"
-        class="input-chat-pill focus:ring-2 ring-white/20"
+        class="input-chat-pill ring-white/20 focus:ring-2"
         :class="[
           {
             'bg-primary/90 hover:bg-primary/80': !!prompt,
@@ -62,7 +62,7 @@ onMounted(() => {
             ...(!systemPrompts.length ? { 'data-tip': 'No prompts registered' } : {}),
           }"
         >
-          <div class="truncate flex items-center gap-2">
+          <div class="flex items-center gap-2 truncate">
             <PhBookBookmark
               class="min-w-fit"
               :weight="prompt ? 'fill' : 'regular'"
@@ -74,7 +74,7 @@ onMounted(() => {
     </template>
 
     <template #item="{ item }">
-      <div class="flex items-center gap-2 truncate fade-truncate">
+      <div class="fade-truncate flex items-center gap-2 truncate">
         <PhBookBookmark
           weight="fill"
           class="min-w-fit"
