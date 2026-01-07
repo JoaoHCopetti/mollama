@@ -2,17 +2,29 @@
 import AppDropdown from '@/components/AppDropdown.vue'
 import AppModelInfo from '@/components/AppModelInfo.vue'
 import { useAppStore } from '@/stores/app-store'
+import { useShortcutsStore } from '@/stores/shortcuts-store'
 import type { Model } from '@/types'
-import { computed } from 'vue'
+import { computed, onMounted, useTemplateRef } from 'vue'
 
 defineProps<{
   selectedModel?: Model
 }>()
+
 const emit = defineEmits(['change'])
 
-const appStore = useAppStore()
+const dropdownTrigger = useTemplateRef('dropdownTriggerRef')
 
+const appStore = useAppStore()
+const shortcutsStore = useShortcutsStore()
 const models = computed(() => appStore.availableModels)
+
+onMounted(() => {
+  shortcutsStore.onPress('models-dropdown-focus', () => {
+    if (dropdownTrigger.value) {
+      dropdownTrigger.value.focus()
+    }
+  })
+})
 
 const onModelClick = (model: Model) => {
   emit('change', model)
@@ -29,7 +41,10 @@ const onModelClick = (model: Model) => {
     @select="onModelClick"
   >
     <template #trigger>
-      <button class="d-btn focus:ring-2 w-64 ring-white/20">
+      <button
+        ref="dropdownTriggerRef"
+        class="d-btn focus:ring-2 w-64 ring-white/20"
+      >
         <AppModelInfo
           v-if="selectedModel"
           :model="selectedModel"

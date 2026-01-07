@@ -3,9 +3,10 @@ import AppDropdown from '@/components/AppDropdown.vue'
 import { useDexieSubscription } from '@/composables/use-dexie-subscription'
 import { db } from '@/database/db'
 import type { SystemPromptData } from '@/database/SystemPrompt'
+import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { PhBookBookmark } from '@phosphor-icons/vue'
 import { liveQuery } from 'dexie'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 
 defineProps<{
   prompt?: SystemPromptData
@@ -13,14 +14,22 @@ defineProps<{
 defineEmits(['change'])
 
 const subscription = useDexieSubscription<SystemPromptData>()
+const shortcutsStore = useShortcutsStore()
 
 const systemPrompts = ref<SystemPromptData[]>([])
+const dropdownTrigger = useTemplateRef('dropdownTriggerRef')
 
 onMounted(() => {
   subscription.setupLiveQuery(liveQuery(() => db.systemPrompts.toArray()))
 
   subscription.onResultChange((result) => {
     systemPrompts.value = result
+  })
+
+  shortcutsStore.onPress('prompts-dropdown-focus', () => {
+    if (dropdownTrigger.value) {
+      dropdownTrigger.value.focus()
+    }
   })
 })
 </script>
@@ -37,6 +46,7 @@ onMounted(() => {
   >
     <template #trigger>
       <button
+        ref="dropdownTriggerRef"
         class="input-chat-pill focus:ring-2 ring-white/20"
         :class="[
           {
