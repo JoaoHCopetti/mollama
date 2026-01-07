@@ -43,7 +43,7 @@ const onModelClick = (model: Model) => {
     <template #trigger>
       <button
         ref="dropdownTriggerRef"
-        class="d-btn w-64 ring-white/20 focus:ring-2"
+        class="d-btn w-44 ring-white/20 focus:ring-2 sm:w-64"
       >
         <AppModelInfo
           v-if="selectedModel"

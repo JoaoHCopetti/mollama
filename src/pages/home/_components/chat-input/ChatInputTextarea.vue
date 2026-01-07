@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useBreakpoints } from '@/composables/use-breakpoints'
 import { useDynamicTextarea } from '@/composables/use-dynamic-textarea'
 import type { MessageState } from '@/database/Message'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
@@ -9,8 +10,10 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['send', 'focus-change'])
 
+const { screenGreaterThan } = useBreakpoints()
+
 const textareaRef = useTemplateRef('textareaRef')
-const dynamicTextarea = useDynamicTextarea(textareaRef)
+const dynamicTextarea = useDynamicTextarea(textareaRef, screenGreaterThan('sm') ? 150 : 100)
 const shortcutsStore = useShortcutsStore()
 
 const message = defineModel<string>('message', { default: '' })
@@ -54,7 +57,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
     v-model="message"
     name="message"
     autofocus
-    class="mb-4 h-14 min-h-14 w-full resize-none border-none bg-transparent px-0 font-sans text-[0.95rem] leading-7 placeholder-gray-500 focus-within:outline-0"
+    class="mb-4 w-full resize-none border-none bg-transparent px-0 font-sans text-[0.95rem] leading-7 placeholder-gray-500 focus-within:outline-0 sm:h-14"
     placeholder="Type anything (CTRL + ALT + F)"
     @keydown.enter="onEnterKeydown"
     @focusin="$emit('focus-change', true)"

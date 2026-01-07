@@ -41,6 +41,11 @@ const toggleValue = () => {
       :weight="checked ? 'fill' : 'bold'"
     />
 
-    <span v-if="label">{{ label }}</span>
+    <span
+      v-if="label"
+      class="hidden sm:block"
+    >
+      {{ label }}
+    </span>
   </label>
 </template>

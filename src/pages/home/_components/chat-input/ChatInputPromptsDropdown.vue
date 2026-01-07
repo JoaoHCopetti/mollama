@@ -37,7 +37,7 @@ onMounted(() => {
 <template>
   <AppDropdown
     id-field="id"
-    class="d-dropdown-top"
+    class="d-dropdown-top left-0 sm:d-dropdown-top"
     :items="systemPrompts"
     container-extend-class="max-w-52"
     :active-item="prompt"
@@ -56,7 +56,7 @@ onMounted(() => {
         ]"
       >
         <div
-          class="w-30"
+          class="sm:w-30"
           :class="{ 'd-tooltip d-tooltip-top': !systemPrompts.length }"
           v-bind="{
             ...(!systemPrompts.length ? { 'data-tip': 'No prompts registered' } : {}),
@@ -67,7 +67,8 @@ onMounted(() => {
               class="min-w-fit"
               :weight="prompt ? 'fill' : 'regular'"
             />
-            {{ prompt?.title || 'Select a prompt' }}
+
+            <span class="hidden sm:block">{{ prompt?.title || 'Select a prompt' }}</span>
           </div>
         </div>
       </button>
