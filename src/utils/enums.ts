@@ -3,8 +3,9 @@ export enum LocalStorageEnum {
   SelectedModelId = 'SELECTED_MODEL_ID',
   Think = 'THINK',
   OllamaApiKey = 'OLLAMA_API_KEY',
+  LastConnection = 'LAST_CONNECTION',
 }
 
 export enum ProvidersEnum {
-  Ollama,
+  Ollama = 'OLLAMA',
 }
