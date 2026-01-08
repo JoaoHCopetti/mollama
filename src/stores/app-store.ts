@@ -1,34 +1,46 @@
 import { useLocalStorage } from '@/composables/use-local-storage'
 import type { SessionData } from '@/database/Session'
+import ValidationError from '@/errors/ValidationError'
 import type { BaseProvider } from '@/providers/BaseProvider'
 import OllamaProvider from '@/providers/ollama/OllamaProvider'
 import type { Model } from '@/types'
 import { LocalStorageEnum, ProvidersEnum } from '@/utils/enums'
 import { defineStore } from 'pinia'
-import { ref, shallowRef, type ShallowRef } from 'vue'
+import { ref, shallowRef } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
   const storage = useLocalStorage()
 
+  const provider = shallowRef<BaseProvider>()
   const availableModels = ref<Model[]>([])
   const selectedModel = ref<Model>()
   const activeSession = ref<SessionData | null>()
-  const provider = shallowRef<BaseProvider>() as ShallowRef<BaseProvider>
 
-  const init = async (providerEnum: ProvidersEnum) => {
-    const providerInstance = getProvider(providerEnum)
+  const init = async (providerEnum: ProvidersEnum, host: string) => {
+    provider.value = getProvider(providerEnum, { host })
 
-    if (!providerInstance) {
-      throw new Error('No provider specified')
+    if (!provider.value) {
+      throw new ValidationError('No provider specified')
     }
 
-    provider.value = providerInstance
-    availableModels.value = await providerInstance.getModels()
+    try {
+      await provider.value.checkConnection(host)
+      await fetchModels()
+    } catch (error) {
+      provider.value = undefined
+      throw error
+    }
   }
 
-  const getProvider = (provider: ProvidersEnum): BaseProvider | undefined => {
+  const fetchModels = async () => {
+    if (provider.value) {
+      availableModels.value = await provider.value.getModels()
+    }
+  }
+
+  const getProvider = (provider: ProvidersEnum, providerConfig: any): BaseProvider | undefined => {
     if (provider === ProvidersEnum.Ollama) {
-      return new OllamaProvider()
+      return new OllamaProvider(providerConfig)
     }
 
     return undefined
@@ -47,10 +59,12 @@ export const useAppStore = defineStore('app', () => {
 
   return {
     init,
+    getProvider,
     availableModels,
     selectedModel,
     activeSession,
     selectModel,
     provider,
+    fetchModels,
   }
 })

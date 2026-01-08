@@ -15,7 +15,7 @@ import type { InputConfig } from '@/types'
 import { LocalStorageEnum } from '@/utils/enums'
 import { computed, onBeforeMount, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import ChatEmpty from './_partials/ChatEmpty.vue'
+import ChatEmpty from './_partials/MollamaLogo.vue'
 import ChatInput, { type InputConfigPayload } from './_partials/chat-input/ChatInput.vue'
 import ChatMessages from './_partials/chat-messages/ChatMessages.vue'
 import { inputConfigKey } from './injection-keys'
@@ -67,6 +67,10 @@ const onInputConfigChange = ({ type, inputConfig }: InputConfigPayload) => {
 const onMessageSend = async () => {
   if (!appStore.selectedModel) {
     throw new ValidationError('No model is selected')
+  }
+
+  if (!appStore.provider) {
+    throw new ValidationError('No provider selected')
   }
 
   const content = inputConfig.value.message
