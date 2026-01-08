@@ -1,18 +1,28 @@
 import type BaseRequest from '@/providers/BaseRequest'
 import OllamaRequest from '@/providers/ollama/OllamaRequest'
 import type { Model } from '@/types'
-import { Ollama, type ModelResponse } from 'ollama/browser'
+import { Ollama, type ModelResponse, type Config as OllamaConfig } from 'ollama/browser'
 import type { BaseProvider } from '../BaseProvider'
 
 export default class OllamaProvider implements BaseProvider {
-  static getProvider(): Ollama {
-    return new Ollama({
-      host: import.meta.env.VITE_OLLAMA_ENDPOINT,
-    })
+  ollama!: Ollama
+
+  constructor(config?: Partial<OllamaConfig>) {
+    this.ollama = new Ollama(config)
+  }
+
+  async checkConnection(host: string): Promise<boolean> {
+    try {
+      await fetch(host)
+
+      return true
+    } catch (error) {
+      throw error
+    }
   }
 
   createRequest(model: Model): BaseRequest {
-    return new OllamaRequest(model)
+    return new OllamaRequest(this, model)
   }
 
   private getLabels = (model: ModelResponse) => {
@@ -29,9 +39,7 @@ export default class OllamaProvider implements BaseProvider {
   }
 
   async getModels(): Promise<Model[]> {
-    const ollama = OllamaProvider.getProvider()
-
-    return (await ollama.list()).models.map((model) => {
+    return (await this.ollama.list()).models.map((model) => {
       const { fullName, name, prettyName, user } = this.getLabels(model)
 
       return {

@@ -1,24 +1,42 @@
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import { onBeforeMount, onUnmounted } from 'vue'
 import ToastContainer from './components/toast/ToastContainer.vue'
+import { useLocalStorage } from './composables/use-local-storage'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
+import ProviderConnection, {
+  type ProviderConnectionEvents,
+} from './pages/_partials/ProviderConnection.vue'
 import { useAppStore } from './stores/app-store'
 import { useShortcutsStore } from './stores/shortcuts-store'
-import { ProvidersEnum } from './utils/enums'
-
-const isBooted = ref(false)
+import { useToastStore } from './stores/toast-store'
+import { LocalStorageEnum } from './utils/enums'
 
 const appStore = useAppStore()
 const shortcutsStore = useShortcutsStore()
+const storage = useLocalStorage()
+const toastStore = useToastStore()
 
 onBeforeMount(async () => {
-  await appStore.init(ProvidersEnum.Ollama)
+  const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
+
   shortcutsStore.init()
 
-  isBooted.value = true
+  if (lastConnection) {
+    try {
+      await appStore.init(lastConnection.provider, lastConnection.host)
+    } catch (error) {
+      console.error(error)
+      toastStore.error("Couldn't restore your last provider connection", { timeout: 5000 })
+    }
+  }
 })
 
-onBeforeUnmount(() => {
+const initApp = async ({ provider, host }: ProviderConnectionEvents['confirmed']) => {
+  await appStore.init(provider, host)
+  storage.setItem(LocalStorageEnum.LastConnection, { provider, host })
+}
+
+onUnmounted(() => {
   shortcutsStore.destroy()
 })
 </script>
@@ -30,7 +48,12 @@ onBeforeUnmount(() => {
     <div class="relative w-full">
       <ToastContainer />
 
-      <RouterView v-if="isBooted" />
+      <RouterView v-if="appStore.provider" />
+
+      <ProviderConnection
+        v-else
+        @confirmed="initApp"
+      />
     </div>
   </main>
 </template>
