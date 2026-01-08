@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onBeforeMount, onUnmounted } from 'vue'
+import { onBeforeMount, onUnmounted, ref } from 'vue'
+import AppTransition from './components/AppTransition.vue'
 import ToastContainer from './components/toast/ToastContainer.vue'
 import { useLocalStorage } from './composables/use-local-storage'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
@@ -10,6 +11,8 @@ import { useAppStore } from './stores/app-store'
 import { useShortcutsStore } from './stores/shortcuts-store'
 import { useToastStore } from './stores/toast-store'
 import { LocalStorageEnum } from './utils/enums'
+
+const isBooted = ref<boolean>(false)
 
 const appStore = useAppStore()
 const shortcutsStore = useShortcutsStore()
@@ -29,6 +32,8 @@ onBeforeMount(async () => {
       toastStore.error("Couldn't restore your last provider connection", { timeout: 5000 })
     }
   }
+
+  isBooted.value = true
 })
 
 const initApp = async ({ provider, host }: ProviderConnectionEvents['confirmed']) => {
@@ -43,17 +48,26 @@ onUnmounted(() => {
 
 <template>
   <main class="relative flex h-full">
+    <ToastContainer />
+
     <MainSidebar class="-ml-[100%] w-full sm:ml-0 sm:w-[300px] md:w-[400px]" />
 
-    <div class="relative w-full">
-      <ToastContainer />
+    <AppTransition
+      from-class="opacity-0"
+      to-class="opacity-100"
+      active-class="transition-all duration-1000 ease-out"
+    >
+      <div
+        v-if="isBooted"
+        class="relative w-full"
+      >
+        <RouterView v-if="appStore.provider" />
 
-      <RouterView v-if="appStore.provider" />
-
-      <ProviderConnection
-        v-else
-        @confirmed="initApp"
-      />
-    </div>
+        <ProviderConnection
+          v-else
+          @confirmed="initApp"
+        />
+      </div>
+    </AppTransition>
   </main>
 </template>
