@@ -17,17 +17,18 @@ export const useAppStore = defineStore('app', () => {
   const activeSession = ref<SessionData | null>()
 
   const init = async (providerEnum: ProvidersEnum, host: string) => {
-    provider.value = getProvider(providerEnum, { host })
+    const providerInstance = getProvider(providerEnum, { host })
 
-    if (!provider.value) {
+    if (!providerInstance) {
       throw new ValidationError('No provider specified')
     }
 
     try {
-      await provider.value.checkConnection(host)
+      provider.value = providerInstance
+
+      await providerInstance.checkConnection(host)
       await fetchModels()
     } catch (error) {
-      provider.value = undefined
       throw error
     }
   }
