@@ -1,6 +1,6 @@
 @layer components {
   .input-chat-pill {
-    @apply bg-base-100 outline-0 select-none cursor-pointer text-gray-300 border-0 text-[0.82rem]  p-1 rounded-full px-3 flex items-center gap-2 transition-all;
+    @apply flex cursor-pointer items-center gap-2 rounded-full border-0 bg-base-100 p-1 px-3 text-[0.82rem] text-gray-300 outline-0 transition-all select-none;
 
     &:not(.input-chat-pill-disabled) {
       @apply hover:bg-base-200;

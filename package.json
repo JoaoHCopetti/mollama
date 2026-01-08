@@ -12,9 +12,9 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "type-check": "vue-tsc --build",
+    "format": "prettier . --write",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky",
     "commit": "git-cz"
   },
   "config": {

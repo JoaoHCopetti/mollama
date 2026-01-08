@@ -4,4 +4,5 @@ import type { Model } from '@/types'
 export interface BaseProvider {
   createRequest(model: Model): BaseRequest
   getModels(): Promise<Model[]>
+  checkConnection(host: string): Promise<boolean>
 }
