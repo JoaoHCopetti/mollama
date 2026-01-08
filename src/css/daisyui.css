@@ -1,4 +1,4 @@
-@plugin "daisyui" {
+@plugin 'daisyui' {
   themes:
     dark --default,
     light --preferslight;
@@ -11,8 +11,9 @@
   }
 
   .d-textarea,
-  .d-input {
-    @apply rounded-lg bg-base-300 w-full font-sans border-none focus:outline-1 outline-white/40 shadow-none placeholder-gray-500;
+  .d-input,
+  .d-select {
+    @apply w-full rounded-lg border-none bg-base-300 font-sans placeholder-gray-500 shadow-none outline-white/40 focus:outline-1;
   }
 
   .d-tooltip::before {
