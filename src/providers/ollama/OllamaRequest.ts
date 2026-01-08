@@ -10,11 +10,11 @@ import BaseRequest from '../BaseRequest'
 import OllamaProvider from './OllamaProvider'
 
 export default class OllamaRequest extends BaseRequest {
-  providerInstance!: Ollama
+  private providerInstance!: Ollama
 
-  constructor(model: Model) {
+  constructor(ollamaProvider: OllamaProvider, model: Model) {
     super(model)
-    this.providerInstance = OllamaProvider.getProvider()
+    this.providerInstance = ollamaProvider.ollama
   }
 
   public async performHandleResponse(options: FetchResponseOptions, messages: MessageData[]) {
