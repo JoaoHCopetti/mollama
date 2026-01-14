@@ -1,16 +1,21 @@
 <script setup lang="ts">
+import { useBreakpoints } from '@/composables/use-breakpoints'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { PhNotePencil } from '@phosphor-icons/vue'
 import { onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const shortcutStore = useShortcutsStore()
+const { screenGreaterThan } = useBreakpoints()
+
 const router = useRouter()
 
 onMounted(() => {
   shortcutStore.onPress('new-chat', () => {
     router.push({ name: 'home' }).then(() => {
-      shortcutStore.trigger('chat-focus')
+      if (screenGreaterThan('sm')) {
+        shortcutStore.trigger('chat-focus')
+      }
     })
   })
 })
@@ -22,7 +27,6 @@ onMounted(() => {
       is="button"
       to="/"
       class="d-btn d-btn-block px-0 uppercase no-underline d-btn-soft d-btn-primary"
-      @click="shortcutStore.trigger('chat-focus')"
     >
       <PhNotePencil
         class="text-lg"
