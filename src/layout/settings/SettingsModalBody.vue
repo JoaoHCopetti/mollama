@@ -29,7 +29,7 @@ const selectItem = (item: SettingsMenuItem) => {
 </script>
 
 <template>
-  <div class="flex min-h-[70vh]">
+  <div class="flex min-h-[70vh] flex-col gap-10 sm:flex-row sm:gap-0">
     <div class="min-w-fit pr-5">
       <h3 class="mt-0 mb-4 flex items-center gap-2">
         <PhGear weight="fill" />
@@ -57,7 +57,7 @@ const selectItem = (item: SettingsMenuItem) => {
 
     <div
       v-if="selectedItem"
-      class="-mr-4 h-full w-full pr-5 pl-5"
+      class="-mr-4 h-full w-full pr-5 pl-0 sm:pl-5"
     >
       <h2>{{ selectedItem?.label }}</h2>
 
