@@ -24,6 +24,7 @@ router.beforeEach((to) => {
     db.sessions.get(+sessionId).then((result) => {
       appStore.activeSession = result
     })
+
     return
   }
 
