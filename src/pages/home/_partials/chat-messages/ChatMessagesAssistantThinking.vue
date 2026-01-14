@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import type { AssistantMessage } from '@/database/Message'
-import { markdown } from '@/utils'
-import { computed } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   message: AssistantMessage
 }>()
 
-const htmlThinking = computed(
-  () => props.message.thinking && markdown.render(props.message.thinking),
-)
+/*
+  There's a bug when rendering the thought process as html and a fence code is written.
+  Still figuring out.
+  It hides all the content and show an empty fence code.
+
+  const htmlThinking = computed(() => {
+    return props.message.thinking && markdown.render(props.message.thinking)
+  })
+ */
 </script>
 
 <!-- eslint-disable vue/no-v-html -->
@@ -36,9 +40,8 @@ const htmlThinking = computed(
     </div>
 
     <div
-      v-if="htmlThinking"
-      class="assistant-message-thought"
-      v-html="htmlThinking"
+      class="assistant-message-thought whitespace-pre-wrap"
+      v-html="message.thinking"
     />
   </div>
 </template>
