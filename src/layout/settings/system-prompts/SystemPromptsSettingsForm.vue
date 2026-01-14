@@ -18,7 +18,7 @@ const props = defineProps<{
   systemPrompt?: SystemPromptData
 }>()
 
-const dynamicTextarea = useDynamicTextarea(useTemplateRef('textareaRef'), 160)
+const dynamicTextarea = useDynamicTextarea(useTemplateRef('textareaRef'), 200)
 
 const form = useForm({
   title: '',
@@ -35,7 +35,9 @@ onMounted(() => {
     form.instruction.value = systemPrompt?.content || ''
   }
 
-  dynamicTextarea.adjustTextareaHeight()
+  nextTick(() => {
+    dynamicTextarea.adjustTextareaHeight()
+  })
 })
 
 const isEdit = computed(() => props.systemPrompt)
