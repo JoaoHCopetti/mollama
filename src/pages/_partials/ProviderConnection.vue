@@ -51,7 +51,7 @@ const onSubmit = () => {
 
 <template>
   <form
-    class="mx-auto flex h-full w-1/2 flex-col items-center justify-center gap-2"
+    class="flex h-full w-full flex-col items-center justify-center gap-2 px-10 sm:mx-auto sm:w-1/2"
     @submit.prevent="onSubmit"
   >
     <div class="mb-10">
