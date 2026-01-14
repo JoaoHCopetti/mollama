@@ -20,6 +20,7 @@ export const useAppStore = defineStore('app', () => {
     const providerInstance = getProvider(providerEnum, { host })
 
     if (!providerInstance) {
+      provider.value = undefined
       throw new ValidationError('No provider specified')
     }
 
@@ -29,6 +30,7 @@ export const useAppStore = defineStore('app', () => {
       await providerInstance.checkConnection(host)
       await fetchModels()
     } catch (error) {
+      provider.value = undefined
       throw error
     }
   }
