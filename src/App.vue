@@ -71,16 +71,17 @@ onBeforeUnmount(() => {
     </button>
 
     <MainSidebar
-      class="-ml-[100%] w-full transition-all sm:ml-0 sm:w-[300px] md:w-[400px]"
+      class="w-full transition-all sm:ml-0 sm:w-[300px] md:w-[400px]"
       :class="{
         'z-30 ml-0': isSidebarOpen,
+        '-ml-[100%]': !isSidebarOpen,
       }"
     />
 
     <div
       class="relative w-full"
       :class="{
-        'scale-x-0': isSidebarOpen,
+        hidden: isSidebarOpen,
       }"
     >
       <RouterView v-if="appStore.provider && isReady" />
