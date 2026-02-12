@@ -21,21 +21,10 @@ const shortcutsStore = useShortcutsStore()
 const storage = useLocalStorage()
 const toastStore = useToastStore()
 
-onBeforeMount(async () => {
-  const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
+const storage = useLocalStorage()
+const route = useRoute()
 
-  shortcutsStore.init()
-
-  if (lastConnection) {
-    try {
-      await appStore.init(lastConnection.provider, lastConnection.host)
-      isReady.value = true
-    } catch (error) {
-      console.error(error)
-      toastStore.error("Couldn't restore your last provider connection", { timeout: 5000 })
-    }
-  }
-})
+const showProviderConnection = computed(() => !appStore.provider && route.name === 'home')
 
 const onConnectionConfirmed = async ({ provider, host }: ProviderConnectionEvents['confirmed']) => {
   await appStore.init(provider, host)
@@ -51,6 +40,22 @@ const toggleSidebar = () => {
 router.beforeEach(() => {
   if (isSidebarOpen.value) {
     isSidebarOpen.value = false
+  }
+})
+
+onBeforeMount(async () => {
+  const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
+
+  shortcutsStore.init()
+
+  if (lastConnection) {
+    try {
+      await appStore.init(lastConnection.provider, lastConnection.host)
+      isReady.value = true
+    } catch (error) {
+      console.error(error)
+      toastStore.error("Couldn't restore your last provider connection", { timeout: 5000 })
+    }
   }
 })
 
