@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { PhList } from '@phosphor-icons/vue'
-import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import AppTransition from './components/AppTransition.vue'
 import ToastContainer from './components/toast/ToastContainer.vue'
 import { useLocalStorage } from './composables/use-local-storage'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
@@ -18,7 +20,6 @@ const isSidebarOpen = ref<boolean>(false)
 
 const appStore = useAppStore()
 const shortcutsStore = useShortcutsStore()
-const storage = useLocalStorage()
 const toastStore = useToastStore()
 
 const storage = useLocalStorage()
@@ -76,25 +77,28 @@ onBeforeUnmount(() => {
     </button>
 
     <MainSidebar
-      class="w-full transition-all sm:ml-0 sm:w-[300px] md:w-[400px]"
+      class="w-full transition-all sm:ml-0 sm:w-[300px] md:w-[370px] md:max-w-[370px]"
       :class="{
         'z-30 ml-0': isSidebarOpen,
         '-ml-[100%]': !isSidebarOpen,
       }"
     />
 
-    <div
-      class="relative w-full"
+    <AppTransition
+      active-class="transition-all"
+      from-class="opacity-0"
+      to-class="opacity-100"
+      class="hello-world relative w-full"
       :class="{
         hidden: isSidebarOpen,
       }"
     >
-      <RouterView v-if="appStore.provider && isReady" />
+      <RouterView v-if="isReady || !showProviderConnection" />
 
       <ProviderConnection
-        v-else-if="!appStore.provider"
+        v-else-if="showProviderConnection"
         @confirmed="onConnectionConfirmed"
       />
-    </div>
+    </AppTransition>
   </main>
 </template>
