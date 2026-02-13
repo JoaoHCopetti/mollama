@@ -6,7 +6,7 @@ import OllamaProvider from '@/providers/ollama/OllamaProvider'
 import type { Model } from '@/types'
 import { LocalStorageEnum, ProvidersEnum } from '@/utils/enums'
 import { defineStore } from 'pinia'
-import { computed, ref, shallowRef } from 'vue'
+import { ref, shallowRef } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
   const storage = useLocalStorage()
@@ -17,7 +17,7 @@ export const useAppStore = defineStore('app', () => {
   const activeSession = ref<SessionData | null>()
   const onModelsFetchedCallback = ref<() => void>()
 
-  const isReady = computed(() => !!provider.value)
+  const state = ref<'not-initialized' | 'not-ready' | 'ready'>('not-initialized')
 
   const init = async (providerEnum: ProvidersEnum, host: string) => {
     const providerInstance = getProvider(providerEnum, { host })
@@ -31,8 +31,11 @@ export const useAppStore = defineStore('app', () => {
       await providerInstance.checkConnection(host)
 
       provider.value = providerInstance
+      state.value = 'ready'
     } catch (error) {
       provider.value = undefined
+      state.value = 'not-ready'
+
       throw error
     }
   }
@@ -72,8 +75,8 @@ export const useAppStore = defineStore('app', () => {
 
   return {
     init,
-    isReady,
     getProvider,
+    state,
     availableModels,
     selectedModel,
     activeSession,
