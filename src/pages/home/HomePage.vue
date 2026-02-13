@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import AppTransition from '@/components/AppTransition.vue'
-import { useLocalStorage } from '@/composables/use-local-storage'
-import { db } from '@/database/db'
 import ValidationError from '@/errors/ValidationError'
 import BaseRequest from '@/providers/BaseRequest'
 import {
@@ -11,58 +9,26 @@ import {
   getOrCreateSession,
 } from '@/services/chat-service'
 import { useAppStore } from '@/stores/app-store'
-import type { InputConfig } from '@/types'
-import { LocalStorageEnum } from '@/utils/enums'
-import { computed, onBeforeMount, provide, ref } from 'vue'
+import { useChatInputStore } from '@/stores/chat-input-store'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChatEmpty from './_partials/MollamaLogo.vue'
-import ChatInput, { type InputConfigPayload } from './_partials/chat-input/ChatInput.vue'
+import ChatInput from './_partials/chat-input/ChatInput.vue'
 import ChatMessages from './_partials/chat-messages/ChatMessages.vue'
-import { inputConfigKey } from './injection-keys'
 
 const appStore = useAppStore()
-const storage = useLocalStorage()
 const route = useRoute()
 const router = useRouter()
-const inputConfig = ref<InputConfig>({ message: '', think: false })
 const request = ref<BaseRequest>()
+const chatInputStore = useChatInputStore()
 
 const currentAssistMessage = computed(() => request.value?.message)
 
-provide(inputConfigKey, inputConfig.value)
-
-onBeforeMount(async () => {
-  restoreSelectedModel()
-  restoreThinkMode()
-  restoreSelectedPrompt()
+onMounted(async () => {
+  appStore.onModelsFetched(() => {
+    chatInputStore.restoreChatConfig()
+  })
 })
-
-const restoreSelectedModel = () => {
-  const selectedModelId = storage.getItem(LocalStorageEnum.SelectedModelId)
-
-  appStore.selectModel(selectedModelId)
-  inputConfig.value.model = appStore.selectedModel
-}
-
-const restoreThinkMode = () => {
-  inputConfig.value.think = storage.getItem(LocalStorageEnum.Think) || false
-}
-
-const restoreSelectedPrompt = async () => {
-  const lastPromptId = storage.getItem(LocalStorageEnum.SelectedPromptId)
-
-  if (lastPromptId) {
-    const lastPrompt = await db.systemPrompts.get(lastPromptId)
-
-    inputConfig.value.prompt = lastPrompt
-  }
-}
-
-const onInputConfigChange = ({ type, inputConfig }: InputConfigPayload) => {
-  if (type === 'model') {
-    appStore.selectModel(inputConfig.model?.id)
-  }
-}
 
 const onMessageSend = async () => {
   if (!appStore.selectedModel) {
@@ -73,8 +39,8 @@ const onMessageSend = async () => {
     throw new ValidationError('No provider selected')
   }
 
-  const content = inputConfig.value.message
-  inputConfig.value.message = ''
+  const content = chatInputStore.config.message
+  chatInputStore.config.message = ''
 
   request.value = appStore.provider.createRequest(appStore.selectedModel)
 
@@ -98,7 +64,7 @@ const registerRequestListener = async () => {
 
   request.value.onMessageChange(async (message) => {
     if (message.response.done) {
-      await createAssistMessage(sessionId, message, inputConfig.value.prompt)
+      await createAssistMessage(sessionId, message, chatInputStore.config.prompt)
 
       if (!route.params.id) {
         router.push(`/sessions/${sessionId}`)
@@ -127,8 +93,8 @@ const handleRequest = async (sessionId: number) => {
   await request.value.handleRequest({
     sessionId,
     model: appStore.selectedModel,
-    think: inputConfig.value.think,
-    prompt: inputConfig.value.prompt,
+    think: chatInputStore.config.think,
+    prompt: chatInputStore.config.prompt,
   })
 }
 
@@ -170,7 +136,6 @@ const stopStreaming = () => {
       <ChatInput
         class="relative z-20 w-full sm:w-3/4"
         :current-assist-message="request?.message"
-        @update:input-config="onInputConfigChange"
         @send="onMessageSend"
         @stop="stopStreaming"
       />

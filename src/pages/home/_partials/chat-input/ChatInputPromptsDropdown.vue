@@ -9,9 +9,8 @@ import { liveQuery } from 'dexie'
 import { onMounted, ref, useTemplateRef } from 'vue'
 
 defineProps<{
-  prompt?: SystemPromptData
+  selectedPrompt?: SystemPromptData
 }>()
-defineEmits(['change'])
 
 const subscription = useDexieSubscription<SystemPromptData>()
 const shortcutsStore = useShortcutsStore()
@@ -40,9 +39,8 @@ onMounted(() => {
     class="d-dropdown-top left-0 sm:d-dropdown-top"
     :items="systemPrompts"
     container-extend-class="max-w-52"
-    :active-item="prompt"
+    :active-item="selectedPrompt"
     item-extend-class="text-sm py-1"
-    @select="$emit('change', $event)"
   >
     <template #trigger>
       <button
@@ -50,7 +48,7 @@ onMounted(() => {
         class="input-chat-pill ring-white/20 focus:ring-2"
         :class="[
           {
-            'bg-primary/90 hover:bg-primary/80': !!prompt,
+            'bg-primary/90 hover:bg-primary/80': !!selectedPrompt,
             'input-chat-pill-disabled': !systemPrompts.length,
           },
         ]"
@@ -65,10 +63,10 @@ onMounted(() => {
           <div class="flex items-center gap-2 truncate">
             <PhBookBookmark
               class="min-w-fit"
-              :weight="prompt ? 'fill' : 'regular'"
+              :weight="selectedPrompt ? 'fill' : 'regular'"
             />
 
-            <span class="hidden sm:block">{{ prompt?.title || 'Select a prompt' }}</span>
+            <span class="hidden sm:block">{{ selectedPrompt?.title || 'Select a prompt' }}</span>
           </div>
         </div>
       </button>

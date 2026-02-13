@@ -2,21 +2,21 @@
 import { useBreakpoints } from '@/composables/use-breakpoints'
 import { useDynamicTextarea } from '@/composables/use-dynamic-textarea'
 import type { MessageState } from '@/database/Message'
+import { useChatInputStore } from '@/stores/chat-input-store'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
 import { onMounted, useTemplateRef } from 'vue'
 
+const emit = defineEmits(['send', 'focus-change'])
 const props = defineProps<{
   currentMessageState?: MessageState
 }>()
-const emit = defineEmits(['send', 'focus-change'])
 
 const { screenGreaterThan } = useBreakpoints()
 
 const textareaRef = useTemplateRef('textareaRef')
 const dynamicTextarea = useDynamicTextarea(textareaRef, screenGreaterThan('sm') ? 150 : 100)
 const shortcutsStore = useShortcutsStore()
-
-const message = defineModel<string>('message', { default: '' })
+const chatInputStore = useChatInputStore()
 
 onMounted(() => {
   dynamicTextarea.adjustTextareaHeight()
@@ -35,7 +35,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
 
   setTimeout(dynamicTextarea.adjustTextareaHeight, 100)
 
-  if (message.value.trim() === '' && !event.shiftKey) {
+  if (chatInputStore.config.message.trim() === '' && !event.shiftKey) {
     event.preventDefault()
     return
   }
@@ -54,7 +54,7 @@ const onEnterKeydown = (event: KeyboardEvent) => {
   <textarea
     id="message"
     ref="textareaRef"
-    v-model="message"
+    v-model="chatInputStore.config.message"
     name="message"
     autofocus
     class="mb-4 w-full resize-none border-none bg-transparent px-0 font-sans text-[0.95rem] leading-7 placeholder-gray-500 focus-within:outline-0 sm:h-14"

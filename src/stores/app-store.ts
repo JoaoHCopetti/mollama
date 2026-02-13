@@ -6,7 +6,7 @@ import OllamaProvider from '@/providers/ollama/OllamaProvider'
 import type { Model } from '@/types'
 import { LocalStorageEnum, ProvidersEnum } from '@/utils/enums'
 import { defineStore } from 'pinia'
-import { ref, shallowRef } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
   const storage = useLocalStorage()
@@ -15,20 +15,22 @@ export const useAppStore = defineStore('app', () => {
   const availableModels = ref<Model[]>([])
   const selectedModel = ref<Model>()
   const activeSession = ref<SessionData | null>()
+  const onModelsFetchedCallback = ref<() => void>()
+
+  const isReady = computed(() => !!provider.value)
 
   const init = async (providerEnum: ProvidersEnum, host: string) => {
     const providerInstance = getProvider(providerEnum, { host })
 
     if (!providerInstance) {
       provider.value = undefined
-      throw new ValidationError('No provider specified')
+      throw new ValidationError(`Provider isn't defined (${providerEnum})`)
     }
 
     try {
       provider.value = providerInstance
 
       await providerInstance.checkConnection(host)
-      await fetchModels()
     } catch (error) {
       provider.value = undefined
       throw error
@@ -38,6 +40,10 @@ export const useAppStore = defineStore('app', () => {
   const fetchModels = async () => {
     if (provider.value) {
       availableModels.value = await provider.value.getModels()
+
+      if (onModelsFetchedCallback.value) {
+        onModelsFetchedCallback.value()
+      }
     }
   }
 
@@ -60,8 +66,13 @@ export const useAppStore = defineStore('app', () => {
     storage.setItem(LocalStorageEnum.SelectedModelId, modelId)
   }
 
+  const onModelsFetched = (callback: () => void) => {
+    onModelsFetchedCallback.value = callback
+  }
+
   return {
     init,
+    isReady,
     getProvider,
     availableModels,
     selectedModel,
@@ -69,5 +80,6 @@ export const useAppStore = defineStore('app', () => {
     selectModel,
     provider,
     fetchModels,
+    onModelsFetched,
   }
 })
