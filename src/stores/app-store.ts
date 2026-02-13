@@ -28,9 +28,9 @@ export const useAppStore = defineStore('app', () => {
     }
 
     try {
-      provider.value = providerInstance
-
       await providerInstance.checkConnection(host)
+
+      provider.value = providerInstance
     } catch (error) {
       provider.value = undefined
       throw error
