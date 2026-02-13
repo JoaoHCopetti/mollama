@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AppTransition from '@/components/AppTransition.vue'
 import ValidationError from '@/errors/ValidationError'
 import BaseRequest from '@/providers/BaseRequest'
 import {
@@ -12,9 +11,9 @@ import { useAppStore } from '@/stores/app-store'
 import { useChatInputStore } from '@/stores/chat-input-store'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import ChatEmpty from './_partials/MollamaLogo.vue'
 import ChatInput from './_partials/chat-input/ChatInput.vue'
 import ChatMessages from './_partials/chat-messages/ChatMessages.vue'
+import MollamaLogo from './_partials/MollamaLogo.vue'
 
 const appStore = useAppStore()
 const route = useRoute()
@@ -110,23 +109,17 @@ const stopStreaming = () => {
 
 <template>
   <div class="flex h-full flex-col">
-    <AppTransition
-      from-class="opacity-0"
-      to-class="opacity-100"
-      active-class="animate-all duration-150 ease-in"
-    >
-      <ChatMessages
-        v-if="appStore.activeSession"
-        :key="appStore.activeSession.id"
-        :session-id="appStore.activeSession.id"
-        :current-assist-message="currentAssistMessage"
-      />
+    <ChatMessages
+      v-if="appStore.activeSession"
+      :key="appStore.activeSession.id"
+      :session-id="appStore.activeSession.id"
+      :current-assist-message="currentAssistMessage"
+    />
 
-      <ChatEmpty
-        v-else-if="appStore.activeSession === null"
-        class="flex h-full w-full items-center justify-center"
-      />
-    </AppTransition>
+    <MollamaLogo
+      v-else-if="appStore.activeSession === null"
+      class="flex h-full w-full items-center justify-center"
+    />
 
     <div class="relative mb-5 w-full px-5 sm:px-0">
       <div

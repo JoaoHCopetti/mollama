@@ -1,21 +1,29 @@
 <script setup lang="ts">
 import { PhList } from '@phosphor-icons/vue'
-import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
-import AppTransition from './components/AppTransition.vue'
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import ToastContainer from './components/toast/ToastContainer.vue'
 import { useLocalStorage } from './composables/use-local-storage'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
+import SetupProviderPage from './pages/setup-provider/SetupProviderPage.vue'
 import router from './router'
 import { useAppStore } from './stores/app-store'
 import { useShortcutsStore } from './stores/shortcuts-store'
 import { useToastStore } from './stores/toast-store'
 import { LocalStorageEnum } from './utils/enums'
 
-const isSidebarOpen = ref<boolean>(false)
 const appStore = useAppStore()
 const storage = useLocalStorage()
-
+const route = useRoute()
 const shortcutsStore = useShortcutsStore()
+
+const isSidebarOpen = ref<boolean>(false)
+const isInitialized = ref<boolean>(false)
+
+const showSetupProviderPage = computed(() => !appStore.isReady && route.name === 'home')
+const showRouterPage = computed(
+  () => (!appStore.isReady && route.name !== 'home') || appStore.isReady,
+)
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
@@ -28,6 +36,8 @@ router.beforeEach(() => {
 })
 
 onBeforeMount(async () => {
+  shortcutsStore.init()
+
   if (!appStore.isReady) {
     const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
 
@@ -43,10 +53,8 @@ onBeforeMount(async () => {
       useToastStore().error(`Couldn't restore your previous connection`, { timeout: 5000 })
     }
   }
-})
 
-onBeforeMount(() => {
-  shortcutsStore.init()
+  isInitialized.value = true
 })
 
 onBeforeUnmount(() => {
@@ -73,18 +81,20 @@ onBeforeUnmount(() => {
       }"
     />
 
-    <RouterView v-slot="{ Component }">
-      <AppTransition
-        active-class="transition-all"
-        from-class="opacity-0"
-        to-class="opacity-100"
-        class="hello-world relative w-full"
-        :class="{
-          hidden: isSidebarOpen,
-        }"
-      >
-        <Component :is="Component" />
-      </AppTransition>
-    </RouterView>
+    <div
+      class="w-full"
+      :class="{
+        hidden: isSidebarOpen,
+      }"
+    >
+      <RouterView v-slot="{ Component }">
+        <Component
+          :is="Component"
+          v-if="showRouterPage"
+        />
+
+        <SetupProviderPage v-else-if="showSetupProviderPage" />
+      </RouterView>
+    </div>
   </main>
 </template>
