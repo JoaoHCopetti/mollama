@@ -8,10 +8,6 @@ import { PhCheck } from '@phosphor-icons/vue'
 import { ref } from 'vue'
 import MollamaLogo from '../home/_partials/MollamaLogo.vue'
 
-export type ProviderConnectionEvents = {
-  confirmed: { provider: ProvidersEnum; host: string }
-}
-
 const isConnectionOk = ref<boolean>()
 const feedbackMessage = ref<string>('')
 
