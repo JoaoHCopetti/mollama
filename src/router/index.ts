@@ -6,7 +6,7 @@ import TestPage from '@/pages/TestPage.vue'
 import type { MiddlewareFunction } from '@/types'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
-const globalMiddlewares = [handleActiveSessionMiddleware]
+const globalMiddlewares: MiddlewareFunction[] = [handleActiveSessionMiddleware]
 
 const routes: RouteRecordRaw[] = [
   {
