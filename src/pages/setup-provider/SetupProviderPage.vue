@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useForm } from '@/composables/use-form'
+import { useLocalStorage } from '@/composables/use-local-storage'
+import router from '@/router'
 import { useAppStore } from '@/stores/app-store'
-import { ProvidersEnum } from '@/utils/enums'
+import { LocalStorageEnum, ProvidersEnum } from '@/utils/enums'
 import { PhCheck } from '@phosphor-icons/vue'
 import { ref } from 'vue'
 import MollamaLogo from '../home/_partials/MollamaLogo.vue'
@@ -10,14 +12,11 @@ export type ProviderConnectionEvents = {
   confirmed: { provider: ProvidersEnum; host: string }
 }
 
-const emit = defineEmits<{
-  confirmed: [args: ProviderConnectionEvents['confirmed']]
-}>()
-
 const isConnectionOk = ref<boolean>()
 const feedbackMessage = ref<string>('')
 
 const appStore = useAppStore()
+const storage = useLocalStorage()
 
 const form = useForm<{ provider: ProvidersEnum; host: string }>({
   provider: ProvidersEnum.Ollama,
@@ -41,11 +40,16 @@ const checkConnection = async () => {
   }
 }
 
-const onSubmit = () => {
-  emit('confirmed', {
-    provider: form.provider.value,
-    host: form.host.value,
-  })
+const onSubmit = async () => {
+  const host = form.host.value
+  const provider = form.provider.value
+
+  await appStore.init(provider, host)
+  await appStore.fetchModels()
+
+  storage.setItem(LocalStorageEnum.LastConnection, { provider, host })
+
+  router.push({ name: 'home' })
 }
 </script>
 

@@ -1,38 +1,21 @@
 <script setup lang="ts">
 import { PhList } from '@phosphor-icons/vue'
-import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import AppTransition from './components/AppTransition.vue'
 import ToastContainer from './components/toast/ToastContainer.vue'
 import { useLocalStorage } from './composables/use-local-storage'
 import MainSidebar from './layout/main-sidebar/MainSidebar.vue'
-import ProviderConnection, {
-  type ProviderConnectionEvents,
-} from './pages/_partials/ProviderConnection.vue'
 import router from './router'
 import { useAppStore } from './stores/app-store'
 import { useShortcutsStore } from './stores/shortcuts-store'
 import { useToastStore } from './stores/toast-store'
 import { LocalStorageEnum } from './utils/enums'
 
-const isReady = ref<boolean>(false)
 const isSidebarOpen = ref<boolean>(false)
-
 const appStore = useAppStore()
-const shortcutsStore = useShortcutsStore()
-const toastStore = useToastStore()
-
 const storage = useLocalStorage()
-const route = useRoute()
 
-const showProviderConnection = computed(() => !appStore.provider && route.name === 'home')
-
-const onConnectionConfirmed = async ({ provider, host }: ProviderConnectionEvents['confirmed']) => {
-  await appStore.init(provider, host)
-
-  storage.setItem(LocalStorageEnum.LastConnection, { provider, host })
-  isReady.value = true
-}
+const shortcutsStore = useShortcutsStore()
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
@@ -45,19 +28,25 @@ router.beforeEach(() => {
 })
 
 onBeforeMount(async () => {
-  const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
+  if (!appStore.isReady) {
+    const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
 
-  shortcutsStore.init()
+    if (!lastConnection) {
+      return
+    }
 
-  if (lastConnection) {
     try {
       await appStore.init(lastConnection.provider, lastConnection.host)
-      isReady.value = true
+      await appStore.fetchModels()
     } catch (error) {
       console.error(error)
-      toastStore.error("Couldn't restore your last provider connection", { timeout: 5000 })
+      useToastStore().error(`Couldn't restore your previous connection`, { timeout: 5000 })
     }
   }
+})
+
+onBeforeMount(() => {
+  shortcutsStore.init()
 })
 
 onBeforeUnmount(() => {
@@ -77,28 +66,25 @@ onBeforeUnmount(() => {
     </button>
 
     <MainSidebar
-      class="w-full transition-all sm:ml-0 sm:w-[300px] md:w-[370px] md:max-w-[370px]"
+      class="w-full transition-all sm:ml-0 sm:w-[300px] md:max-w-[370px] md:min-w-[370px]"
       :class="{
         'z-30 ml-0': isSidebarOpen,
         '-ml-[100%]': !isSidebarOpen,
       }"
     />
 
-    <AppTransition
-      active-class="transition-all"
-      from-class="opacity-0"
-      to-class="opacity-100"
-      class="hello-world relative w-full"
-      :class="{
-        hidden: isSidebarOpen,
-      }"
-    >
-      <RouterView v-if="isReady || !showProviderConnection" />
-
-      <ProviderConnection
-        v-else-if="showProviderConnection"
-        @confirmed="onConnectionConfirmed"
-      />
-    </AppTransition>
+    <RouterView v-slot="{ Component }">
+      <AppTransition
+        active-class="transition-all"
+        from-class="opacity-0"
+        to-class="opacity-100"
+        class="hello-world relative w-full"
+        :class="{
+          hidden: isSidebarOpen,
+        }"
+      >
+        <Component :is="Component" />
+      </AppTransition>
+    </RouterView>
   </main>
 </template>

@@ -10,8 +10,6 @@ defineProps<{
   selectedModel?: Model
 }>()
 
-const emit = defineEmits(['change'])
-
 const dropdownTrigger = useTemplateRef('dropdownTriggerRef')
 
 const appStore = useAppStore()
@@ -25,10 +23,6 @@ onMounted(() => {
     }
   })
 })
-
-const onModelClick = (model: Model) => {
-  emit('change', model)
-}
 </script>
 
 <template>
@@ -38,7 +32,6 @@ const onModelClick = (model: Model) => {
     class="d-dropdown-top"
     id-field="id"
     item-extend-class="text-xs font-medium"
-    @select="onModelClick"
   >
     <template #trigger>
       <button

@@ -1,4 +1,9 @@
 import type { SystemPromptData } from '@/database/SystemPrompt'
+import type {
+  NavigationGuardReturn,
+  RouteLocationNormalized,
+  RouteLocationNormalizedLoaded,
+} from 'vue-router'
 
 type FetchResponseOptions = {
   sessionId: number
@@ -24,11 +29,17 @@ interface InputConfig {
   prompt?: SystemPromptData
 }
 
+type MiddlewareFunction = (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalizedLoaded,
+) => Promise<NavigationGuardReturn> | NavigationGuardReturn
+
 export {
   FetchResponseOptions,
   InputConfig,
   InputMessage,
   MessageState,
+  MiddlewareFunction,
   Model,
   ResponseDetails,
   ToastTypes,

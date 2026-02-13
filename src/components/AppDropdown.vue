@@ -15,7 +15,7 @@ const props = withDefaults(
     containerExtendClass: '',
   },
 )
-defineEmits(['select'])
+defineEmits(['change'])
 
 const getItemKey = (item: T) => item[props.idField] as PropertyKey
 </script>
@@ -43,7 +43,7 @@ const getItemKey = (item: T) => item[props.idField] as PropertyKey
         :key="getItemKey(item)"
         v-slot="{ active }"
         as="li"
-        @click="$emit('select', item)"
+        @click="$emit('change', item)"
       >
         <a
           class="dropdown-item"

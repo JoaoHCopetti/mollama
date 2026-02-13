@@ -1,29 +1,32 @@
 <script setup lang="ts">
 import { useShortcutsStore } from '@/stores/shortcuts-store'
-import { onMounted, ref, type Component } from 'vue'
+import { onMounted, type Component } from 'vue'
 
-const props = defineProps<{
-  label?: string
-  icon: Component
-  value: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    label?: string
+    icon: Component
+    checked?: boolean
+  }>(),
+  {
+    checked: false,
+    label: undefined,
+  },
+)
 
 const emit = defineEmits(['change'])
 
 const shortcuts = useShortcutsStore()
 
-const checked = ref<boolean>(props.value)
+const toggleChecked = () => {
+  emit('change', !props.checked)
+}
 
 onMounted(() => {
   shortcuts.onPress('toggle-think', () => {
-    toggleValue()
+    toggleChecked()
   })
 })
-
-const toggleValue = () => {
-  checked.value = !checked.value
-  emit('change', checked.value)
-}
 </script>
 
 <template>
@@ -32,9 +35,9 @@ const toggleValue = () => {
     :class="{
       'bg-primary/90 hover:bg-primary/80': checked,
     }"
-    @click="toggleValue"
-    @keypress.space="toggleValue"
-    @keypress.enter="toggleValue"
+    @click="toggleChecked"
+    @keypress.space="toggleChecked"
+    @keypress.enter="toggleChecked"
   >
     <Component
       :is="icon"

@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { useLocalStorage } from '@/composables/use-local-storage'
 import type { AssistantMessage } from '@/database/Message'
 import type { SystemPromptData } from '@/database/SystemPrompt'
+import { useChatInputStore } from '@/stores/chat-input-store'
 import type { InputConfig, Model } from '@/types'
-import { LocalStorageEnum } from '@/utils/enums'
 import { PhBrain } from '@phosphor-icons/vue'
-import { computed, inject, onMounted, ref } from 'vue'
-import { inputConfigKey } from '../../injection-keys'
+import { computed, ref } from 'vue'
 import ChatInputModelsDropdown from './ChatInputModelsDropdown.vue'
 import ChatInputPromptsDropdown from './ChatInputPromptsDropdown.vue'
 import ChatInputSendButton from './ChatInputSendButton.vue'
 import ChatInputTextarea from './ChatInputTextarea.vue'
 import ChatInputToggle from './ChatInputToggle.vue'
 
-export type InputConfigPayload = { type: keyof InputConfig; inputConfig: InputConfig }
+export type InputConfigPayload = { type: keyof InputConfig; config: InputConfig }
 
-const storage = useLocalStorage()
+const chatInputStore = useChatInputStore()
 
 const props = defineProps<{
   currentAssistMessage?: AssistantMessage
@@ -27,52 +25,24 @@ const emit = defineEmits<{
   'update:input-config': [args: InputConfigPayload]
 }>()
 
-const inputConfig = inject(inputConfigKey, { message: '', think: false })
-
-const callbacks = ref<{ [P in keyof InputConfig]: CallableFunction }>()
 const isTextareaFocused = ref<boolean>(false)
 
 const state = computed(() => props.currentAssistMessage?.state)
 
-onMounted(() => {
-  callbacks.value = {
-    message: onMessageChange,
-    think: onThinkChange,
-    model: onModelChange,
-    prompt: onPromptChange,
-  }
-})
-
-const onInputConfigChange = (prop: keyof InputConfig, payload: any) => {
-  if (callbacks.value && callbacks.value[prop]) {
-    callbacks.value[prop](payload)
-    emit('update:input-config', { type: prop, inputConfig })
-    return
-  }
-
-  throw new Error(`Callback for "${prop}" prop isn't registered`)
-}
-
 const onMessageChange = (e: Event) => {
-  const target = e.target as HTMLTextAreaElement
-
-  inputConfig.message = target.value
+  chatInputStore.setMessage((e.target as HTMLTextAreaElement).value)
 }
 
-const onPromptChange = (newVal: SystemPromptData) => {
-  inputConfig.prompt = newVal.id !== inputConfig.prompt?.id ? newVal : undefined
-
-  storage.setItem(LocalStorageEnum.SelectedPromptId, inputConfig.prompt?.id)
+const onPromptChange = (prompt: SystemPromptData) => {
+  chatInputStore.setPrompt(prompt)
 }
 
-const onThinkChange = (newVal: boolean) => {
-  inputConfig.think = newVal
-
-  storage.setItem(LocalStorageEnum.Think, newVal)
+const onThinkChange = (think: boolean) => {
+  chatInputStore.setThink(think)
 }
 
-const onModelChange = (newVal: Model) => {
-  inputConfig.model = newVal
+const onModelChange = (model: Model) => {
+  chatInputStore.setModel(model)
 }
 
 const onSend = () => {
@@ -88,9 +58,8 @@ const onSend = () => {
     }"
   >
     <ChatInputTextarea
-      :message="inputConfig.message"
       :current-message-state="state"
-      @input="onInputConfigChange('message', $event)"
+      @input="onMessageChange"
       @focus-change="isTextareaFocused = $event"
       @send="onSend"
     />
@@ -98,26 +67,26 @@ const onSend = () => {
     <div class="flex justify-between">
       <div class="flex items-end gap-2 pb-2 sm:overflow-visible sm:pb-0">
         <ChatInputModelsDropdown
-          :selected-model="inputConfig.model"
-          @change="onInputConfigChange('model', $event)"
+          :selected-model="chatInputStore.config.model"
+          @change="onModelChange"
         />
 
         <ChatInputToggle
-          :value="inputConfig.think"
+          :checked="chatInputStore.config.think"
           label="Think"
           :icon="PhBrain"
           tabindex="0"
-          @change="onInputConfigChange('think', $event)"
+          @change="onThinkChange"
         />
 
         <ChatInputPromptsDropdown
-          :prompt="inputConfig.prompt"
-          @change="onInputConfigChange('prompt', $event)"
+          :selected-prompt="chatInputStore.config.prompt"
+          @change="onPromptChange"
         />
       </div>
 
       <ChatInputSendButton
-        :message="inputConfig.message"
+        :message="chatInputStore.config.message"
         :assist-message-state="currentAssistMessage?.state"
         @send="onSend"
         @stop="$emit('stop')"
