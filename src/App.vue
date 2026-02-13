@@ -20,9 +20,8 @@ const shortcutsStore = useShortcutsStore()
 const isSidebarOpen = ref<boolean>(false)
 const isInitialized = ref<boolean>(false)
 
-const showSetupProviderPage = computed(() => !appStore.isReady && route.name === 'home')
-const showRouterPage = computed(
-  () => (!appStore.isReady && route.name !== 'home') || appStore.isReady,
+const showIntendedRoute = computed(
+  () => appStore.state === 'ready' || (appStore.state === 'not-ready' && route.name !== 'home'),
 )
 
 const toggleSidebar = () => {
@@ -38,7 +37,7 @@ router.beforeEach(() => {
 onBeforeMount(async () => {
   shortcutsStore.init()
 
-  if (!appStore.isReady) {
+  if (appStore.state === 'not-initialized') {
     const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
 
     if (!lastConnection) {
@@ -90,10 +89,10 @@ onBeforeUnmount(() => {
       <RouterView v-slot="{ Component }">
         <Component
           :is="Component"
-          v-if="showRouterPage"
+          v-if="showIntendedRoute"
         />
 
-        <SetupProviderPage v-else-if="showSetupProviderPage" />
+        <SetupProviderPage v-else-if="appStore.state === 'not-ready'" />
       </RouterView>
     </div>
   </main>
