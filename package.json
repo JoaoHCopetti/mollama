@@ -14,21 +14,13 @@
     "type-check": "vue-tsc --build",
     "format": "prettier . --write",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "commit": "git-cz"
-  },
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/cz-commitlint"
-    }
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@commitlint/cz-commitlint": "^20.2.0",
     "@headlessui/vue": "^1.7.23",
     "@phosphor-icons/vue": "^2.2.1",
     "@tailwindcss/vite": "^4.1.17",
     "@types/markdown-it": "^14.1.2",
-    "commitizen": "^4.3.1",
     "dexie": "^4.2.1",
     "diff-dom": "^5.2.1",
     "highlight.js": "^11.11.1",
@@ -42,8 +34,6 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.2.0",
-    "@commitlint/config-conventional": "^20.2.0",
     "@tsconfig/node22": "^22.0.2",
     "@types/jsdom": "^27.0.0",
     "@types/lodash-es": "^4.17.12",
