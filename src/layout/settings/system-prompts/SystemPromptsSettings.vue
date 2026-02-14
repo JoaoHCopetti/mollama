@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import type { SystemPromptData } from '@/database/SystemPrompt'
 import { PhPlus } from '@phosphor-icons/vue'
-import { nextTick, ref, useTemplateRef } from 'vue'
+import { ref } from 'vue'
 import SystemPromptsSettingsForm, {
   type SystemPromptSubmitPayload,
 } from './SystemPromptsSettingsForm.vue'
 import SystemPromptsSettingsList from './SystemPromptsSettingsList.vue'
 
 const showForm = ref<boolean>(false)
-const settingsFormEl = useTemplateRef('systemPromptsSettingsFormRef')
 
 const systemPromptEdit = ref<SystemPromptData>()
 
@@ -22,12 +21,6 @@ const onSubmit = async ({ action }: SystemPromptSubmitPayload) => {
 
 const onNewPromptClick = async () => {
   showForm.value = !showForm.value
-
-  nextTick(() => {
-    if (settingsFormEl.value) {
-      settingsFormEl.value.focusTitleInput()
-    }
-  })
 }
 
 const onSystemPromptEdit = ({ systemPrompt }: { systemPrompt: SystemPromptData }) => {

@@ -27,19 +27,6 @@ const form = useForm({
 
 const titleEl = useTemplateRef('titleRef')
 
-onMounted(() => {
-  const systemPrompt = props.systemPrompt
-
-  if (systemPrompt) {
-    form.title.value = systemPrompt?.title || ''
-    form.instruction.value = systemPrompt?.content || ''
-  }
-
-  nextTick(() => {
-    dynamicTextarea.adjustTextareaHeight()
-  })
-})
-
 const isEdit = computed(() => props.systemPrompt)
 
 const onSubmit = async () => {
@@ -83,16 +70,26 @@ const focusTitleInput = () => {
   }
 }
 
-const onEnterKeydown = (e: Event) => {
-  e.preventDefault()
-  form.instruction.value += '\n'
+const populateForm = () => {
+  const systemPrompt = props.systemPrompt
+
+  if (systemPrompt) {
+    form.title.value = systemPrompt?.title || ''
+    form.instruction.value = systemPrompt?.content || ''
+  }
+}
+
+onMounted(() => {
+  focusTitleInput()
+
+  if (isEdit.value) {
+    populateForm()
+  }
 
   nextTick(() => {
     dynamicTextarea.adjustTextareaHeight()
   })
-}
-
-defineExpose({ focusTitleInput })
+})
 </script>
 
 <template>
@@ -108,6 +105,7 @@ defineExpose({ focusTitleInput })
         class="d-input"
         placeholder="Title"
         required
+        autofocus
       />
 
       <textarea
@@ -119,7 +117,6 @@ defineExpose({ focusTitleInput })
         placeholder="Instructions"
         required
         @update:model-value="dynamicTextarea.adjustTextareaHeight"
-        @keypress.enter="onEnterKeydown"
       />
 
       <div class="ml-auto">
