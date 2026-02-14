@@ -4,19 +4,36 @@ import { useDynamicTextarea } from '@/composables/use-dynamic-textarea'
 import type { MessageState } from '@/database/Message'
 import { useChatInputStore } from '@/stores/chat-input-store'
 import { useShortcutsStore } from '@/stores/shortcuts-store'
-import { onMounted, useTemplateRef } from 'vue'
+import { nextTick, onMounted, useTemplateRef } from 'vue'
 
 const emit = defineEmits(['send', 'focus-change'])
 const props = defineProps<{
   currentMessageState?: MessageState
 }>()
 
-const { screenGreaterThan } = useBreakpoints()
-
 const textareaRef = useTemplateRef('textareaRef')
+
+const { screenGreaterThan } = useBreakpoints()
 const dynamicTextarea = useDynamicTextarea(textareaRef, screenGreaterThan('sm') ? 150 : 100)
 const shortcutsStore = useShortcutsStore()
 const chatInputStore = useChatInputStore()
+
+const onEnterKeydown = (event: KeyboardEvent) => {
+  if (props.currentMessageState?.isLoading && !event.shiftKey) {
+    event.preventDefault()
+    return
+  }
+
+  if (!chatInputStore.config.message.trim()) {
+    return
+  }
+
+  if (!event.shiftKey) {
+    emit('send')
+    event.preventDefault()
+    nextTick(dynamicTextarea.adjustTextareaHeight)
+  }
+}
 
 onMounted(() => {
   dynamicTextarea.adjustTextareaHeight()
@@ -27,27 +44,6 @@ onMounted(() => {
     }
   })
 })
-
-const onEnterKeydown = (event: KeyboardEvent) => {
-  if (event.key !== 'Enter') {
-    return
-  }
-
-  setTimeout(dynamicTextarea.adjustTextareaHeight, 100)
-
-  if (chatInputStore.config.message.trim() === '' && !event.shiftKey) {
-    event.preventDefault()
-    return
-  }
-
-  if (!event.shiftKey) {
-    event.preventDefault()
-
-    if (!props.currentMessageState?.isLoading) {
-      emit('send')
-    }
-  }
-}
 </script>
 
 <template>
