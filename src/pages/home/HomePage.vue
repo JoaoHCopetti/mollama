@@ -23,12 +23,6 @@ const chatInputStore = useChatInputStore()
 
 const currentAssistMessage = computed(() => request.value?.message)
 
-onMounted(async () => {
-  appStore.onModelsFetched(() => {
-    chatInputStore.restoreChatConfig()
-  })
-})
-
 const onMessageSend = async () => {
   if (!appStore.selectedModel) {
     throw new ValidationError('No model is selected')
@@ -105,6 +99,12 @@ const stopStreaming = () => {
 
   request.value = undefined
 }
+
+onMounted(async () => {
+  appStore.onModelsFetched(() => {
+    chatInputStore.restoreChatConfig()
+  })
+})
 </script>
 
 <template>
