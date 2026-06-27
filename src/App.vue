@@ -18,7 +18,6 @@ const route = useRoute()
 const shortcutsStore = useShortcutsStore()
 
 const isSidebarOpen = ref<boolean>(false)
-const isInitialized = ref<boolean>(false)
 
 const showIntendedRoute = computed(
   () => appStore.state === 'ready' || (appStore.state === 'not-ready' && route.name !== 'home'),
@@ -41,6 +40,8 @@ onBeforeMount(async () => {
     const lastConnection = storage.getItem(LocalStorageEnum.LastConnection)
 
     if (!lastConnection) {
+      appStore.state = 'not-ready'
+
       return
     }
 
@@ -53,7 +54,7 @@ onBeforeMount(async () => {
     }
   }
 
-  isInitialized.value = true
+  appStore.state = 'ready'
 })
 
 onBeforeUnmount(() => {
