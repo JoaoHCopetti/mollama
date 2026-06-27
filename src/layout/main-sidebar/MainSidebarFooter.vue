@@ -11,7 +11,7 @@ defineEmits(['settings-click'])
       <MainSidebarFooterItem
         label="GitHub"
         :icon="PhGithubLogo"
-        href="https://github.com/JoaoHCopetti/mollama"
+        href="https://github.com/JohnHammerSky/mollama"
         target="_blank"
       />
     </div>
